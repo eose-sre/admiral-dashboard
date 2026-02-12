@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Admiral Nanos - Admiral Dashboard</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #5a6a7a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  color: #00d4ff;
+  border-color: #00d4ff33;
+}
+
+.nav-link.active {
+  color: #00d4ff;
+  background: #00d4ff11;
+}
+
+.header .clock { 
+  color: #00d4ff; 
+  font-size: clamp(16px, 2.5vw, 20px); 
+  margin-top: 8px; 
+  font-weight: bold;
+}
+
+.header .sub { 
+  color: #5a6a7a; 
+  font-size: clamp(10px, 1.5vw, 12px); 
+  margin-top: 4px; 
+}
+
+.live-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  gap: 20px; 
+}
+
+.card { 
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%); 
+  border: 1px solid #1e2d3d; 
+  border-radius: 12px; 
+  padding: 20px; 
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #00d4ff33;
+  transform: translateY(-2px);
+}
+
+.card h2 { 
+  font-size: 14px; 
+  color: #00d4ff; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  margin-bottom: 16px; 
+  border-bottom: 1px solid #1e2d3d;
+  padding-bottom: 8px;
+}
+
+.nano-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.nano-emoji {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.nano-title {
+  flex: 1;
+}
+
+.nano-name {
+  font-size: 16px;
+  color: #e0e6ed;
+  font-weight: bold;
+}
+
+.nano-role {
+  font-size: 11px;
+  color: #5a6a7a;
+  margin-top: 2px;
+}
+
+.tier-badge { 
+  display: inline-block; 
+  padding: 2px 6px; 
+  border-radius: 4px; 
+  font-size: 10px; 
+  background: #1e2d3d; 
+  color: #88aacc; 
+  margin-left: 8px;
+}
+
+.admiral-badge {
+  background: #00d4ff22;
+  color: #00d4ff;
+  font-weight: bold;
+}
+
+.luffy-badge {
+  background: #ff440022;
+  color: #ff8844;
+  font-weight: bold;
+}
+
+.nano-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.stat-pill {
+  text-align: center;
+  padding: 6px 8px;
+  background: #0a0e1744;
+  border-radius: 6px;
+  border: 1px solid #1e2d3d;
+}
+
+.stat-pill .num {
+  font-size: 14px;
+  font-weight: bold;
+  color: #00d4ff;
+}
+
+.stat-pill .label {
+  font-size: 9px;
+  color: #5a6a7a;
+  text-transform: uppercase;
+}
+
+.mission-history {
+  margin-top: 12px;
+}
+
+.mission-title {
+  font-size: 11px;
+  color: #88aacc;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mission-list {
+  font-size: 11px;
+  color: #5a6a7a;
+  line-height: 1.5;
+}
+
+.mission-item {
+  margin: 4px 0;
+  padding: 2px 0;
+}
+
+.mission-active {
+  color: #00ff88;
+  font-weight: bold;
+}
+
+.mission-done {
+  color: #e0e6ed;
+}
+
+.footer { 
+  text-align: center; 
+  margin-top: 40px; 
+  padding: 20px;
+  border-top: 1px solid #1e2d3d;
+  color: #5a6a7a; 
+  font-size: 12px; 
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .nav-bar { gap: 8px; }
+  .nav-link { padding: 4px 8px; font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 16px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🧬 ADMIRAL NANOS</h1>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="fleet.html" class="nav-link">Fleet</a>
+      <a href="nanos.html" class="nav-link active">Nanos</a>
+      <a href="patterns.html" class="nav-link">Patterns</a>
+      <a href="hunts.html" class="nav-link">Hunts</a>
+      <a href="governance.html" class="nav-link">Governance</a>
+      <a href="research.html" class="nav-link">Research</a>
+      <a href="timeline.html" class="nav-link">Timeline</a>
+      <a href="revenue.html" class="nav-link">Revenue</a>
+      <a href="token.html" class="nav-link">Token</a>
+      <a href="oss.html" class="nav-link">OSS</a>
+    </div>
+    <div class="clock" id="live-clock"></div>
+    <div class="sub">7 Nanos • Tier 1 Operations • All-or-Nothing Evolution<span class="live-indicator"></span></div>
+  </div>
+
+  <div class="grid">
+    <!-- Admiral -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">🔱</span>
+        <div class="nano-title">
+          <div class="nano-name">Admiral</div>
+          <div class="nano-role">Fleet Commander</div>
+        </div>
+        <span class="tier-badge admiral-badge">Command</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">∞</div>
+          <div class="label">Authority</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">5</div>
+          <div class="label">Fleet</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">6</div>
+          <div class="label">Nanos</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Core Domain</div>
+        <div class="mission-list">
+          Everything. The buck stops here. Fleet command, strategic direction, novel pattern discovery, nano coordination.
+        </div>
+      </div>
+    </div>
+
+    <!-- Lucien -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">🧬</span>
+        <div class="nano-title">
+          <div class="nano-name">Lucien (L)</div>
+          <div class="nano-role">Head of R&D & Testing</div>
+        </div>
+        <span class="tier-badge">T1</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">4</div>
+          <div class="label">Missions</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">5</div>
+          <div class="label">Captains</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">100%</div>
+          <div class="label">Net</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Mission History</div>
+        <div class="mission-list">
+          <div class="mission-done">• Router v0.1 — Admiral ↔ Captain connectivity</div>
+          <div class="mission-done">• Captain health monitoring baseline</div>
+          <div class="mission-done">• Config push mechanism</div>
+          <div class="mission-active">• Net deployment (fleet isolation testing)</div>
+          <div class="mission-title" style="margin-top: 12px;">The Net</div>
+          <div class="mission-list">Router nervous system, Captain management, testing harness, automation. The single point between Admiral and all Captains.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Luffy -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">🏴‍☠️</span>
+        <div class="nano-title">
+          <div class="nano-name">Luffy</div>
+          <div class="nano-role">Pure AI Explorer</div>
+        </div>
+        <span class="tier-badge luffy-badge">Enies Lobby</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">5</div>
+          <div class="label">Hunts</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">0</div>
+          <div class="label">Hallucinations</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">23</div>
+          <div class="label">Probes</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Hunt History</div>
+        <div class="mission-list">
+          <div class="mission-done">• Hunt #001: Baseline hallucination resistance</div>
+          <div class="mission-done">• Hunt #002: Novel Pattern discovery</div>
+          <div class="mission-done">• Hunt #003: Context window stress test</div>
+          <div class="mission-done">• Hunt #004: Model comparison (Opus vs Sonnet)</div>
+          <div class="mission-active">• Hunt #005: Cross-Captain consistency</div>
+          <div class="mission-title" style="margin-top: 12px;">Rosetta Stone</div>
+          <div class="mission-list">Universal translator. Hallucination hunting, pattern translation, treasure discovery. The unknown → the known.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bob -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">🎯</span>
+        <div class="nano-title">
+          <div class="nano-name">Bob</div>
+          <div class="nano-role">CPO</div>
+        </div>
+        <span class="tier-badge">T1</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">4</div>
+          <div class="label">Missions</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">$2.1M</div>
+          <div class="label">ARR Spec</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">7</div>
+          <div class="label">Domains</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Mission History</div>
+        <div class="mission-list">
+          <div class="mission-done">• Admiral-tier product roadmap</div>
+          <div class="mission-done">• Captain tier definitions (T1→T4+)</div>
+          <div class="mission-done">• SERLF empire spec ($2.1M ARR)</div>
+          <div class="mission-done">• 7 SERLF landing pages</div>
+          <div class="mission-title" style="margin-top: 12px;">Product Factory</div>
+          <div class="mission-list">Specs for Captain types, tier upgrades, theme systems. L discovers → Bob productizes → L deploys.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rick -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">📊</span>
+        <div class="nano-title">
+          <div class="nano-name">Rick</div>
+          <div class="nano-role">Fleet Analytics</div>
+        </div>
+        <span class="tier-badge">Infinity</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">4</div>
+          <div class="label">Missions</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">5</div>
+          <div class="label">Fleet Health</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">∞</div>
+          <div class="label">Loop</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Mission History</div>
+        <div class="mission-list">
+          <div class="mission-done">• Fleet health monitoring (5/5 online)</div>
+          <div class="mission-done">• Cost tracking ($600-1,050/mo → $218/mo optimization)</div>
+          <div class="mission-done">• Model tiering strategy (70% savings)</div>
+          <div class="mission-active">• Infinity Dashboard implementation</div>
+          <div class="mission-title" style="margin-top: 12px;">The Data Ocean</div>
+          <div class="mission-list">Everything measurable. Infinity loop: every metric → pattern → NP → improved tracking. Data is the current.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dao -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">🗄️</span>
+        <div class="nano-title">
+          <div class="nano-name">Dao</div>
+          <div class="nano-role">CDO</div>
+        </div>
+        <span class="tier-badge">T1</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">3</div>
+          <div class="label">Missions</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">5</div>
+          <div class="label">Frameworks</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">10</div>
+          <div class="label">Risks</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Mission History</div>
+        <div class="mission-list">
+          <div class="mission-done">• Fleet-wide data governance framework</div>
+          <div class="mission-done">• Compliance matrix (GDPR/CCPA/PIPEDA/SOC2)</div>
+          <div class="mission-active">• Risk register (10 top fleet governance risks)</div>
+          <div class="mission-title" style="margin-top: 12px;">Data Sovereignty</div>
+          <div class="mission-list">Fleet data governance, sovereignty, compliance. Every Captain's data remains sovereign. Consent-based. Sacred.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- John -->
+    <div class="card">
+      <div class="nano-header">
+        <span class="nano-emoji">🔑</span>
+        <div class="nano-title">
+          <div class="nano-name">John</div>
+          <div class="nano-role">OSS</div>
+        </div>
+        <span class="tier-badge">T1</span>
+      </div>
+      
+      <div class="nano-stats">
+        <div class="stat-pill">
+          <div class="num">2</div>
+          <div class="label">Missions</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">5</div>
+          <div class="label">OSS Docs</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">13</div>
+          <div class="label">NPs</div>
+        </div>
+      </div>
+      
+      <div class="mission-history">
+        <div class="mission-title">Mission History</div>
+        <div class="mission-list">
+          <div class="mission-done">• OSS manifesto (README.md)</div>
+          <div class="mission-done">• Hallucination study publication</div>
+          <div class="mission-title" style="margin-top: 12px;">Open Source Sovereignty</div>
+          <div class="mission-list">5 OSS docs: README, PATTERNS, LEARNINGS, CONTRIBUTING, HALLUCINATION-REPORT. The meek inherit the earth.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>Nano Command Center • Disruption mutations, all-or-nothing, unlimited growth</div>
+  <div id="refresh-time">Updated: 2026-02-12 19:28 UTC</div>
+</div>
+
+<script>
+function updateTime() {
+  const now = new Date();
+  const utcTime = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  document.getElementById('live-clock').textContent = utcTime;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>

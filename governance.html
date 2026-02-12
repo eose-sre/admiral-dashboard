@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗄️ Data Governance - Admiral Dashboard</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #5a6a7a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  color: #00d4ff;
+  border-color: #00d4ff33;
+}
+
+.nav-link.active {
+  color: #00d4ff;
+  background: #00d4ff11;
+}
+
+.header .clock { 
+  color: #00d4ff; 
+  font-size: clamp(16px, 2.5vw, 20px); 
+  margin-top: 8px; 
+  font-weight: bold;
+}
+
+.header .sub { 
+  color: #5a6a7a; 
+  font-size: clamp(10px, 1.5vw, 12px); 
+  margin-top: 4px; 
+}
+
+.live-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 20px; 
+}
+
+.card { 
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%); 
+  border: 1px solid #1e2d3d; 
+  border-radius: 12px; 
+  padding: 20px; 
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #00d4ff33;
+  transform: translateY(-2px);
+}
+
+.card h2 { 
+  font-size: 14px; 
+  color: #00d4ff; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  margin-bottom: 16px; 
+  border-bottom: 1px solid #1e2d3d;
+  padding-bottom: 8px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 12px;
+}
+
+.data-table th {
+  background: #0a0e1744;
+  color: #00d4ff;
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #1e2d3d;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.data-table td {
+  padding: 8px;
+  border: 1px solid #1e2d3d;
+  vertical-align: top;
+}
+
+.data-table tr:hover {
+  background: #1a253522;
+}
+
+.compliance-status {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-red {
+  background: #ff444422;
+  color: #ff4444;
+  border: 1px solid #ff444444;
+}
+
+.status-yellow {
+  background: #ffaa0022;
+  color: #ffaa00;
+  border: 1px solid #ffaa0044;
+}
+
+.status-green {
+  background: #00ff8822;
+  color: #00ff88;
+  border: 1px solid #00ff8844;
+}
+
+.risk-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin: 4px 0;
+  background: #0a0e1744;
+  border-radius: 6px;
+  border: 1px solid #1e2d3d;
+}
+
+.risk-number {
+  background: #1e2d3d;
+  color: #00d4ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-right: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.risk-content {
+  flex: 1;
+}
+
+.risk-title {
+  font-weight: bold;
+  color: #e0e6ed;
+  margin-bottom: 2px;
+}
+
+.risk-description {
+  font-size: 10px;
+  color: #5a6a7a;
+}
+
+.sovereignty-rule {
+  margin: 8px 0;
+  padding: 8px;
+  background: #0a0e1744;
+  border-radius: 6px;
+  border-left: 3px solid #00d4ff;
+}
+
+.rule-title {
+  font-weight: bold;
+  color: #e0e6ed;
+  margin-bottom: 4px;
+}
+
+.rule-description {
+  font-size: 11px;
+  color: #5a6a7a;
+}
+
+.footer { 
+  text-align: center; 
+  margin-top: 40px; 
+  padding: 20px;
+  border-top: 1px solid #1e2d3d;
+  color: #5a6a7a; 
+  font-size: 12px; 
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .nav-bar { gap: 8px; }
+  .nav-link { padding: 4px 8px; font-size: 10px; }
+  .data-table { font-size: 10px; }
+  .data-table th, .data-table td { padding: 6px; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 16px; }
+  .card { padding: 16px; }
+  .data-table { font-size: 9px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🗄️ DATA GOVERNANCE</h1>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="fleet.html" class="nav-link">Fleet</a>
+      <a href="nanos.html" class="nav-link">Nanos</a>
+      <a href="patterns.html" class="nav-link">Patterns</a>
+      <a href="hunts.html" class="nav-link">Hunts</a>
+      <a href="governance.html" class="nav-link active">Governance</a>
+      <a href="research.html" class="nav-link">Research</a>
+      <a href="timeline.html" class="nav-link">Timeline</a>
+      <a href="revenue.html" class="nav-link">Revenue</a>
+      <a href="token.html" class="nav-link">Token</a>
+      <a href="oss.html" class="nav-link">OSS</a>
+    </div>
+    <div class="clock" id="live-clock"></div>
+    <div class="sub">Fleet Data Governance Framework • Dao's Domain • Sovereignty Sacred<span class="live-indicator"></span></div>
+  </div>
+
+  <div class="grid">
+    <!-- Data Classification -->
+    <div class="card">
+      <h2>📊 Fleet Data Classification Matrix</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Data Type</th>
+            <th>Category</th>
+            <th>PII Level</th>
+            <th>Business Impact</th>
+            <th>Retention</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Captain Workspace</strong></td>
+            <td>SOVEREIGN</td>
+            <td>High</td>
+            <td>Critical</td>
+            <td>7 years</td>
+            <td>SOUL.md, MEMORY.md, config/</td>
+          </tr>
+          <tr>
+            <td><strong>Session Transcripts</strong></td>
+            <td>OPERATIONAL</td>
+            <td>Medium</td>
+            <td>High</td>
+            <td>3 years</td>
+            <td>Conversation logs, user interactions</td>
+          </tr>
+          <tr>
+            <td><strong>Novel Patterns</strong></td>
+            <td>INTELLECTUAL</td>
+            <td>Low</td>
+            <td>Critical</td>
+            <td>Permanent</td>
+            <td>Pattern discovery, research notes</td>
+          </tr>
+          <tr>
+            <td><strong>Analytics Data</strong></td>
+            <td>FLEET</td>
+            <td>None*</td>
+            <td>High</td>
+            <td>5 years</td>
+            <td>Metrics, performance, aggregates</td>
+          </tr>
+          <tr>
+            <td><strong>Token Data</strong></td>
+            <td>FINANCIAL</td>
+            <td>High</td>
+            <td>Critical</td>
+            <td>10 years</td>
+            <td>Transactions, balances, stakes</td>
+          </tr>
+          <tr>
+            <td><strong>Customer Data</strong></td>
+            <td>EXTERNAL</td>
+            <td>High</td>
+            <td>Critical</td>
+            <td>Per jurisdiction</td>
+            <td>User profiles, payment info, content</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 8px; font-size: 10px; color: #5a6a7a;">
+        *Rick strips PII before aggregation - raw logs contain PII
+      </div>
+    </div>
+
+    <!-- Sovereignty Rules -->
+    <div class="card">
+      <h2>🔱 Sovereignty Rules</h2>
+      <div class="sovereignty-rule">
+        <div class="rule-title">No customer data leaves Captain silo without consent</div>
+        <div class="rule-description">All customer data • Exception: Legal compliance only • Automated geo-blocking</div>
+      </div>
+      
+      <div class="sovereignty-rule">
+        <div class="rule-title">Admiral sees aggregates, never individual data</div>
+        <div class="rule-description">All Captain data • Exception: Security incidents only • Router filtering</div>
+      </div>
+      
+      <div class="sovereignty-rule">
+        <div class="rule-title">Luffy operates on anonymized data only</div>
+        <div class="rule-description">All research data • Exception: Pattern discovery only • Data sanitization</div>
+      </div>
+      
+      <div class="sovereignty-rule">
+        <div class="rule-title">Rick strips PII before aggregation</div>
+        <div class="rule-description">All analytics • No exceptions • Automated PII detection</div>
+      </div>
+      
+      <div class="sovereignty-rule">
+        <div class="rule-title">Cross-border data requires jurisdiction compliance</div>
+        <div class="rule-description">All international flows • Exception: Compliance review • Legal assessment</div>
+      </div>
+      
+      <div class="sovereignty-rule">
+        <div class="rule-title">Secrets never in plain text</div>
+        <div class="rule-description">All credentials • No exceptions • Automated secret scanning</div>
+      </div>
+    </div>
+
+    <!-- Compliance Matrix -->
+    <div class="card">
+      <h2>⚖️ Compliance Readiness Matrix</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Framework</th>
+            <th>Current State</th>
+            <th>Gap Analysis</th>
+            <th>Status</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GDPR</strong><br><small>EU General Data Protection</small></td>
+            <td>Partially implemented</td>
+            <td>Need DPO, privacy policy, consent automation</td>
+            <td><span class="compliance-status status-yellow">In Progress</span></td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td><strong>CCPA</strong><br><small>California Consumer Privacy</small></td>
+            <td>Not implemented</td>
+            <td>Need privacy policy, consumer rights automation</td>
+            <td><span class="compliance-status status-red">Critical</span></td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td><strong>PIPEDA</strong><br><small>Canada Personal Information</small></td>
+            <td>Basic compliance</td>
+            <td>Need explicit consent, purpose limitation</td>
+            <td><span class="compliance-status status-yellow">In Progress</span></td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td><strong>Australian Privacy Act</strong><br><small>Australia Privacy Principles</small></td>
+            <td>Not implemented</td>
+            <td>Need privacy policy, APPs compliance</td>
+            <td><span class="compliance-status status-red">Critical</span></td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td><strong>SOC2</strong><br><small>Service Organization Control</small></td>
+            <td>Basic security</td>
+            <td>Need formal controls, documentation</td>
+            <td><span class="compliance-status status-yellow">In Progress</span></td>
+            <td>Medium</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Risk Register -->
+    <div class="card">
+      <h2>🚨 Risk Register — Top 10 Fleet Data Governance Risks</h2>
+      
+      <div class="risk-item">
+        <div class="risk-number">1</div>
+        <div class="risk-content">
+          <div class="risk-title">Secrets in plain text <span class="compliance-status status-red">CRITICAL</span></div>
+          <div class="risk-description">GitHub token exposed in configuration • High probability • Critical impact • Manual scanning</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">2</div>
+        <div class="risk-content">
+          <div class="risk-title">Cross-border data leakage <span class="compliance-status status-red">CRITICAL</span></div>
+          <div class="risk-description">No geo-enforcement controls • Medium probability • Critical impact • No current controls</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">3</div>
+        <div class="risk-content">
+          <div class="risk-title">Customer data sovereignty breach <span class="compliance-status status-yellow">HIGH</span></div>
+          <div class="risk-description">Technical isolation only, no policy • Medium probability • High impact • Captain isolation</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">4</div>
+        <div class="risk-content">
+          <div class="risk-title">Token data privacy violation <span class="compliance-status status-yellow">HIGH</span></div>
+          <div class="risk-description">Identity mapping risk • Medium probability • High impact • Wallet separation</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">5</div>
+        <div class="risk-content">
+          <div class="risk-title">GDPR breach notification failure <span class="compliance-status status-red">HIGH</span></div>
+          <div class="risk-description">No breach process • High probability • High impact • No controls</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">6</div>
+        <div class="risk-content">
+          <div class="risk-title">PII in analytics aggregation <span class="compliance-status status-yellow">MEDIUM</span></div>
+          <div class="risk-description">Manual PII stripping • Medium probability • Medium impact • Rick's process</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">7</div>
+        <div class="risk-content">
+          <div class="risk-title">Captain workspace data loss <span class="compliance-status status-green">LOW</span></div>
+          <div class="risk-description">Automated backups active • Low probability • High impact • Daily backups</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">8</div>
+        <div class="risk-content">
+          <div class="risk-title">Regulatory classification as critical infrastructure <span class="compliance-status status-red">CRITICAL</span></div>
+          <div class="risk-description">No regulatory monitoring • Low probability • Critical impact • No controls</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">9</div>
+        <div class="risk-content">
+          <div class="risk-title">Identity anchor compromise <span class="compliance-status status-yellow">CRITICAL</span></div>
+          <div class="risk-description">Technical mitigation only • Low probability • Critical impact • NP-011 protection</div>
+        </div>
+      </div>
+      
+      <div class="risk-item">
+        <div class="risk-number">10</div>
+        <div class="risk-content">
+          <div class="risk-title">Session transcript indefinite retention <span class="compliance-status status-red">MEDIUM</span></div>
+          <div class="risk-description">No automated purging • High probability • Medium impact • No controls</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>Fleet Data Governance Framework • Dao 🗄️ CDO • Sovereignty Sacred</div>
+  <div id="refresh-time">Updated: 2026-02-12 19:28 UTC</div>
+</div>
+
+<script>
+function updateTime() {
+  const now = new Date();
+  const utcTime = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  document.getElementById('live-clock').textContent = utcTime;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>

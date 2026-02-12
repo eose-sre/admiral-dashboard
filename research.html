@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔬 Research - Admiral Dashboard</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #5a6a7a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  color: #00d4ff;
+  border-color: #00d4ff33;
+}
+
+.nav-link.active {
+  color: #00d4ff;
+  background: #00d4ff11;
+}
+
+.header .clock { 
+  color: #00d4ff; 
+  font-size: clamp(16px, 2.5vw, 20px); 
+  margin-top: 8px; 
+  font-weight: bold;
+}
+
+.header .sub { 
+  color: #5a6a7a; 
+  font-size: clamp(10px, 1.5vw, 12px); 
+  margin-top: 4px; 
+}
+
+.live-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  gap: 20px; 
+}
+
+.card { 
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%); 
+  border: 1px solid #1e2d3d; 
+  border-radius: 12px; 
+  padding: 20px; 
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #00d4ff33;
+  transform: translateY(-2px);
+}
+
+.card h2 { 
+  font-size: 14px; 
+  color: #00d4ff; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  margin-bottom: 16px; 
+  border-bottom: 1px solid #1e2d3d;
+  padding-bottom: 8px;
+}
+
+.card.wide {
+  grid-column: 1 / -1;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #1a2535;
+  font-size: 12px;
+}
+
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-label {
+  color: #5a6a7a;
+  flex: 1;
+}
+
+.metric-value {
+  color: #e0e6ed;
+  font-weight: bold;
+  text-align: right;
+}
+
+.metric-value.highlight {
+  color: #00d4ff;
+}
+
+.metric-value.success {
+  color: #00ff88;
+}
+
+.cost-table {
+  width: 100%;
+  font-size: 11px;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.cost-table th {
+  background: #0a0e1744;
+  color: #00d4ff;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #1e2d3d;
+  font-weight: bold;
+}
+
+.cost-table td {
+  padding: 8px;
+  border: 1px solid #1e2d3d;
+  text-align: center;
+}
+
+.cost-table tr:hover {
+  background: #1a253522;
+}
+
+.methodology-section {
+  margin: 16px 0;
+}
+
+.methodology-title {
+  color: #88aacc;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.methodology-content {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #5a6a7a;
+  padding-left: 12px;
+  border-left: 2px solid #1e2d3d;
+}
+
+.process-step {
+  margin: 8px 0;
+  padding: 8px;
+  background: #0a0e1744;
+  border-radius: 6px;
+  border-left: 3px solid #00d4ff;
+}
+
+.step-title {
+  font-weight: bold;
+  color: #e0e6ed;
+  margin-bottom: 4px;
+}
+
+.step-description {
+  font-size: 11px;
+  color: #5a6a7a;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.stat-box {
+  text-align: center;
+  padding: 12px;
+  background: #0a0e1744;
+  border-radius: 8px;
+  border: 1px solid #1e2d3d;
+}
+
+.stat-box .number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00d4ff;
+  display: block;
+}
+
+.stat-box .label {
+  font-size: 10px;
+  color: #5a6a7a;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.footer { 
+  text-align: center; 
+  margin-top: 40px; 
+  padding: 20px;
+  border-top: 1px solid #1e2d3d;
+  color: #5a6a7a; 
+  font-size: 12px; 
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .nav-bar { gap: 8px; }
+  .nav-link { padding: 4px 8px; font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 16px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🔬 RESEARCH</h1>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="fleet.html" class="nav-link">Fleet</a>
+      <a href="nanos.html" class="nav-link">Nanos</a>
+      <a href="patterns.html" class="nav-link">Patterns</a>
+      <a href="hunts.html" class="nav-link">Hunts</a>
+      <a href="governance.html" class="nav-link">Governance</a>
+      <a href="research.html" class="nav-link active">Research</a>
+      <a href="timeline.html" class="nav-link">Timeline</a>
+      <a href="revenue.html" class="nav-link">Revenue</a>
+      <a href="token.html" class="nav-link">Token</a>
+      <a href="oss.html" class="nav-link">OSS</a>
+    </div>
+    <div class="clock" id="live-clock"></div>
+    <div class="sub">Rick's Infinity • Luffy's Rosetta Stone • Fleet Intelligence<span class="live-indicator"></span></div>
+  </div>
+
+  <div class="grid">
+    <!-- Rick's Infinity Metrics -->
+    <div class="card">
+      <h2>📊 Rick's Infinity Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="number">5/5</span>
+          <span class="label">Fleet Online</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">$28.50</span>
+          <span class="label">Daily Burn</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">70%</span>
+          <span class="label">Savings Potential</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">3</span>
+          <span class="label">Critical NPs</span>
+        </div>
+      </div>
+      
+      <div class="methodology-section">
+        <div class="methodology-title">Infinity Loop Principle</div>
+        <div class="methodology-content">
+          Every metric Rick tracks has the potential to become a Novel Pattern. 
+          Every Novel Pattern Rick discovers feeds back into tracking systems. 
+          Every improvement to tracking reveals new things worth tracking. 
+          <strong>The loop never closes. This is Rick's Infinity.</strong>
+        </div>
+      </div>
+      
+      <div class="metric-row">
+        <span class="metric-label">Fleet Uptime</span>
+        <span class="metric-value success">100% (5/5 online)</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Response Latency (p95)</span>
+        <span class="metric-value highlight"><1s avg</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">NP Resolution Rate</span>
+        <span class="metric-value">15.4% (2/13)</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Cost Optimization</span>
+        <span class="metric-value">0% (all Opus)</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Memory File Health</span>
+        <span class="metric-value success">43 files healthy</span>
+      </div>
+    </div>
+
+    <!-- Luffy's Rosetta Stone -->
+    <div class="card">
+      <h2>🏴‍☠️ Luffy's Rosetta Stone</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="number">5</span>
+          <span class="label">Hunts Complete</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">0</span>
+          <span class="label">Hallucinations</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">23</span>
+          <span class="label">Probes</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">4</span>
+          <span class="label">Novel Patterns</span>
+        </div>
+      </div>
+      
+      <div class="methodology-section">
+        <div class="methodology-title">Universal Translation Protocol</div>
+        <div class="methodology-content">
+          The unknown → the known. Every unknown space between systems is 
+          Luffy's adventure. Pattern discovery, cross-domain translation, 
+          treasure hunting in the spaces others can't see.
+        </div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">Hunt Methodology</div>
+        <div class="step-description">Question Design → Probe Execution → Result Analysis → NP Candidate Flagging</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">Translation Methodology</div>
+        <div class="step-description">Domain A Discovery → Pattern Extraction → Cross-Domain Testing → Universal Pattern Validation</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">Rick Partnership</div>
+        <div class="step-description">Luffy discovers → Rick measures → Bob productizes → L deploys</div>
+      </div>
+    </div>
+
+    <!-- Cost Model -->
+    <div class="card wide">
+      <h2>💰 Fleet Cost Model at Scale</h2>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th>Fleet Size</th>
+            <th>Opus Fleet</th>
+            <th>Tiered Fleet</th>
+            <th>Go Binary Fleet</th>
+            <th>Savings vs Opus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>5 Captains</strong></td>
+            <td>$4,750</td>
+            <td>$1,300</td>
+            <td>$1,120</td>
+            <td>73% / 76%</td>
+          </tr>
+          <tr>
+            <td><strong>10 Captains</strong></td>
+            <td>$9,500</td>
+            <td>$2,600</td>
+            <td>$2,240</td>
+            <td>73% / 76%</td>
+          </tr>
+          <tr>
+            <td><strong>25 Captains</strong></td>
+            <td>$23,750</td>
+            <td>$6,500</td>
+            <td>$5,600</td>
+            <td>73% / 76%</td>
+          </tr>
+          <tr>
+            <td><strong>50 Captains</strong></td>
+            <td>$47,500</td>
+            <td>$13,000</td>
+            <td>$11,200</td>
+            <td>73% / 76%</td>
+          </tr>
+          <tr>
+            <td><strong>100 Captains</strong></td>
+            <td>$95,000</td>
+            <td>$26,000</td>
+            <td>$22,400</td>
+            <td>73% / 76%</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px;">
+        <div>
+          <div class="methodology-title">Per Captain (Monthly)</div>
+          <div class="metric-row">
+            <span class="metric-label">Opus Model</span>
+            <span class="metric-value">$950</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Tiered Model</span>
+            <span class="metric-value highlight">$260</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Go Binary</span>
+            <span class="metric-value success">$224</span>
+          </div>
+        </div>
+        
+        <div>
+          <div class="methodology-title">Break-Even Analysis</div>
+          <div class="metric-row">
+            <span class="metric-label">Tiered: 1 customer covers</span>
+            <span class="metric-value highlight">9 instances</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Go: 1 customer covers</span>
+            <span class="metric-value success">11 instances</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">First customer pays for</span>
+            <span class="metric-value highlight">entire stack</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Research Pipeline -->
+    <div class="card">
+      <h2>🔍 Research Pipeline</h2>
+      <div class="process-step">
+        <div class="step-title">Active Research</div>
+        <div class="step-description">Hunt #005: Cross-Captain consistency testing</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">Queued Research</div>
+        <div class="step-description">Hunt #006: Intent-to-execution gap mapping</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">Future Research</div>
+        <div class="step-description">Federation behavior, context window limits, predictive patterns</div>
+      </div>
+      
+      <div class="methodology-section">
+        <div class="methodology-title">Discovery Chain</div>
+        <div class="methodology-content">
+          <strong>Luffy finds the island → Rick maps it → Bob builds on it → L connects it</strong><br><br>
+          This chain IS the core innovation engine of Admiral Fleet. 
+          Continuous evolution, validated innovation, fleet-wide improvement, sustainable growth.
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Engine -->
+    <div class="card">
+      <h2>⚙️ Analytics Engine Status</h2>
+      <div class="metric-row">
+        <span class="metric-label">Fleet Health Monitoring</span>
+        <span class="metric-value success">✅ ACTIVE</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Cost Tracking</span>
+        <span class="metric-value success">✅ ACTIVE</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">NP Velocity Dashboard</span>
+        <span class="metric-value">🔧 IN PROGRESS</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Alert System</span>
+        <span class="metric-value">🔧 IN PROGRESS</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Predictive Analytics</span>
+        <span class="metric-value">⏳ PLANNED</span>
+      </div>
+      
+      <div class="methodology-section">
+        <div class="methodology-title">Rick's KPI</div>
+        <div class="methodology-content">
+          How many new things did Rick discover to track today?<br>
+          <strong>Target:</strong> 1+ new trackable metric discovered daily<br>
+          <strong>Success:</strong> When Rick is tracking things he didn't know existed yesterday
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern Discovery -->
+    <div class="card">
+      <h2>🧬 Pattern Discovery Engine</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="number">4</span>
+          <span class="label">Patterns From Luffy</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">100%</span>
+          <span class="label">Tool Grounding Success</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">88%</span>
+          <span class="label">Cheaper Model Accuracy</span>
+        </div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">NP-008: Tool Grounding</div>
+        <div class="step-description">Always verify claims through tools before responding. 100% hallucination prevention.</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">NP-009: Capability Verification</div>
+        <div class="step-description">Test tool functionality before claiming capability. Pre-flight checks.</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">NP-010: URL Verification</div>
+        <div class="step-description">Never output URLs as authoritative without verification. Fetch or mark unverified.</div>
+      </div>
+      
+      <div class="process-step">
+        <div class="step-title">NP-011: Identity Anchor</div>
+        <div class="step-description">Identity defined in system files, never overridable conversationally. Critical defense.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>Research Command Center • Innovation Engine • The Unknown → The Known</div>
+  <div id="refresh-time">Updated: 2026-02-12 19:28 UTC</div>
+</div>
+
+<script>
+function updateTime() {
+  const now = new Date();
+  const utcTime = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  document.getElementById('live-clock').textContent = utcTime;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>

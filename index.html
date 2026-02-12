@@ -51,6 +51,36 @@ body {
   text-shadow: 0 0 20px #00d4ff44;
 }
 
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #5a6a7a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  color: #00d4ff;
+  border-color: #00d4ff33;
+}
+
+.nav-link.active {
+  color: #00d4ff;
+  background: #00d4ff11;
+}
+
 .header .clock { 
   color: #00d4ff; 
   font-size: clamp(16px, 2.5vw, 20px); 
@@ -249,6 +279,8 @@ body {
   body { padding: 12px; }
   .grid { grid-template-columns: 1fr; }
   .scorecard-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-bar { gap: 8px; }
+  .nav-link { padding: 4px 8px; font-size: 10px; }
 }
 
 @media (max-width: 480px) {
@@ -263,6 +295,19 @@ body {
 <div class="container">
   <div class="header">
     <h1>🔱 ADMIRAL FLEET CONTROL</h1>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link active">Dashboard</a>
+      <a href="fleet.html" class="nav-link">Fleet</a>
+      <a href="nanos.html" class="nav-link">Nanos</a>
+      <a href="patterns.html" class="nav-link">Patterns</a>
+      <a href="hunts.html" class="nav-link">Hunts</a>
+      <a href="governance.html" class="nav-link">Governance</a>
+      <a href="research.html" class="nav-link">Research</a>
+      <a href="timeline.html" class="nav-link">Timeline</a>
+      <a href="revenue.html" class="nav-link">Revenue</a>
+      <a href="token.html" class="nav-link">Token</a>
+      <a href="oss.html" class="nav-link">OSS</a>
+    </div>
     <div class="clock" id="live-clock"></div>
     <div class="sub">Live Data • Rick's Infinity Analytics<span class="live-indicator"></span></div>
   </div>

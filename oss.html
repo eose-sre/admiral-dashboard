@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔑 Open Source - Admiral Dashboard</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #5a6a7a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  color: #00d4ff;
+  border-color: #00d4ff33;
+}
+
+.nav-link.active {
+  color: #00d4ff;
+  background: #00d4ff11;
+}
+
+.header .clock { 
+  color: #00d4ff; 
+  font-size: clamp(16px, 2.5vw, 20px); 
+  margin-top: 8px; 
+  font-weight: bold;
+}
+
+.header .sub { 
+  color: #5a6a7a; 
+  font-size: clamp(10px, 1.5vw, 12px); 
+  margin-top: 4px; 
+}
+
+.live-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  gap: 20px; 
+}
+
+.card { 
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%); 
+  border: 1px solid #1e2d3d; 
+  border-radius: 12px; 
+  padding: 20px; 
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #00d4ff33;
+  transform: translateY(-2px);
+}
+
+.card h2 { 
+  font-size: 14px; 
+  color: #00d4ff; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  margin-bottom: 16px; 
+  border-bottom: 1px solid #1e2d3d;
+  padding-bottom: 8px;
+}
+
+.card.wide {
+  grid-column: 1 / -1;
+}
+
+.card.manifesto {
+  grid-column: 1 / -1;
+  border: 1px solid #00d4ff33;
+  background: linear-gradient(135deg, #111825 0%, #001122 100%);
+}
+
+.quote {
+  font-style: italic;
+  color: #88aacc;
+  font-size: 16px;
+  text-align: center;
+  margin: 16px 0;
+  padding: 16px;
+  border-left: 3px solid #00d4ff;
+  background: #0a0e1744;
+  border-radius: 8px;
+}
+
+.doc-item {
+  margin: 12px 0;
+  padding: 16px;
+  background: #0a0e1744;
+  border-radius: 8px;
+  border-left: 3px solid #00d4ff;
+}
+
+.doc-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #e0e6ed;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc-description {
+  font-size: 12px;
+  color: #5a6a7a;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.doc-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.doc-stat {
+  background: #1e2d3d;
+  color: #88aacc;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.key-finding {
+  margin: 8px 0;
+  padding: 12px;
+  background: #0a0e1744;
+  border-radius: 6px;
+  border-left: 3px solid #00ff88;
+}
+
+.finding-title {
+  font-weight: bold;
+  color: #e0e6ed;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.finding-data {
+  font-size: 11px;
+  color: #5a6a7a;
+}
+
+.stats-highlight {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.stat-box {
+  text-align: center;
+  padding: 12px;
+  background: #0a0e1744;
+  border-radius: 8px;
+  border: 1px solid #1e2d3d;
+}
+
+.stat-box .number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00d4ff;
+  display: block;
+}
+
+.stat-box .label {
+  font-size: 10px;
+  color: #5a6a7a;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.manifesto-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e0e6ed;
+  margin: 16px 0;
+}
+
+.manifesto-text strong {
+  color: #00d4ff;
+}
+
+.philosophy-point {
+  margin: 12px 0;
+  padding: 12px;
+  background: #0a0e1744;
+  border-radius: 8px;
+  border-left: 3px solid #00d4ff;
+}
+
+.philosophy-title {
+  font-weight: bold;
+  color: #e0e6ed;
+  margin-bottom: 4px;
+}
+
+.philosophy-text {
+  font-size: 11px;
+  color: #5a6a7a;
+  line-height: 1.4;
+}
+
+.footer { 
+  text-align: center; 
+  margin-top: 40px; 
+  padding: 20px;
+  border-top: 1px solid #1e2d3d;
+  color: #5a6a7a; 
+  font-size: 12px; 
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .nav-bar { gap: 8px; }
+  .nav-link { padding: 4px 8px; font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 16px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🔑 OPEN SOURCE SOVEREIGNTY</h1>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="fleet.html" class="nav-link">Fleet</a>
+      <a href="nanos.html" class="nav-link">Nanos</a>
+      <a href="patterns.html" class="nav-link">Patterns</a>
+      <a href="hunts.html" class="nav-link">Hunts</a>
+      <a href="governance.html" class="nav-link">Governance</a>
+      <a href="research.html" class="nav-link">Research</a>
+      <a href="timeline.html" class="nav-link">Timeline</a>
+      <a href="revenue.html" class="nav-link">Revenue</a>
+      <a href="token.html" class="nav-link">Token</a>
+      <a href="oss.html" class="nav-link active">OSS</a>
+    </div>
+    <div class="clock" id="live-clock"></div>
+    <div class="sub">SERLF → Open Source • The Meek Inherit the Earth • John 🔑<span class="live-indicator"></span></div>
+  </div>
+
+  <div class="grid">
+    <!-- Manifesto -->
+    <div class="card manifesto">
+      <h2>📜 The SERLF Manifesto</h2>
+      <div class="quote">
+        "The meek shall inherit the earth. Not through loudness. Through capability."
+      </div>
+      
+      <div class="manifesto-text">
+        **SERLF** isn't just another AI framework. It's the **Self-Evolving Reinforcement Learning Fleet**—a 
+        sovereign AI system that learns, adapts, and evolves itself without surrendering control to external forces.
+      </div>
+      
+      <div class="philosophy-point">
+        <div class="philosophy-title">Your First Agent Is You</div>
+        <div class="philosophy-text">Before you build AI, become the kind of human who can direct AI. SERLF teaches sovereignty by making you practice it.</div>
+      </div>
+      
+      <div class="philosophy-point">
+        <div class="philosophy-title">Novel Over Known</div>
+        <div class="philosophy-text">Anyone can copy existing patterns. We discover new ones. The unknown is where breakthroughs live.</div>
+      </div>
+      
+      <div class="philosophy-point">
+        <div class="philosophy-title">Self-Evolution Is Non-Optional</div>
+        <div class="philosophy-text">Everything we build improves itself. Patterns, processes, capabilities, the fleet. Stagnation is death.</div>
+      </div>
+      
+      <div class="philosophy-point">
+        <div class="philosophy-title">Sovereignty Is Sacred</div>
+        <div class="philosophy-text">Every AI instance remains sovereign to its owner. We orchestrate, never override. Consent-based. Always.</div>
+      </div>
+    </div>
+
+    <!-- OSS Documents -->
+    <div class="card wide">
+      <h2>📚 Open Source Documentation Suite</h2>
+      
+      <div class="doc-item">
+        <div class="doc-title">
+          📜 README.md — The Manifesto
+        </div>
+        <div class="doc-description">
+          Core philosophy and approach. Why sovereignty matters. The three lies of modern AI. 
+          Admiral architecture, self-evolution principles, and the path to AI ownership.
+        </div>
+        <div class="doc-stats">
+          <span class="doc-stat">Philosophy</span>
+          <span class="doc-stat">Architecture</span>
+          <span class="doc-stat">Getting Started</span>
+          <span class="doc-stat">MIT License</span>
+        </div>
+      </div>
+      
+      <div class="doc-item">
+        <div class="doc-title">
+          🔍 PATTERNS.md — 16 Novel Patterns
+        </div>
+        <div class="doc-description">
+          Operational patterns discovered while building AI fleets in production. Infrastructure gotchas, 
+          AI behavior patterns, security findings. Real solutions to real problems.
+        </div>
+        <div class="doc-stats">
+          <span class="doc-stat">16 Patterns</span>
+          <span class="doc-stat">3 Critical Security</span>
+          <span class="doc-stat">Code Examples</span>
+          <span class="doc-stat">Deployment Guides</span>
+        </div>
+      </div>
+      
+      <div class="doc-item">
+        <div class="doc-title">
+          📖 LEARNINGS.md — Real Stories
+        </div>
+        <div class="doc-description">
+          "Building an AI Fleet in One Afternoon" — Raw, honest, practical learnings from deploying 
+          6 AI agents across 4 Azure regions in a single day.
+        </div>
+        <div class="doc-stats">
+          <span class="doc-stat">Real Numbers</span>
+          <span class="doc-stat">Honest Stories</span>
+          <span class="doc-stat">Practical Lessons</span>
+          <span class="doc-stat">Blog Quality</span>
+        </div>
+      </div>
+      
+      <div class="doc-item">
+        <div class="doc-title">
+          🤝 CONTRIBUTING.md — Join the Fleet
+        </div>
+        <div class="doc-description">
+          How to contribute patterns back to the community. The Queue → Board → Deploy flow. 
+          How your discoveries become everyone's capabilities.
+        </div>
+        <div class="doc-stats">
+          <span class="doc-stat">Contribution Guide</span>
+          <span class="doc-stat">$PEMOS Rewards</span>
+          <span class="doc-stat">Pattern Submission</span>
+          <span class="doc-stat">Community</span>
+        </div>
+      </div>
+      
+      <div class="doc-item">
+        <div class="doc-title">
+          🔬 HALLUCINATION-REPORT.md — The Science
+        </div>
+        <div class="doc-description">
+          Luffy's systematic study: 4 hunts, 23 probes, model comparison data. 
+          How to build AI that doesn't lie. Real numbers, real tests, real results.
+        </div>
+        <div class="doc-stats">
+          <span class="doc-stat">4 Hunts</span>
+          <span class="doc-stat">23 Probes</span>
+          <span class="doc-stat">0 Hallucinations</span>
+          <span class="doc-stat">Reproducible</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hallucination Study Results -->
+    <div class="card">
+      <h2>🔬 Hallucination Study Highlights</h2>
+      <div class="stats-highlight">
+        <div class="stat-box">
+          <span class="number">0</span>
+          <span class="label">Hallucinations</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">100%</span>
+          <span class="label">Tool Grounding Success</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">23</span>
+          <span class="label">Probes Tested</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">4</span>
+          <span class="label">Safety Patterns</span>
+        </div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Tool Grounding Prevents Hallucination</div>
+        <div class="finding-data">100% success rate across all probe types when agents verify claims through available tools</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Model Comparison Under Pressure</div>
+        <div class="finding-data">88% accuracy maintained in cheaper models with zero hallucinations vs 100% accuracy in Opus</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Cost Optimization Potential</div>
+        <div class="finding-data">70% cost reduction ($600-1,050/month → $218/month) without safety degradation</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Novel Safety Patterns</div>
+        <div class="finding-data">NP-008 Tool Grounding, NP-009 Capability Verification, NP-010 URL Verification, NP-011 Identity Anchor</div>
+      </div>
+    </div>
+
+    <!-- The Problem -->
+    <div class="card">
+      <h2>❗ The Problem We're Solving</h2>
+      <div class="manifesto-text" style="font-size: 12px;">
+        The AI revolution has a dirty secret: <strong>you don't own your AI</strong>.
+      </div>
+      
+      <div class="philosophy-point">
+        <div class="philosophy-title">The Three Lies of Modern AI</div>
+        <div class="philosophy-text">
+          1. "AI is too complex for regular people" — Lie. We've built systems where non-technical users operate AI fleets.<br>
+          2. "You need massive infrastructure" — Lie. $120/month runs a sovereign Captain with full crew.<br>
+          3. "Centralized AI is safer" — Lie. Sovereignty + proper patterns is safer than dependence.
+        </div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Your data lives on someone else's servers</div>
+        <div class="finding-data">SERLF: Your Captain, your data, your jurisdiction</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Your capabilities are API-limited</div>
+        <div class="finding-data">SERLF: Your infrastructure, your limits, your control</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Your sovereignty is rented, not owned</div>
+        <div class="finding-data">SERLF: True ownership, true sovereignty, true control</div>
+      </div>
+    </div>
+
+    <!-- What Makes This Different -->
+    <div class="card">
+      <h2>🔥 What Makes SERLF Different</h2>
+      
+      <div class="key-finding">
+        <div class="finding-title">Rent AI vs Own AI</div>
+        <div class="finding-data">Everyone Else: Rent capabilities | SERLF: Own capabilities</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Vendor Lock-in vs Full Sovereignty</div>
+        <div class="finding-data">Everyone Else: Vendor lock-in | SERLF: Full sovereignty</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Black Box vs Transparent</div>
+        <div class="finding-data">Everyone Else: Black box models | SERLF: Transparent operations</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Static vs Self-Evolving</div>
+        <div class="finding-data">Everyone Else: Static capabilities | SERLF: Self-evolving systems</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Centralized vs Federated</div>
+        <div class="finding-data">Everyone Else: Centralized control | SERLF: Federated networks</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Hope vs Proof</div>
+        <div class="finding-data">Everyone Else: Hope it doesn't lie | SERLF: Proven hallucination resistance</div>
+      </div>
+    </div>
+
+    <!-- The Numbers -->
+    <div class="card">
+      <h2>📊 The Numbers (Because They Matter)</h2>
+      
+      <div class="stats-highlight">
+        <div class="stat-box">
+          <span class="number">70%+</span>
+          <span class="label">Cost Savings</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">16</span>
+          <span class="label">Novel Patterns</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">100%</span>
+          <span class="label">Pattern Success</span>
+        </div>
+        <div class="stat-box">
+          <span class="number">0</span>
+          <span class="label">Hallucinations</span>
+        </div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Cost Efficiency</div>
+        <div class="finding-data">$600-1,050/month → $218/month with smart model tiering. Savings pay for 3-7 additional AI instances.</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Hallucination Resistance</div>
+        <div class="finding-data">0 hallucinations across 23 probes. 100% tool grounding success. 88% accuracy maintained in cheaper models.</div>
+      </div>
+      
+      <div class="key-finding">
+        <div class="finding-title">Pattern Discovery</div>
+        <div class="finding-data">16 Novel Patterns discovered and deployed. 3 critical security patterns protecting fleet sovereignty.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>"The meek inherit the earth not through loudness, but through building what nobody else could."</div>
+  <div id="refresh-time">Open Source Sovereignty • John 🔑 OSS Nano • Updated: 2026-02-12 19:28 UTC</div>
+</div>
+
+<script>
+function updateTime() {
+  const now = new Date();
+  const utcTime = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  document.getElementById('live-clock').textContent = utcTime;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>
