@@ -205,7 +205,7 @@ body{background:var(--bg);color:var(--text);font:400 13px/1.6 var(--font);-webki
   <div class="auth-box">
     <div class="auth-logo">🔱</div>
     <div class="auth-title">Meek</div>
-    <div class="auth-sub">Fleet Command · Sovereign Access</div>
+    <div class="auth-sub">Owner Access · Sovereign Fleet Command</div>
     <div style="margin-top:24px" id="gsiBtn"></div>
     <div class="auth-error" id="authErr">Access denied. Only authorized emails permitted.</div>
     <div class="auth-bypass" onclick="bypassAuth()">device auth →</div>
@@ -214,11 +214,11 @@ body{background:var(--bg);color:var(--text);font:400 13px/1.6 var(--font);-webki
 
 <div class="app" id="appShell" style="display:none">
   <div class="top">
-    <div class="logo"><div class="logo-m">🔱</div><div><div class="logo-t">Meek</div><div class="logo-s">Fleet Command · Sovereign</div></div></div>
+    <div class="logo"><div class="logo-m">🔱</div><div><div class="logo-t">Meek</div><div class="logo-s">Kay's Fleet · Sovereign</div></div></div>
     <div class="top-r">
       <div class="ch"><span class="ch-dot"></span>5/5</div>
       <div class="ch">🔒</div>
-      <div class="ch ch-user">kewinjoffe@gmail.com</div>
+      <div class="ch ch-user">👑 Kay · Owner</div>
       <div class="ch clk" id="clk"></div>
     </div>
   </div>
@@ -382,7 +382,7 @@ const RE=[
 const P={};
 
 P.bridge=()=>`
-<div class="hero"><div class="hero-title">🔱 <span>Meek</span> Fleet Command</div><div class="hero-sub">Sovereign fleet management · SSO: kewinjoffe@gmail.com · Device auth enforced</div>
+<div class="hero"><div class="hero-title">🔱 <span>Meek</span> Fleet Command</div><div class="hero-sub">Owner: Kay · SSO enforced · Device auth · Sovereign</div>
 <div class="hero-stats">
   <div class="hero-st"><div class="hero-st-v" style="color:var(--ok)">5/5</div><div class="hero-st-l">Fleet</div></div>
   <div class="hero-st"><div class="hero-st-v" style="color:var(--sea)">19</div><div class="hero-st-l">Patterns</div></div>
@@ -570,7 +570,7 @@ P.security=()=>`
   <div class="c"><div class="ch2"><div class="ct">🔒 Lockdown</div><span class="b b-ok">ENFORCED</span></div>
     <div class="r"><span class="rn">Device Auth</span><span class="rm" style="color:var(--ok)">Ed25519 ✓</span></div>
     <div class="r"><span class="rn">Insecure Auth</span><span class="rm" style="color:var(--ok)">Blocked ✓</span></div>
-    <div class="r"><span class="rn">SSO</span><span class="rm">kewinjoffe@gmail.com</span></div></div>
+    <div class="r"><span class="rn">Owner</span><span class="rm">Kay · kewinjoffe@gmail.com</span></div></div>
   <div class="c"><div class="ch2"><div class="ct">Issues</div><span class="b b-danger">5 OPEN</span></div>
     <div class="r"><span class="d d-r"></span><span class="rn">Source maps (NP-016)</span><span class="rm">CRIT</span></div>
     <div class="r"><span class="d d-r"></span><span class="rn">Headers (NP-014)</span><span class="rm">HIGH</span></div>
