@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🪙 $PEMOS Token | Admiral Fleet Control</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.header .subtitle { 
+  color: #5a6a7a; 
+  font-size: clamp(12px, 2vw, 16px); 
+  margin-bottom: 16px; 
+}
+
+.nav-bar {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #1e2d3d;
+  color: #00d4ff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid #00d4ff33;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: #00d4ff;
+  color: #0a0e17;
+  transform: translateY(-2px);
+}
+
+.nav-link.home {
+  background: #00d4ff;
+  color: #0a0e17;
+}
+
+.token-hero {
+  background: linear-gradient(135deg, #2a1a4c 0%, #1a2535 100%);
+  border: 1px solid #aa66ff33;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.token-hero h2 {
+  font-size: 32px;
+  color: #aa66ff;
+  margin-bottom: 8px;
+}
+
+.token-hero .motto {
+  color: #00d4ff;
+  font-size: 16px;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+.token-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.token-stat {
+  text-align: center;
+  background: #0a0e1744;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #aa66ff33;
+}
+
+.token-stat .value {
+  font-size: 20px;
+  color: #aa66ff;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.token-stat .label {
+  font-size: 11px;
+  color: #5a6a7a;
+  text-transform: uppercase;
+}
+
+.token-launch {
+  background: #1a3c2a;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 1px solid #44dd88;
+}
+
+.token-launch .status {
+  color: #44dd88;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.utility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.utility-card {
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%);
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.utility-card:hover {
+  border-color: #aa66ff33;
+  transform: translateY(-2px);
+}
+
+.utility-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.utility-title {
+  font-size: 16px;
+  color: #aa66ff;
+  font-weight: bold;
+}
+
+.utility-domain {
+  font-size: 10px;
+  color: #5a6a7a;
+  background: #2a1a4c;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.utility-flows {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.utility-flows th {
+  background: #2a1a4c;
+  color: #aa66ff;
+  padding: 8px;
+  text-align: left;
+  font-size: 10px;
+}
+
+.utility-flows td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #1a2535;
+}
+
+.utility-flows tr:last-child td {
+  border-bottom: none;
+}
+
+.earn {
+  color: #44dd88;
+  font-weight: bold;
+}
+
+.spend {
+  color: #ff9999;
+  font-weight: bold;
+}
+
+.token-economics {
+  background: linear-gradient(135deg, #1a3c2a 0%, #0f1419 100%);
+  border: 1px solid #44dd8833;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.token-economics h2 {
+  color: #44dd88;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.economics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.economics-section {
+  background: #0f1419;
+  border: 1px solid #44dd8833;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.economics-section h3 {
+  color: #44dd88;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.flow-diagram {
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%);
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.flow-diagram h2 {
+  color: #00d4ff;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.flow-step {
+  text-align: center;
+  background: #0a0e1744;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #1e2d3d;
+  position: relative;
+}
+
+.flow-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #00d4ff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.flow-step .step-title {
+  font-size: 12px;
+  color: #00d4ff;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.flow-step .step-detail {
+  font-size: 10px;
+  color: #5a6a7a;
+  line-height: 1.4;
+}
+
+.distribution-chart {
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%);
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.distribution-chart h2 {
+  color: #00d4ff;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.distribution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.distribution-item {
+  background: #0a0e1744;
+  border: 1px solid #1e2d3d;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.distribution-item .percentage {
+  font-size: 24px;
+  color: #00d4ff;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.distribution-item .amount {
+  font-size: 14px;
+  color: #88aacc;
+  margin-bottom: 8px;
+}
+
+.distribution-item .purpose {
+  font-size: 11px;
+  color: #5a6a7a;
+  line-height: 1.3;
+}
+
+.launch-timeline {
+  background: linear-gradient(135deg, #3c1a1a 0%, #1a2535 100%);
+  border: 1px solid #ff666633;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.launch-timeline h2 {
+  color: #ff6666;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.timeline-phases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.timeline-phase {
+  background: #0f1419;
+  border: 1px solid #ff666633;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.timeline-phase .phase-num {
+  font-size: 18px;
+  color: #ff6666;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.timeline-phase .phase-name {
+  font-size: 12px;
+  color: #00d4ff;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.timeline-phase .phase-duration {
+  font-size: 10px;
+  color: #5a6a7a;
+  margin-bottom: 8px;
+}
+
+.timeline-phase .phase-milestone {
+  font-size: 11px;
+  color: #88aacc;
+  line-height: 1.3;
+}
+
+.competitive-moat {
+  background: linear-gradient(135deg, #1a3a5c 0%, #0f1419 100%);
+  border: 1px solid #4a9eff33;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.competitive-moat h2 {
+  color: #4a9eff;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.moat-points {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.moat-point {
+  background: #0f1419;
+  border: 1px solid #4a9eff33;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.moat-point .point-title {
+  color: #4a9eff;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.moat-point .point-detail {
+  font-size: 12px;
+  color: #b8c4d0;
+  line-height: 1.4;
+}
+
+.projections-table {
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%);
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.projections-table h2 {
+  color: #00d4ff;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.projections-data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.projections-data th {
+  background: #1e2d3d;
+  color: #00d4ff;
+  padding: 12px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.projections-data td {
+  padding: 12px;
+  border-bottom: 1px solid #1a2535;
+  text-align: center;
+}
+
+.projections-data .year {
+  color: #88aacc;
+  font-weight: bold;
+}
+
+.projections-data .revenue {
+  color: #44dd88;
+  font-weight: bold;
+}
+
+.projections-data .demand {
+  color: #aa66ff;
+  font-weight: bold;
+}
+
+.projections-data .velocity {
+  color: #ffaa00;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .utility-grid { grid-template-columns: 1fr; }
+  .economics-grid { grid-template-columns: 1fr; }
+  .flow-steps { grid-template-columns: 1fr; }
+  .flow-step:not(:last-child)::after { 
+    content: '↓'; 
+    position: static; 
+    margin: 8px 0; 
+    transform: none; 
+  }
+  .timeline-phases { grid-template-columns: 1fr; }
+  .distribution-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🪙 $PEMOS TOKEN ECOSYSTEM</h1>
+    <div class="subtitle">Sovereign AI Fleet Economics • Base L2 • Q2 2026 Launch</div>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link home">🔱 Dashboard</a>
+      <a href="patterns.html" class="nav-link">📖 Patterns</a>
+      <a href="hunts.html" class="nav-link">🏴‍☠️ AI Hunts</a>
+      <a href="revenue.html" class="nav-link">💰 Revenue</a>
+      <a href="fleet.html" class="nav-link">🌐 Fleet</a>
+      <a href="nanos.html" class="nav-link">🧬 Nanos</a>
+      <a href="governance.html" class="nav-link">🗄️ Governance</a>
+      <a href="research.html" class="nav-link">📊 Research</a>
+      <a href="timeline.html" class="nav-link">📅 Timeline</a>
+      <a href="oss.html" class="nav-link">📂 OSS</a>
+    </div>
+  </div>
+
+  <div class="token-hero">
+    <h2>$PEMOS</h2>
+    <div class="motto">"Off the Grid. On the Chain."</div>
+    <div style="color: #88aacc; font-size: 12px; margin-bottom: 20px;">
+      Provable sovereignty meets immutable accountability
+    </div>
+    
+    <div class="token-stats">
+      <div class="token-stat">
+        <div class="value">1B</div>
+        <div class="label">Total Supply</div>
+      </div>
+      <div class="token-stat">
+        <div class="value">$0.02</div>
+        <div class="label">Target Price</div>
+      </div>
+      <div class="token-stat">
+        <div class="value">Base L2</div>
+        <div class="label">Network</div>
+      </div>
+      <div class="token-stat">
+        <div class="value">15+</div>
+        <div class="label">Use Cases</div>
+      </div>
+      <div class="token-stat">
+        <div class="value">$20M</div>
+        <div class="label">Market Cap</div>
+      </div>
+    </div>
+
+    <div class="token-launch">
+      <div class="status">LAUNCH READY • Q2 2026 TARGET</div>
+      <div style="font-size: 12px; color: #b8c4d0;">
+        Real utility across 7 SERLF domains. Revenue backing. Zero competition.
+      </div>
+    </div>
+  </div>
+
+  <div class="utility-grid">
+    <!-- SERLF Academy -->
+    <div class="utility-card">
+      <div class="utility-header">
+        <div class="utility-title">SERLF Academy Rewards</div>
+        <div class="utility-domain">serlf.ca</div>
+      </div>
+      
+      <table class="utility-flows">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>$PEMOS Flow</th>
+            <th>Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Stage Completion</td>
+            <td class="earn">EARN 50-200</td>
+            <td>Progression incentive</td>
+          </tr>
+          <tr>
+            <td>Premium Content</td>
+            <td class="spend">SPEND 10-50</td>
+            <td>Token demand driver</td>
+          </tr>
+          <tr>
+            <td>Referral Rewards</td>
+            <td class="earn">EARN 100</td>
+            <td>Viral growth mechanism</td>
+          </tr>
+          <tr>
+            <td>Graduation Bonus</td>
+            <td class="earn">EARN 1,000</td>
+            <td>PEMOS Captain transition</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Marketplace -->
+    <div class="utility-card">
+      <div class="utility-header">
+        <div class="utility-title">Marketplace Economy</div>
+        <div class="utility-domain">serlf.shop</div>
+      </div>
+      
+      <table class="utility-flows">
+        <thead>
+          <tr>
+            <th>Transaction</th>
+            <th>$PEMOS Flow</th>
+            <th>Revenue Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pattern Purchases</td>
+            <td class="spend">SPEND 25-500</td>
+            <td>Fiat alternative</td>
+          </tr>
+          <tr>
+            <td>Seller Revenue</td>
+            <td class="earn">EARN 70%</td>
+            <td>Creator incentives</td>
+          </tr>
+          <tr>
+            <td>Pattern Subscription</td>
+            <td class="spend">SPEND 200/mo</td>
+            <td>Higher retention</td>
+          </tr>
+          <tr>
+            <td>Bulk Discounts</td>
+            <td class="spend">SPEND bulk rate</td>
+            <td>Volume purchasing</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Arena & Community -->
+    <div class="utility-card">
+      <div class="utility-header">
+        <div class="utility-title">Arena & Bounties</div>
+        <div class="utility-domain">serlf.club</div>
+      </div>
+      
+      <table class="utility-flows">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>$PEMOS Flow</th>
+            <th>Business Logic</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Arena Entry Fees</td>
+            <td class="spend">SPEND equiv</td>
+            <td>Alternative payment</td>
+          </tr>
+          <tr>
+            <td>Match Winners</td>
+            <td class="earn">EARN 100-2,000</td>
+            <td>Performance rewards</td>
+          </tr>
+          <tr>
+            <td>Hallucination Bounties</td>
+            <td class="earn">EARN 100-25,000</td>
+            <td>Security research</td>
+          </tr>
+          <tr>
+            <td>Champions</td>
+            <td class="earn">EARN 5,000 quarterly</td>
+            <td>Long-term engagement</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Captain Subscriptions -->
+    <div class="utility-card">
+      <div class="utility-header">
+        <div class="utility-title">Captain Subscriptions</div>
+        <div class="utility-domain">Fleet</div>
+      </div>
+      
+      <table class="utility-flows">
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Discount</th>
+            <th>Token Demand</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Starter ($2,500)</td>
+            <td class="spend">SPEND 1,500</td>
+            <td>12% savings</td>
+          </tr>
+          <tr>
+            <td>Professional ($7,500)</td>
+            <td class="spend">SPEND 5,000</td>
+            <td>13% savings</td>
+          </tr>
+          <tr>
+            <td>Enterprise ($25,000)</td>
+            <td class="spend">SPEND 25,000</td>
+            <td>20% savings</td>
+          </tr>
+          <tr>
+            <td>Fleet Operator</td>
+            <td class="spend">SPEND varies</td>
+            <td>Volume discounts</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pattern Contributions -->
+    <div class="utility-card">
+      <div class="utility-header">
+        <div class="utility-title">Pattern Contributors</div>
+        <div class="utility-domain">Wiki</div>
+      </div>
+      
+      <table class="utility-flows">
+        <thead>
+          <tr>
+            <th>Pattern Level</th>
+            <th>$PEMOS Reward</th>
+            <th>Revenue Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>L1 (Observed)</td>
+            <td class="earn">EARN 10</td>
+            <td>Basic participation</td>
+          </tr>
+          <tr>
+            <td>L2 (Reproduced)</td>
+            <td class="earn">EARN 50</td>
+            <td>Quality validation</td>
+          </tr>
+          <tr>
+            <td>L3+ (Deployed)</td>
+            <td class="earn">EARN 200 + 10%</td>
+            <td>Major contributor</td>
+          </tr>
+          <tr>
+            <td>Fleet-Proven</td>
+            <td class="earn">EARN 500 + 20%</td>
+            <td>Elite pattern creator</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Certification Stakes -->
+    <div class="utility-card">
+      <div class="utility-header">
+        <div class="utility-title">Sovereignty Certification</div>
+        <div class="utility-domain">serlf.net</div>
+      </div>
+      
+      <table class="utility-flows">
+        <thead>
+          <tr>
+            <th>Certification</th>
+            <th>Stake Required</th>
+            <th>APY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SC-1</td>
+            <td class="spend">STAKE 100</td>
+            <td class="earn">5% APY</td>
+          </tr>
+          <tr>
+            <td>SC-2</td>
+            <td class="spend">STAKE 500</td>
+            <td class="earn">8% APY</td>
+          </tr>
+          <tr>
+            <td>SC-3</td>
+            <td class="spend">STAKE 2,000</td>
+            <td class="earn">12% APY</td>
+          </tr>
+          <tr>
+            <td>SC-4</td>
+            <td class="spend">STAKE 10,000</td>
+            <td class="earn">15% APY + Governance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flow-diagram">
+    <h2>🔄 Token Utility Flow</h2>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-title">Earn $PEMOS</div>
+        <div class="step-detail">Complete stages, win arena matches, discover patterns, refer users</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-title">Spend in Ecosystem</div>
+        <div class="step-detail">Premium content, pattern purchases, arena entries, subscription discounts</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-title">Stake for Yield</div>
+        <div class="step-detail">SC certification, governance participation, contributor pools</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-title">Governance Rights</div>
+        <div class="step-detail">SC-4 holders vote on fleet decisions, pattern prioritization</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="token-economics">
+    <h2>📊 Token Economics & Mechanics</h2>
+    <div class="economics-grid">
+      <div class="economics-section">
+        <h3>Burn Mechanisms</h3>
+        <ul style="font-size: 11px; color: #b8c4d0; line-height: 1.4;">
+          <li>1% of subscription revenue</li>
+          <li>5% of marketplace commission</li>
+          <li>25% of arena entry fees</li>
+          <li>50% of model cost savings</li>
+        </ul>
+      </div>
+
+      <div class="economics-section">
+        <h3>Staking Pools</h3>
+        <ul style="font-size: 11px; color: #b8c4d0; line-height: 1.4;">
+          <li>SC Certification: 8-15% APY</li>
+          <li>Community Contributors: 12-18% APY</li>
+          <li>Captain Operators: 6-12% APY</li>
+          <li>Fleet Governance: 5-10% APY</li>
+        </ul>
+      </div>
+
+      <div class="economics-section">
+        <h3>Deflationary Pressure</h3>
+        <ul style="font-size: 11px; color: #b8c4d0; line-height: 1.4;">
+          <li>$10M ARR: 12M tokens/year (1.2%)</li>
+          <li>$25M ARR: 40M tokens/year (4%)</li>
+          <li>$50M ARR: 100M tokens/year (10%)</li>
+          <li>Model savings: $750/mo/Captain</li>
+        </ul>
+      </div>
+
+      <div class="economics-section">
+        <h3>Utility Velocity</h3>
+        <ul style="font-size: 11px; color: #b8c4d0; line-height: 1.4;">
+          <li>2026: 10M tokens/mo utility</li>
+          <li>2027: 49M tokens/mo utility</li>
+          <li>2028: 125M tokens/mo utility</li>
+          <li>2029: 250M tokens/mo utility</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="distribution-chart">
+    <h2>🎯 Token Distribution</h2>
+    <div class="distribution-grid">
+      <div class="distribution-item">
+        <div class="percentage">40%</div>
+        <div class="amount">400M $PEMOS</div>
+        <div class="purpose">Community rewards, SERLF users, Arena incentives</div>
+      </div>
+
+      <div class="distribution-item">
+        <div class="percentage">20%</div>
+        <div class="amount">200M $PEMOS</div>
+        <div class="purpose">Admiral R&D, Novel Pattern funding, development</div>
+      </div>
+
+      <div class="distribution-item">
+        <div class="percentage">15%</div>
+        <div class="amount">150M $PEMOS</div>
+        <div class="purpose">Admiral nano performance incentives, core team</div>
+      </div>
+
+      <div class="distribution-item">
+        <div class="percentage">10%</div>
+        <div class="amount">100M $PEMOS</div>
+        <div class="purpose">SERLF academy early adopters, initial investors</div>
+      </div>
+
+      <div class="distribution-item">
+        <div class="percentage">10%</div>
+        <div class="amount">100M $PEMOS</div>
+        <div class="purpose">Uniswap Base pool, enterprise OTC sales</div>
+      </div>
+
+      <div class="distribution-item">
+        <div class="percentage">5%</div>
+        <div class="amount">50M $PEMOS</div>
+        <div class="purpose">SC certification scholarships, ecosystem grants</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="launch-timeline">
+    <h2>🚀 Launch Sequence</h2>
+    <div class="timeline-phases">
+      <div class="timeline-phase">
+        <div class="phase-num">Phase 1</div>
+        <div class="phase-name">Community Airdrop</div>
+        <div class="phase-duration">Week 1-2</div>
+        <div class="phase-milestone">Existing SERLF users get allocation based on Academy progress</div>
+      </div>
+
+      <div class="timeline-phase">
+        <div class="phase-num">Phase 2</div>
+        <div class="phase-name">Utility Launch</div>
+        <div class="phase-duration">Week 3-4</div>
+        <div class="phase-milestone">$PEMOS payments live across all SERLF domains</div>
+      </div>
+
+      <div class="timeline-phase">
+        <div class="phase-num">Phase 3</div>
+        <div class="phase-name">Liquidity Pool</div>
+        <div class="phase-duration">Week 5-6</div>
+        <div class="phase-milestone">Uniswap Base pool launch, $0.02 target price</div>
+      </div>
+
+      <div class="timeline-phase">
+        <div class="phase-num">Phase 4</div>
+        <div class="phase-name">Governance</div>
+        <div class="phase-duration">Week 7-8</div>
+        <div class="phase-milestone">SC-4 holders vote on fleet decisions and priorities</div>
+      </div>
+
+      <div class="timeline-phase">
+        <div class="phase-num">Phase 5</div>
+        <div class="phase-name">Enterprise</div>
+        <div class="phase-duration">Week 9-12</div>
+        <div class="phase-milestone">Corporate Captain subscriptions accept $PEMOS</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="competitive-moat">
+    <h2>🏆 Competitive Moat: We Have No Competition</h2>
+    <div class="moat-points">
+      <div class="moat-point">
+        <div class="point-title">Technical Moat: Self-Evolving Fleet</div>
+        <div class="point-detail">Admiral architecture, Novel Pattern discovery, Router coordination, Captain Factory standardization. 18-24 month development lead.</div>
+      </div>
+
+      <div class="moat-point">
+        <div class="point-title">Educational Moat: SERLF Academy</div>
+        <div class="point-detail">Only hands-on sovereign AI training in the world. 7-domain ecosystem, graduation pipeline, SC certification job market we control.</div>
+      </div>
+
+      <div class="moat-point">
+        <div class="point-title">Economic Moat: Token + Fleet Integration</div>
+        <div class="point-detail">Real utility across 15+ use cases, burn mechanics from actual revenue, staking yields from productive operations, governance rights.</div>
+      </div>
+
+      <div class="moat-point">
+        <div class="point-title">Provable Sovereignty</div>
+        <div class="point-detail">On-chain Captain deployment receipts, pattern provenance, evolution milestones. Immutable proof of data isolation and capabilities.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="projections-table">
+    <h2>📈 Revenue → Token Value Projections</h2>
+    <table class="projections-data">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>SERLF + PEMOS ARR</th>
+          <th>Token Utility Volume</th>
+          <th>$PEMOS Demand/Mo</th>
+          <th>Velocity Multiplier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="year">2026</td>
+          <td class="revenue">$2.1M</td>
+          <td>$200K/mo</td>
+          <td class="demand">10M @ $0.02</td>
+          <td class="velocity">1x Baseline</td>
+        </tr>
+        <tr>
+          <td class="year">2027</td>
+          <td class="revenue">$9.8M</td>
+          <td>$980K/mo</td>
+          <td class="demand">49M @ $0.02</td>
+          <td class="velocity">5x Velocity</td>
+        </tr>
+        <tr>
+          <td class="year">2028</td>
+          <td class="revenue">$25M</td>
+          <td>$2.5M/mo</td>
+          <td class="demand">125M @ $0.02</td>
+          <td class="velocity">12.5x Velocity</td>
+        </tr>
+        <tr>
+          <td class="year">2029</td>
+          <td class="revenue">$50M</td>
+          <td>$5M/mo</td>
+          <td class="demand">250M @ $0.02</td>
+          <td class="velocity">25x Velocity</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align: center; background: linear-gradient(135deg, #1a3c2a 0%, #3c1a1a 100%); padding: 24px; border-radius: 12px; border: 1px solid #44dd8833; margin-bottom: 32px;">
+    <div style="color: #44dd88; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+      🎯 Bob's Bold Conclusion
+    </div>
+    <div style="color: #e0e6ed; font-size: 14px; line-height: 1.4; margin-bottom: 12px;">
+      "We weren't building a token with AI features. We were building an AI revolution that happens to have a token."
+    </div>
+    <div style="color: #ff9999; font-size: 12px;">
+      <strong>$0.02 is the floor, not the ceiling.</strong> Real revenue, real utility, real moat.
+    </div>
+  </div>
+</div>
+
+<script>
+// Add interactive animations
+document.addEventListener('DOMContentLoaded', function() {
+  // Token stats animation
+  const tokenStats = document.querySelectorAll('.token-stat');
+  tokenStats.forEach((stat, index) => {
+    stat.style.animationDelay = `${index * 0.1}s`;
+    stat.style.opacity = '0';
+    stat.style.animation = 'fadeIn 0.6s ease-in forwards';
+  });
+
+  // Utility card hover effects
+  const utilityCards = document.querySelectorAll('.utility-card');
+  utilityCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.style.transform = 'translateY(-4px)';
+      card.style.boxShadow = '0 8px 24px rgba(170, 102, 255, 0.1)';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'translateY(-2px)';
+      card.style.boxShadow = 'none';
+    });
+  });
+
+  // Flow step animations
+  const flowSteps = document.querySelectorAll('.flow-step');
+  flowSteps.forEach((step, index) => {
+    step.style.animationDelay = `${index * 0.2}s`;
+    step.style.opacity = '0';
+    step.style.animation = 'fadeIn 0.6s ease-in forwards';
+  });
+});
+</script>
+
+</body>
+</html>

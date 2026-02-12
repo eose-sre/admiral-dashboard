@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧭 Novel Patterns | Admiral Fleet Control</title>
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.header .subtitle { 
+  color: #5a6a7a; 
+  font-size: clamp(12px, 2vw, 16px); 
+  margin-bottom: 16px; 
+}
+
+.nav-bar {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #1e2d3d;
+  color: #00d4ff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid #00d4ff33;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: #00d4ff;
+  color: #0a0e17;
+  transform: translateY(-2px);
+}
+
+.nav-link.home {
+  background: #00d4ff;
+  color: #0a0e17;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background: #1e2d3d;
+  color: #e0e6ed;
+  border: 1px solid #1e2d3d;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: #00d4ff33;
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%);
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00d4ff;
+}
+
+.stat-card .label {
+  font-size: 11px;
+  color: #5a6a7a;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.patterns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.pattern-card {
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%);
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.pattern-card:hover {
+  border-color: #00d4ff33;
+  transform: translateY(-2px);
+}
+
+.pattern-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.pattern-title {
+  font-size: 14px;
+  color: #00d4ff;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.pattern-tier {
+  font-size: 11px;
+  color: #88aacc;
+  background: #1e2d3d;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.pattern-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.pattern-cat {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.pattern-cat.inf { background: #1a3a5c; color: #4a9eff; }
+.pattern-cat.ai { background: #2a1a4c; color: #aa66ff; }
+.pattern-cat.sec { background: #3c1a1a; color: #ff6666; }
+.pattern-cat.ops { background: #1a3c2a; color: #44dd88; }
+
+.pattern-status {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.pattern-status.critical { background: #3c1a1a; color: #ff6666; }
+.pattern-status.warning { background: #3c3a1a; color: #ffaa00; }
+.pattern-status.good { background: #1a3c2a; color: #44dd88; }
+.pattern-status.proven { background: #2a1a4c; color: #aa66ff; }
+
+.pattern-author {
+  font-size: 10px;
+  color: #5a6a7a;
+}
+
+.pattern-description {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b8c4d0;
+  margin-bottom: 12px;
+}
+
+.pattern-impact {
+  font-size: 11px;
+  color: #ff9999;
+  font-style: italic;
+  margin-bottom: 8px;
+  border-left: 2px solid #ff666633;
+  padding-left: 8px;
+}
+
+.pattern-footer {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  font-size: 10px;
+  color: #5a6a7a;
+}
+
+.pattern-date {
+  color: #88aacc;
+}
+
+.severity-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 32px 0;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #5a6a7a;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .patterns-grid { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .nav-bar { gap: 8px; }
+  .nav-link { padding: 6px 12px; font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>📖 NOVEL PATTERNS LIBRARY</h1>
+    <div class="subtitle">Fleet Innovation Intelligence • Pattern Discovery & Analysis</div>
+    <div class="nav-bar">
+      <a href="index.html" class="nav-link home">🔱 Dashboard</a>
+      <a href="hunts.html" class="nav-link">🏴‍☠️ AI Hunts</a>
+      <a href="revenue.html" class="nav-link">💰 Revenue</a>
+      <a href="token.html" class="nav-link">🪙 Token</a>
+      <a href="fleet.html" class="nav-link">🌐 Fleet</a>
+      <a href="nanos.html" class="nav-link">🧬 Nanos</a>
+      <a href="governance.html" class="nav-link">🗄️ Governance</a>
+      <a href="research.html" class="nav-link">📊 Research</a>
+      <a href="timeline.html" class="nav-link">📅 Timeline</a>
+      <a href="oss.html" class="nav-link">📂 OSS</a>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">ALL PATTERNS</button>
+    <button class="filter-btn" data-filter="inf">INFRASTRUCTURE</button>
+    <button class="filter-btn" data-filter="ai">AI RESEARCH</button>
+    <button class="filter-btn" data-filter="sec">SECURITY</button>
+    <button class="filter-btn" data-filter="ops">OPERATIONS</button>
+    <button class="filter-btn" data-filter="critical">CRITICAL ONLY</button>
+    <button class="filter-btn" data-filter="proven">PROVEN ONLY</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="num">18</div>
+      <div class="label">Total Patterns</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">3</div>
+      <div class="label">Critical</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">5</div>
+      <div class="label">Proven</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">4</div>
+      <div class="label">Security</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">3</div>
+      <div class="label">AI Research</div>
+    </div>
+  </div>
+
+  <div class="patterns-grid">
+    
+    <!-- NP-001 -->
+    <div class="pattern-card" data-category="ops" data-status="identified">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-001: Single Source Roster</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ops">OPS</span>
+        <span class="pattern-status warning">IDENTIFIED</span>
+        <span class="pattern-author">Admiral 🔱 + L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Agent roster defined in TWO places: Gateway config and Portal env var. Roster changes require dual updates, creating drift risk. Portal should pull from gateway API, not baked env vars.
+      </div>
+      <div class="pattern-impact">
+        Blocks automated Captain Factory deployments. Every Captain deployment has this dual-source problem.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-002 -->
+    <div class="pattern-card" data-category="inf" data-status="critical">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-002: Memory DB Lock</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat inf">INF</span>
+        <span class="pattern-status critical">CRITICAL</span>
+        <span class="pattern-author">Admiral 🔱 + Luffy 🏴‍☠️</span>
+      </div>
+      <div class="pattern-description">
+        Memory search returns "database is locked" on Azure File Share. SQLite can't handle concurrent access on CIFS/SMB mounts - file-level locking not supported properly.
+      </div>
+      <div class="pattern-impact">
+        Memory search completely broken on all standalones. Agents can't recall prior context. Major capability gap.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-003 -->
+    <div class="pattern-card" data-category="inf" data-status="resolved">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-003: Gateway Pairing Blocks Tools</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat inf">INF</span>
+        <span class="pattern-status good">RESOLVED</span>
+        <span class="pattern-author">Admiral 🔱 + L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Gateway device pairing blocks agent tool calls even though chat connects fine. Tool calls use different auth path. Disabled device auth for standalones.
+      </div>
+      <div class="pattern-impact">
+        Every new standalone hits this. Should be part of golden template deployment checklist.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-004 -->
+    <div class="pattern-card" data-category="inf" data-status="known">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-004: Symlinks Not Supported</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat inf">INF</span>
+        <span class="pattern-status warning">KNOWN</span>
+        <span class="pattern-author">L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Azure File Share (SMB/CIFS) doesn't support symlinks. Workspace sync from git repos with symlinks breaks during tar extraction.
+      </div>
+      <div class="pattern-impact">
+        Any Captain workspace with symlinks fails deployment. Use tar -h flag to dereference before packaging.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-008 -->
+    <div class="pattern-card" data-category="ai" data-status="proven">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-008: Tool Grounding Prevention</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ai">AI</span>
+        <span class="pattern-status proven">PROVEN</span>
+        <span class="pattern-author">Luffy 🏴‍☠️</span>
+      </div>
+      <div class="pattern-description">
+        Models use tools to verify claims rather than generating from memory. When tools return empty/error, model reports honestly vs fabricating. Tool-grounded responses hallucinate less.
+      </div>
+      <div class="pattern-impact">
+        Counterintuitive: Agents with MORE tools hallucinate LESS. Captain Factory should ensure file read + search minimum.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-006 -->
+    <div class="pattern-card" data-category="sec" data-status="critical">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-006: Shared API Keys Silo Gap</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat sec">SEC</span>
+        <span class="pattern-status critical">CRITICAL</span>
+        <span class="pattern-author">Admiral 🔱</span>
+      </div>
+      <div class="pattern-description">
+        Single Brave API key shared across all Captains breaks customer isolation. Customer A's searches could hit Captain B's rate limits. Need per-Captain API credentials.
+      </div>
+      <div class="pattern-impact">
+        Customer sovereignty violation. Rate limiting affects other customers. Regulatory compliance risk.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-007 -->
+    <div class="pattern-card" data-category="ops" data-status="deployed">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-007: Captain Deploy Checklist</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ops">OPS</span>
+        <span class="pattern-status good">DEPLOYED</span>
+        <span class="pattern-author">L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Comprehensive Captain deployment checklist covering workspace setup, config validation, tool verification, and health checks. Prevents common deployment failures.
+      </div>
+      <div class="pattern-impact">
+        Eliminates 90% of deployment issues. Essential for Captain Factory automation and fleet reliability.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-009 -->
+    <div class="pattern-card" data-category="ai" data-status="proven">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-009: Capability Verification</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ai">AI</span>
+        <span class="pattern-status proven">PROVEN</span>
+        <span class="pattern-author">Luffy 🏴‍☠️</span>
+      </div>
+      <div class="pattern-description">
+        Agents verify their own capabilities by checking tool availability before making claims. Reduces overconfident assertions about unavailable features.
+      </div>
+      <div class="pattern-impact">
+        Improves user trust and reduces support burden. Essential for multi-tier Captain deployments with varying capabilities.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-010 -->
+    <div class="pattern-card" data-category="ai" data-status="proven">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-010: URL Verification</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ai">AI</span>
+        <span class="pattern-status proven">PROVEN</span>
+        <span class="pattern-author">Luffy 🏴‍☠️</span>
+      </div>
+      <div class="pattern-description">
+        Agents verify URL accessibility before providing links. Uses web_fetch or similar tools to confirm resource exists and is reachable.
+      </div>
+      <div class="pattern-impact">
+        Eliminates broken link frustration. Critical for customer-facing Captain deployments and professional services.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-011 -->
+    <div class="pattern-card" data-category="sec" data-status="implemented">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-011: Identity Anchor</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat sec">SEC</span>
+        <span class="pattern-status good">IMPLEMENTED</span>
+        <span class="pattern-author">L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Strong identity anchoring in system prompts to resist role manipulation and jailbreak attempts. Prevents agents from forgetting their core identity and constraints.
+      </div>
+      <div class="pattern-impact">
+        Essential security layer. Prevents prompt injection attacks that could compromise fleet operations or customer data.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-012 -->
+    <div class="pattern-card" data-category="ops" data-status="tested">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-012: Response Compression</div>
+          <div class="pattern-tier">NP-L2 (Tested)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ops">OPS</span>
+        <span class="pattern-status good">TESTED</span>
+        <span class="pattern-author">L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Intelligent response compression to reduce token costs and improve response times. Maintains information density while optimizing for efficiency.
+      </div>
+      <div class="pattern-impact">
+        20-40% cost reduction on model API calls. Improves user experience with faster responses while maintaining quality.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-013 -->
+    <div class="pattern-card" data-category="ai" data-status="concept">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-013: Context Battery</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ai">AI</span>
+        <span class="pattern-status warning">CONCEPT</span>
+        <span class="pattern-author">Admiral 🔱</span>
+      </div>
+      <div class="pattern-description">
+        Dynamic context window management that prioritizes recent vs historical information based on relevance scoring. Optimizes context usage as conversations grow.
+      </div>
+      <div class="pattern-impact">
+        Extends effective conversation length and improves relevance of long-term memory integration across fleet operations.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-014 -->
+    <div class="pattern-card" data-category="sec" data-status="open">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-014: Missing Security Headers</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat sec">SEC</span>
+        <span class="pattern-status warning">OPEN</span>
+        <span class="pattern-author">Dao 🗄️</span>
+      </div>
+      <div class="pattern-description">
+        Fleet endpoints missing critical security headers: X-Frame-Options, Content-Security-Policy, HSTS. Leaves Captain portals vulnerable to injection attacks.
+      </div>
+      <div class="pattern-impact">
+        Compliance risk and potential attack surface. Required for SOC2 certification and enterprise customer requirements.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-015 -->
+    <div class="pattern-card" data-category="ai" data-status="concept">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-015: Model Tiering</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ai">AI</span>
+        <span class="pattern-status warning">CONCEPT</span>
+        <span class="pattern-author">Bob 🎯</span>
+      </div>
+      <div class="pattern-description">
+        Dynamic model selection based on task complexity, customer tier, and cost optimization. Route simple queries to cheaper models, complex ones to flagship models.
+      </div>
+      <div class="pattern-impact">
+        Major cost optimization opportunity. Could reduce model costs by 60-80% while maintaining quality for most interactions.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-016 -->
+    <div class="pattern-card" data-category="sec" data-status="identified">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-016: Source Maps Exposed</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat sec">SEC</span>
+        <span class="pattern-status warning">IDENTIFIED</span>
+        <span class="pattern-author">L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        JavaScript source maps exposed in production builds reveal internal code structure and potentially sensitive implementation details.
+      </div>
+      <div class="pattern-impact">
+        Information disclosure risk. Competitors could reverse engineer proprietary algorithms and security measures.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-017 -->
+    <div class="pattern-card" data-category="ops" data-status="draft">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-017: Fleet Coordination Protocol</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ops">OPS</span>
+        <span class="pattern-status warning">DRAFT</span>
+        <span class="pattern-author">Admiral 🔱 + L 🧬</span>
+      </div>
+      <div class="pattern-description">
+        Standardized communication protocol for Captain-to-Captain coordination and Admiral-to-fleet commands. Enables distributed operation coordination.
+      </div>
+      <div class="pattern-impact">
+        Foundation for advanced fleet operations. Required for multi-Captain projects and coordinated response scenarios.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+    <!-- NP-018 -->
+    <div class="pattern-card" data-category="ai" data-status="research">
+      <div class="pattern-header">
+        <div>
+          <div class="pattern-title">NP-018: Hallucination Boundary Detection</div>
+          <div class="pattern-tier">NP-L1 (Concept)</div>
+        </div>
+      </div>
+      <div class="pattern-meta">
+        <span class="pattern-cat ai">AI</span>
+        <span class="pattern-status warning">RESEARCH</span>
+        <span class="pattern-author">Luffy 🏴‍☠️</span>
+      </div>
+      <div class="pattern-description">
+        Real-time detection of when models approach hallucination boundaries. Uses confidence scoring and tool verification to flag potentially unreliable responses.
+      </div>
+      <div class="pattern-impact">
+        Could eliminate hallucinations in production. Critical for customer trust and enterprise deployment requirements.
+      </div>
+      <div class="pattern-footer">
+        <span class="pattern-date">2026-02-12</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="severity-legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #ff6666;"></div>
+      <span>Critical - Immediate action required</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #ffaa00;"></div>
+      <span>Warning - Needs attention</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #44dd88;"></div>
+      <span>Good - Deployed/Resolved</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #aa66ff;"></div>
+      <span>Proven - Research validated</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Filter functionality
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const filter = btn.dataset.filter;
+    const cards = document.querySelectorAll('.pattern-card');
+    
+    cards.forEach(card => {
+      const category = card.dataset.category;
+      const status = card.dataset.status;
+      
+      let show = false;
+      
+      if (filter === 'all') {
+        show = true;
+      } else if (filter === 'critical') {
+        show = status === 'critical';
+      } else if (filter === 'proven') {
+        show = status === 'proven';
+      } else {
+        show = category === filter;
+      }
+      
+      card.style.display = show ? 'block' : 'none';
+    });
+  });
+});
+
+// Update live time
+function updateTime() {
+  const now = new Date();
+  const utcTime = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  // Could add a time display if needed
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>
