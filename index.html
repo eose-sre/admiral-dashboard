@@ -242,6 +242,9 @@ const N=[
     {id:'truth',ic:'🏴‍☠️',l:'Luffy\'s Truth'},
     {id:'evolution',ic:'🔄',l:'Evolutions',c:'8'},
   ]},
+  {s:'Live',i:[
+    {id:'chat',ic:'💬',l:'Chat'},
+  ]},
 ];
 
 const FL=[
@@ -588,6 +591,11 @@ P.truth=()=>`
     <div class="r"><span style="font-size:13px">🏴‍☠️</span><span class="rn">Luffy: Burn 80%, talk to customers</span></div></div>
 </div>`;
 
+P.chat=()=>`
+<div style="height:100%;margin:-20px -24px;display:flex;flex-direction:column">
+  <iframe src="/index.original.html#/chat" style="flex:1;border:none;width:100%;min-height:calc(100vh - 90px);border-radius:0"></iframe>
+</div>`;
+
 P.evolution=()=>`
 <div class="ph"><div><div class="pt">Evolutions</div><div class="ps">Every remake preserved · Self-evolving</div></div></div>
 <div class="c">
@@ -606,7 +614,7 @@ let cur='bridge';
 function go(id){cur=id;document.querySelectorAll('.ni').forEach(n=>n.classList.toggle('on',n.dataset.p===id));document.getElementById('mn').innerHTML=P[id]?`<div class="pg on">${P[id]()}</div>`:'';document.getElementById('mn').scrollTop=0}
 function fN(c){document.querySelectorAll('#npf .ft').forEach(b=>b.classList.toggle('on',b.textContent.trim().startsWith(c)));document.querySelectorAll('#npl .np').forEach(el=>{el.style.display=(c==='ALL'||el.dataset.c===c)?'':'none'})}
 function sN(q){const s=q.toLowerCase();document.querySelectorAll('#npl .np').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(s)?'':'none'})}
-function bNav(){let h='';N.forEach(s=>{h+=`<div class="ns"><div class="nl">${s.s}</div>`;s.i.forEach(i=>{h+=`<div class="ni" data-p="${i.id}" onclick="go('${i.id}')"><span class="ic">${i.ic}</span>${i.l}${i.c?`<span class="nc">${i.c}</span>`:''}</div>`});h+=`</div>`});h+=`<div class="nf"><div class="ni" onclick="window.open('https://meek.pemos.ca','_blank')"><span class="ic">💬</span>Chat</div></div>`;document.getElementById('nav').innerHTML=h}
+function bNav(){let h='';N.forEach(s=>{h+=`<div class="ns"><div class="nl">${s.s}</div>`;s.i.forEach(i=>{h+=`<div class="ni" data-p="${i.id}" onclick="go('${i.id}')"><span class="ic">${i.ic}</span>${i.l}${i.c?`<span class="nc">${i.c}</span>`:''}</div>`});h+=`</div>`});h+=`<div class="nf"><div class="ni" data-p="chat" onclick="go('chat')"><span class="ic">💬</span>Chat</div></div>`;document.getElementById('nav').innerHTML=h}
 function clk(){const t=new Date().toUTCString().slice(17,25)+' UTC';document.getElementById('clk').textContent=t;document.getElementById('clk2').textContent=t}
 bNav();go('bridge');clk();setInterval(clk,1000);
 </script>
