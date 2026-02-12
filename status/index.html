@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Status | Meek 🔱</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#0f1419,#1a2332);color:#e8eaed;line-height:1.6;min-height:100vh}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        header{text-align:center;margin-bottom:2rem;border-bottom:1px solid #2d3748;padding-bottom:1rem}
+        .title{font-size:2rem;font-weight:700;color:#4299e1;margin-bottom:.5rem}
+        .subtitle{color:#a0aec0;font-size:.9rem}
+        .metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+        .metric-card{background:rgba(45,55,72,.4);border:1px solid #2d3748;border-radius:8px;padding:1rem;text-align:center}
+        .metric-value{font-size:1.8rem;font-weight:700;color:#4299e1;margin-bottom:.25rem}
+        .metric-label{color:#a0aec0;font-size:.85rem;text-transform:uppercase;letter-spacing:.5px}
+        .health-score{color:#68d391!important}
+        .cost-warning{color:#f6ad55!important}
+        .fleet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:2rem}
+        .instance-card{background:rgba(45,55,72,.4);border:1px solid #2d3748;border-radius:8px;padding:1rem;transition:transform .2s}
+        .instance-card:hover{transform:translateY(-2px)}
+        .instance-header{display:flex;align-items:center;margin-bottom:.75rem}
+        .status-dot{width:12px;height:12px;border-radius:50%;margin-right:.75rem;animation:pulse 2s infinite}
+        .status-online{background:#68d391}
+        .status-warning{background:#f6ad55}
+        .status-error{background:#fc8181}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+        .instance-name{font-weight:600;font-size:1.1rem;color:#e8eaed}
+        .instance-region{color:#a0aec0;font-size:.85rem;margin-bottom:.5rem}
+        .instance-updated{color:#718096;font-size:.75rem}
+        .nano-status{background:rgba(45,55,72,.4);border:1px solid #2d3748;border-radius:8px;padding:1rem;margin-bottom:1rem}
+        .nano-title{color:#4299e1;font-weight:600;margin-bottom:.75rem;font-size:1.1rem}
+        .nano-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem}
+        .nano-item{display:flex;align-items:center;padding:.5rem;background:rgba(26,35,50,.5);border-radius:4px}
+        .nano-emoji{margin-right:.5rem;font-size:1.1rem}
+        .nano-name{color:#e8eaed;font-size:.9rem}
+        .footer{text-align:center;color:#718096;font-size:.8rem;border-top:1px solid #2d3748;padding-top:1rem;margin-top:2rem}
+        .refresh-indicator{display:inline-flex;align-items:center;margin-left:.5rem}
+        .refresh-dot{width:6px;height:6px;background:#4299e1;border-radius:50%;margin-right:.25rem;animation:blink 1s infinite}
+        @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:.3}}
+        @media(max-width:768px){.container{padding:15px}.title{font-size:1.5rem}.metrics-grid{grid-template-columns:repeat(2,1fr);gap:.75rem}.fleet-grid{grid-template-columns:1fr}.nano-list{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:480px){.metrics-grid{grid-template-columns:1fr}.nano-list{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Fleet Status 🔱</h1>
+            <p class="subtitle">Real-time monitoring • Last updated: <span id="lastUpdate">--:--</span> UTC <span class="refresh-indicator"><span class="refresh-dot"></span>Live</span></p>
+        </header>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value health-score" id="fleetHealth">0.86</div>
+                <div class="metric-label">Fleet Health (B+)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value cost-warning" id="costToday">$6.60</div>
+                <div class="metric-label">Cost Today ($1 target)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="npCount">29</div>
+                <div class="metric-label">Novel Patterns</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="nanoCount">6</div>
+                <div class="metric-label">Nanos Active</div>
+            </div>
+        </div>
+        
+        <div class="fleet-grid" id="fleetGrid">
+            <div class="instance-card">
+                <div class="instance-header">
+                    <div class="status-dot status-online"></div>
+                    <div class="instance-name">Master</div>
+                </div>
+                <div class="instance-region">CA Central • T1</div>
+                <div class="instance-updated">Last check: 23:04 UTC</div>
+            </div>
+            <div class="instance-card">
+                <div class="instance-header">
+                    <div class="status-dot status-online"></div>
+                    <div class="instance-name">Admiral</div>
+                </div>
+                <div class="instance-region">AU East • T1</div>
+                <div class="instance-updated">Last check: 23:04 UTC</div>
+            </div>
+            <div class="instance-card">
+                <div class="instance-header">
+                    <div class="status-dot status-online"></div>
+                    <div class="instance-name">AdmiralMark1</div>
+                </div>
+                <div class="instance-region">ZA North • T1</div>
+                <div class="instance-updated">Last check: 23:03 UTC</div>
+            </div>
+            <div class="instance-card">
+                <div class="instance-header">
+                    <div class="status-dot status-online"></div>
+                    <div class="instance-name">Meek 🔱</div>
+                </div>
+                <div class="instance-region">CA Central • Admiral</div>
+                <div class="instance-updated">Last check: 23:04 UTC</div>
+            </div>
+            <div class="instance-card">
+                <div class="instance-header">
+                    <div class="status-dot status-online"></div>
+                    <div class="instance-name">Clo</div>
+                </div>
+                <div class="instance-region">CA Central • T1</div>
+                <div class="instance-updated">Last check: 23:04 UTC</div>
+            </div>
+        </div>
+        
+        <div class="nano-status">
+            <div class="nano-title">Active Nanos</div>
+            <div class="nano-list">
+                <div class="nano-item">
+                    <span class="nano-emoji">🔱</span>
+                    <span class="nano-name">Admiral</span>
+                </div>
+                <div class="nano-item">
+                    <span class="nano-emoji">🧬</span>
+                    <span class="nano-name">Lucien (L)</span>
+                </div>
+                <div class="nano-item">
+                    <span class="nano-emoji">🏴‍☠️</span>
+                    <span class="nano-name">Luffy</span>
+                </div>
+                <div class="nano-item">
+                    <span class="nano-emoji">🎯</span>
+                    <span class="nano-name">Bob</span>
+                </div>
+                <div class="nano-item">
+                    <span class="nano-emoji">📊</span>
+                    <span class="nano-name">Rick</span>
+                </div>
+                <div class="nano-item">
+                    <span class="nano-emoji">🗄️</span>
+                    <span class="nano-name">Dao</span>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>Meek Fleet Control • Build: v2026.02.12 • Size: ~8KB</p>
+        </footer>
+    </div>
+    
+    <script>
+        function updateStatus(){
+            const now=new Date();
+            document.getElementById('lastUpdate').textContent=now.toISOString().slice(11,16);
+            
+            fetch('./status.json')
+                .then(r=>r.json())
+                .then(d=>{
+                    if(d.fleetHealth)document.getElementById('fleetHealth').textContent=d.fleetHealth;
+                    if(d.costToday)document.getElementById('costToday').textContent=d.costToday;
+                    if(d.npCount)document.getElementById('npCount').textContent=d.npCount;
+                    if(d.nanoCount)document.getElementById('nanoCount').textContent=d.nanoCount;
+                    
+                    if(d.instances){
+                        d.instances.forEach((inst,i)=>{
+                            const card=document.querySelectorAll('.instance-card')[i];
+                            if(card){
+                                card.querySelector('.status-dot').className=`status-dot status-${inst.status}`;
+                                card.querySelector('.instance-updated').textContent=`Last check: ${inst.lastCheck}`;
+                            }
+                        });
+                    }
+                })
+                .catch(()=>console.log('Static mode'));
+        }
+        
+        updateStatus();
+        setInterval(updateStatus,60000);
+        
+        document.querySelectorAll('.metric-card,.instance-card').forEach(c=>
+            c.onclick=()=>{
+                c.style.transform='scale(.98)';
+                setTimeout(()=>c.style.transform='',150);
+            }
+        );
+    </script>
+</body>
+</html>

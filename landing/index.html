@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERLF - Sovereign AI Fleet Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a1428;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f1824 0%, #1e2d3d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+        }
+        
+        /* What SERLF Is */
+        .features {
+            padding: 80px 0;
+            background: #0f1b2a;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #f1f5f9;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(30, 45, 61, 0.5);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: #94a3b8;
+        }
+        
+        /* Products Section */
+        .products {
+            padding: 80px 0;
+            background: #081118;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 0;
+            background: #0f1b2a;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .pricing-card {
+            background: rgba(30, 45, 61, 0.8);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card.featured {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-period {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-features li {
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+        
+        .plan-features li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+        
+        .cta-desc {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: #f1f5f9;
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(241, 245, 249, 0.3);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #020617;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid #1e293b;
+        }
+        
+        .footer-text {
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-brand {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .plan-price {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .feature-card,
+            .pricing-card {
+                padding: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="logo">SERLF</h1>
+                <p class="tagline">"The meek shall inherit the earth."</p>
+                <p class="subtitle">Sovereign AI Fleet Management</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What SERLF Is -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">What SERLF Is</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Sovereign Fleet Management</h3>
+                    <p class="feature-desc">Complete control over your AI agents with no external dependencies or vendor lock-in.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Self-Evolving Patterns</h3>
+                    <p class="feature-desc">Agents that learn, adapt, and improve automatically through novel pattern discovery.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Zero-Trust by Default</h3>
+                    <p class="feature-desc">Built-in security architecture that verifies every action and maintains data sovereignty.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <div class="container">
+            <h2 class="section-title">Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <h3 class="product-title">Captain Factory</h3>
+                    <p class="product-desc">Deploy and configure AI captains with custom capabilities</p>
+                </div>
+                <div class="product-card">
+                    <h3 class="product-title">Fleet Trials</h3>
+                    <p class="product-desc">Test and validate agent behaviors in controlled environments</p>
+                </div>
+                <div class="product-card">
+                    <h3 class="product-title">Fleet Dashboard</h3>
+                    <p class="product-desc">Monitor, control, and optimize your entire agent fleet</p>
+                </div>
+                <div class="product-card">
+                    <h3 class="product-title">Novel Patterns</h3>
+                    <p class="product-desc">Discover and share emergent AI behaviors and patterns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2 class="section-title">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="plan-name">Free</h3>
+                    <div class="plan-price">$0</div>
+                    <div class="plan-period">forever</div>
+                    <ul class="plan-features">
+                        <li>1 agent</li>
+                        <li>Basic dashboard</li>
+                        <li>Community support</li>
+                    </ul>
+                </div>
+                <div class="pricing-card featured">
+                    <h3 class="plan-name">Pro</h3>
+                    <div class="plan-price">$49</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li>5 agents</li>
+                        <li>Fleet trials access</li>
+                        <li>Advanced dashboard</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <h3 class="plan-name">Enterprise</h3>
+                    <div class="plan-price">$299</div>
+                    <div class="plan-period">per month</div>
+                    <ul class="plan-features">
+                        <li>Unlimited agents</li>
+                        <li>Full feature access</li>
+                        <li>Dedicated support</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Ready to Deploy?</h2>
+            <p class="cta-desc">Start building your sovereign AI fleet today</p>
+            <a href="https://github.com/eose-inc/serlf" class="btn">Deploy Your First Captain</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">EOSE Inc.</p>
+            <p class="footer-text">Built by <span class="footer-brand">Meek 🔱</span></p>
+        </div>
+    </footer>
+</body>
+</html>
