@@ -3,152 +3,871 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admiral Fleet Control 🔱</title>
-<meta http-equiv="refresh" content="60">
+<title>🔱 Admiral Fleet Control</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#0a0e17;color:#e0e6ed;font-family:'SF Mono','Fira Code',monospace;padding:20px}
-  .header{text-align:center;margin-bottom:24px}
-  .header h1{font-size:28px;color:#00d4ff;letter-spacing:2px}
-  .header .sub{color:#5a6a7a;font-size:12px;margin-top:4px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1000px;margin:0 auto}
-  .card{background:#111825;border:1px solid #1e2d3d;border-radius:8px;padding:16px}
-  .card h2{font-size:13px;color:#5a6a7a;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-  .card.full{grid-column:1/-1}
-  .fleet-row{display:flex;align-items:center;padding:6px 0;border-bottom:1px solid #1a2535}
-  .fleet-row:last-child{border-bottom:none}
-  .dot{width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0}
-  .dot.green{background:#00ff88;box-shadow:0 0 6px #00ff8844}
-  .dot.yellow{background:#ffaa00;box-shadow:0 0 6px #ffaa0044}
-  .fleet-name{flex:1;font-size:13px}
-  .fleet-meta{color:#5a6a7a;font-size:11px}
-  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .stat{text-align:center}
-  .stat .num{font-size:32px;font-weight:bold;color:#00d4ff}
-  .stat .label{font-size:11px;color:#5a6a7a;margin-top:2px}
-  .nano-row{display:flex;align-items:center;padding:5px 0}
-  .nano-emoji{font-size:18px;margin-right:8px}
-  .nano-name{flex:1;font-size:13px}
-  .nano-role{color:#5a6a7a;font-size:11px}
-  .cap-row{display:flex;align-items:center;padding:5px 0;border-bottom:1px solid #1a2535}
-  .cap-row:last-child{border-bottom:none}
-  .cap-emoji{font-size:16px;margin-right:8px}
-  .cap-name{flex:1;font-size:13px}
-  .cap-crew{color:#5a6a7a;font-size:11px;margin-right:8px}
-  .cap-status{font-size:10px;padding:2px 8px;border-radius:10px;background:#1a3c2a;color:#44dd88}
-  .np-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
-  .np-cat{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:bold}
-  .np-cat.sec{background:#3c1a1a;color:#ff6666}
-  .np-cat.inf{background:#1a3a5c;color:#4a9eff}
-  .np-cat.ai{background:#2a1a4c;color:#aa66ff}
-  .np-cat.ops{background:#1a3c2a;color:#44dd88}
-  .crit{color:#ff6666;font-weight:bold;font-size:11px}
-  .warn{color:#ffaa00;font-size:11px}
-  .ok{color:#00ff88;font-size:11px}
-  .progress-bar{height:4px;background:#1e2d3d;border-radius:2px;margin-top:8px;overflow:hidden}
-  .progress-fill{height:100%;border-radius:2px}
-  .repo-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid #1a2535}
-  .repo-row:last-child{border-bottom:none}
-  .repo-name{color:#00d4ff}
-  .blocked-item{padding:6px 0;border-bottom:1px solid #1a2535;font-size:12px}
-  .blocked-item:last-child{border-bottom:none}
-  .blocked-label{color:#ff6666;font-size:10px;text-transform:uppercase}
-  .mission-row{display:flex;align-items:center;padding:4px 0;font-size:12px}
-  .mission-count{font-size:20px;font-weight:bold;color:#00d4ff;margin-right:8px}
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body { 
+  background: #0a0e17; 
+  color: #e0e6ed; 
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Consolas', monospace; 
+  padding: 20px; 
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header { 
+  text-align: center; 
+  margin-bottom: 32px; 
+  padding: 24px;
+  background: linear-gradient(135deg, #111825 0%, #1a2535 100%);
+  border-radius: 12px;
+  border: 1px solid #00d4ff33;
+}
+
+.header h1 { 
+  font-size: clamp(24px, 4vw, 36px);
+  color: #00d4ff; 
+  letter-spacing: 3px; 
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px #00d4ff44;
+}
+
+.header .clock { 
+  color: #00d4ff; 
+  font-size: clamp(16px, 2.5vw, 20px); 
+  margin-top: 8px; 
+  font-weight: bold;
+}
+
+.header .sub { 
+  color: #5a6a7a; 
+  font-size: clamp(10px, 1.5vw, 12px); 
+  margin-top: 4px; 
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 20px; 
+}
+
+.card { 
+  background: linear-gradient(135deg, #111825 0%, #0f1419 100%); 
+  border: 1px solid #1e2d3d; 
+  border-radius: 12px; 
+  padding: 20px; 
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #00d4ff33;
+  transform: translateY(-2px);
+}
+
+.card h2 { 
+  font-size: 14px; 
+  color: #00d4ff; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  margin-bottom: 16px; 
+  border-bottom: 1px solid #1e2d3d;
+  padding-bottom: 8px;
+}
+
+.card.wide { 
+  grid-column: 1 / -1; 
+}
+
+.card.half {
+  grid-column: span 2;
+}
+
+.fleet-row { 
+  display: flex; 
+  align-items: center; 
+  padding: 8px 0; 
+  border-bottom: 1px solid #1a2535; 
+}
+
+.fleet-row:last-child { 
+  border-bottom: none; 
+}
+
+.dot { 
+  width: 10px; 
+  height: 10px; 
+  border-radius: 50%; 
+  margin-right: 12px; 
+  flex-shrink: 0; 
+}
+
+.dot.green { 
+  background: #00ff88; 
+  box-shadow: 0 0 8px #00ff8844; 
+  animation: pulse 2s infinite;
+}
+
+.dot.yellow { 
+  background: #ffaa00; 
+  box-shadow: 0 0 8px #ffaa0044; 
+}
+
+.dot.red { 
+  background: #ff4444; 
+  box-shadow: 0 0 8px #ff444444; 
+}
+
+.fleet-name { 
+  flex: 1; 
+  font-size: 14px; 
+  font-weight: 500;
+}
+
+.fleet-meta { 
+  color: #5a6a7a; 
+  font-size: 11px; 
+}
+
+.scorecard-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+  gap: 16px; 
+}
+
+.score-item { 
+  text-align: center; 
+  padding: 12px;
+  background: #0a0e1744;
+  border-radius: 8px;
+  border: 1px solid #1e2d3d;
+}
+
+.score-item .num { 
+  font-size: clamp(20px, 3vw, 32px); 
+  font-weight: bold; 
+  color: #00d4ff; 
+  display: block;
+}
+
+.score-item .label { 
+  font-size: 10px; 
+  color: #5a6a7a; 
+  margin-top: 4px; 
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nano-row { 
+  display: flex; 
+  align-items: center; 
+  padding: 8px 0; 
+  border-bottom: 1px solid #1a2535;
+}
+
+.nano-row:last-child { 
+  border-bottom: none; 
+}
+
+.nano-emoji { 
+  font-size: 20px; 
+  margin-right: 12px; 
+  width: 24px;
+}
+
+.nano-info { 
+  flex: 1; 
+}
+
+.nano-name { 
+  font-size: 14px; 
+  font-weight: 500;
+  color: #e0e6ed;
+}
+
+.nano-role { 
+  color: #5a6a7a; 
+  font-size: 11px; 
+  margin-top: 2px;
+}
+
+.nano-stats {
+  text-align: right;
+  font-size: 11px;
+}
+
+.tier-badge { 
+  display: inline-block; 
+  padding: 2px 6px; 
+  border-radius: 4px; 
+  font-size: 10px; 
+  background: #1e2d3d; 
+  color: #88aacc; 
+  margin-left: 8px;
+}
+
+.np-row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  padding: 6px 0; 
+  font-size: 12px; 
+  border-bottom: 1px solid #1a2535;
+}
+
+.np-row:last-child { 
+  border-bottom: none; 
+}
+
+.np-cat { 
+  display: inline-block; 
+  padding: 2px 8px; 
+  border-radius: 4px; 
+  font-size: 10px; 
+  font-weight: bold; 
+  margin-right: 8px;
+}
+
+.np-cat.inf { background: #1a3a5c; color: #4a9eff; }
+.np-cat.ai { background: #2a1a4c; color: #aa66ff; }
+.np-cat.sec { background: #3c1a1a; color: #ff6666; }
+.np-cat.ops { background: #1a3c2a; color: #44dd88; }
+
+.status-critical { color: #ff6666; font-weight: bold; }
+.status-warning { color: #ffaa00; }
+.status-good { color: #00ff88; }
+
+.revenue-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.revenue-item {
+  text-align: center;
+  padding: 16px;
+  background: #0a0e1744;
+  border-radius: 8px;
+  border: 1px solid #1e2d3d;
+}
+
+.revenue-item .amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00d4ff;
+}
+
+.revenue-item .label {
+  font-size: 11px;
+  color: #5a6a7a;
+  margin-top: 4px;
+}
+
+.token-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.token-stat {
+  text-align: center;
+  padding: 12px;
+  background: #0a0e1744;
+  border-radius: 8px;
+}
+
+.token-stat .value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00d4ff;
+}
+
+.token-stat .label {
+  font-size: 10px;
+  color: #5a6a7a;
+  margin-top: 4px;
+}
+
+.pie-chart {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #00d4ff 0deg 108deg,
+    #1a3c2a 108deg 180deg,
+    #3c1a1a 180deg 252deg,
+    #2a1a4c 252deg 324deg,
+    #1e2d3d 324deg 360deg
+  );
+  margin: 0 auto;
+}
+
+.repo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #1a2535;
+  font-size: 12px;
+}
+
+.repo-row:last-child {
+  border-bottom: none;
+}
+
+.repo-link {
+  color: #00d4ff;
+  text-decoration: none;
+  flex: 1;
+}
+
+.repo-link:hover {
+  text-decoration: underline;
+}
+
+.repo-files {
+  color: #5a6a7a;
+  font-size: 11px;
+}
+
+.blocker-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #1a2535;
+  font-size: 12px;
+}
+
+.blocker-item:last-child {
+  border-bottom: none;
+}
+
+.blocker-priority {
+  color: #ff6666;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.timeline-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #1a2535;
+  font-size: 12px;
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-date {
+  color: #00d4ff;
+  font-weight: bold;
+}
+
+.timeline-event {
+  margin-top: 2px;
+  color: #e0e6ed;
+}
+
+.footer { 
+  text-align: center; 
+  margin-top: 40px; 
+  padding: 20px;
+  border-top: 1px solid #1e2d3d;
+  color: #5a6a7a; 
+  font-size: 12px; 
+}
+
+.footer .motto {
+  color: #00d4ff;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .card.half { grid-column: span 1; }
+  .scorecard-grid { grid-template-columns: repeat(2, 1fr); }
+  .revenue-grid { grid-template-columns: 1fr; }
+  .token-overview { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 16px; }
+  .card { padding: 16px; }
+  .scorecard-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>🔱 ADMIRAL FLEET CONTROL</h1>
-  <div class="sub">Day One — <span id="ts"></span> — Auto-refresh 60s</div>
+<div class="container">
+  <div class="header">
+    <h1>🔱 ADMIRAL FLEET CONTROL</h1>
+    <div class="clock" id="live-clock"></div>
+    <div class="sub">Central Command Bridge • Day One Operations</div>
+  </div>
+
+  <div class="grid">
+    <!-- Fleet Status -->
+    <div class="card">
+      <h2>🌐 Fleet Status</h2>
+      <div class="fleet-row">
+        <span class="dot green"></span>
+        <span class="fleet-name">Admiral Meek</span>
+        <span class="fleet-meta">CA-Central • Admiral</span>
+      </div>
+      <div class="fleet-row">
+        <span class="dot green"></span>
+        <span class="fleet-name">Master Control</span>
+        <span class="fleet-meta">CA-West • T1</span>
+      </div>
+      <div class="fleet-row">
+        <span class="dot green"></span>
+        <span class="fleet-name">Admiral AU</span>
+        <span class="fleet-meta">AU-East • T1</span>
+      </div>
+      <div class="fleet-row">
+        <span class="dot green"></span>
+        <span class="fleet-name">AdmiralMark1</span>
+        <span class="fleet-meta">ZA-Cape • T1</span>
+      </div>
+      <div class="fleet-row">
+        <span class="dot green"></span>
+        <span class="fleet-name">Clo Instance</span>
+        <span class="fleet-meta">CA-East • T1</span>
+      </div>
+    </div>
+
+    <!-- Nano Command -->
+    <div class="card">
+      <h2>🧬 Nano Command</h2>
+      <div class="nano-row">
+        <span class="nano-emoji">🔱</span>
+        <div class="nano-info">
+          <div class="nano-name">Admiral</div>
+          <div class="nano-role">Fleet Commander</div>
+        </div>
+        <div class="nano-stats">
+          <div>21 missions</div>
+          <span class="tier-badge">Admiral</span>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🧬</span>
+        <div class="nano-info">
+          <div class="nano-name">Lucien (L)</div>
+          <div class="nano-role">R&D • Router • Net</div>
+        </div>
+        <div class="nano-stats">
+          <div>8 missions</div>
+          <span class="tier-badge">T1</span>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🏴‍☠️</span>
+        <div class="nano-info">
+          <div class="nano-name">Luffy</div>
+          <div class="nano-role">AI Explorer</div>
+        </div>
+        <div class="nano-stats">
+          <div>12 hunts</div>
+          <span class="tier-badge">East Blue</span>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🎯</span>
+        <div class="nano-info">
+          <div class="nano-name">Bob</div>
+          <div class="nano-role">CPO • Product</div>
+        </div>
+        <div class="nano-stats">
+          <div>6 specs</div>
+          <span class="tier-badge">T1</span>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">📊</span>
+        <div class="nano-info">
+          <div class="nano-name">Rick</div>
+          <div class="nano-role">Analytics</div>
+        </div>
+        <div class="nano-stats">
+          <div>4 reports</div>
+          <span class="tier-badge">T1</span>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🗄️</span>
+        <div class="nano-info">
+          <div class="nano-name">Dao</div>
+          <div class="nano-role">Data Governance</div>
+        </div>
+        <div class="nano-stats">
+          <div>3 audits</div>
+          <span class="tier-badge">T1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Captain Factory -->
+    <div class="card">
+      <h2>🏭 Captain Factory</h2>
+      <div class="nano-row">
+        <span class="nano-emoji">🎓</span>
+        <div class="nano-info">
+          <div class="nano-name">Sensei (SERLF)</div>
+          <div class="nano-role">Self-Evolving Research & Learning Framework</div>
+        </div>
+        <div class="nano-stats">
+          <div>8 crew</div>
+          <div class="status-good">READY</div>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🌾</span>
+        <div class="nano-info">
+          <div class="nano-name">Harvest (Feedles)</div>
+          <div class="nano-role">Content Intelligence & Curation</div>
+        </div>
+        <div class="nano-stats">
+          <div>6 crew</div>
+          <div class="status-good">READY</div>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">⚖️</span>
+        <div class="nano-info">
+          <div class="nano-name">Counsel (Legal)</div>
+          <div class="nano-role">Legal Intelligence & Document Processing</div>
+        </div>
+        <div class="nano-stats">
+          <div>6 crew</div>
+          <div class="status-good">READY</div>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🏪</span>
+        <div class="nano-info">
+          <div class="nano-name">Merchant</div>
+          <div class="nano-role">Commerce & Market Intelligence</div>
+        </div>
+        <div class="nano-stats">
+          <div>6 crew</div>
+          <div class="status-good">READY</div>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🏥</span>
+        <div class="nano-info">
+          <div class="nano-name">Medic</div>
+          <div class="nano-role">Health & Wellness Intelligence</div>
+        </div>
+        <div class="nano-stats">
+          <div>6 crew</div>
+          <div class="status-good">READY</div>
+        </div>
+      </div>
+      <div class="nano-row">
+        <span class="nano-emoji">🛡️</span>
+        <div class="nano-info">
+          <div class="nano-name">Sentinel</div>
+          <div class="nano-role">Security & Threat Intelligence</div>
+        </div>
+        <div class="nano-stats">
+          <div>6 crew</div>
+          <div class="status-good">READY</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day One Scorecard -->
+    <div class="card wide">
+      <h2>📈 Day One Scorecard</h2>
+      <div class="scorecard-grid">
+        <div class="score-item">
+          <span class="num">21</span>
+          <span class="label">Missions</span>
+        </div>
+        <div class="score-item">
+          <span class="num">11</span>
+          <span class="label">Repos</span>
+        </div>
+        <div class="score-item">
+          <span class="num">17</span>
+          <span class="label">Novel Patterns</span>
+        </div>
+        <div class="score-item">
+          <span class="num">91KB</span>
+          <span class="label">OSS Contrib</span>
+        </div>
+        <div class="score-item">
+          <span class="num">0</span>
+          <span class="label">Hallucinations</span>
+        </div>
+        <div class="score-item">
+          <span class="num">226MB</span>
+          <span class="label">Data Recovered</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Novel Patterns -->
+    <div class="card">
+      <h2>📖 Novel Patterns</h2>
+      <div class="np-row">
+        <div>
+          <span class="np-cat sec">SEC</span>
+          NP-014 Identity Anchor
+        </div>
+        <span class="status-critical">CRITICAL</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat sec">SEC</span>
+          NP-006 Shared API Keys
+        </div>
+        <span class="status-critical">CRITICAL</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat inf">INF</span>
+          NP-002 Memory DB Lock
+        </div>
+        <span class="status-critical">CRITICAL</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat sec">SEC</span>
+          NP-015 Missing Headers
+        </div>
+        <span class="status-warning">OPEN</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat ai">AI</span>
+          NP-008 Tool Grounding
+        </div>
+        <span class="status-good">PROVEN</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat ai">AI</span>
+          NP-009 Capability Verify
+        </div>
+        <span class="status-good">PROVEN</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat ai">AI</span>
+          NP-010 URL Verify
+        </div>
+        <span class="status-good">PROVEN</span>
+      </div>
+      <div class="np-row">
+        <div>
+          <span class="np-cat ops">OPS</span>
+          NP-007 Deploy Checklist
+        </div>
+        <span class="status-good">DEPLOYED</span>
+      </div>
+    </div>
+
+    <!-- Revenue Pipeline -->
+    <div class="card">
+      <h2>💰 Revenue Pipeline</h2>
+      <div class="revenue-grid">
+        <div class="revenue-item">
+          <div class="amount">$2.1M</div>
+          <div class="label">SERLF Pipeline</div>
+        </div>
+        <div class="revenue-item">
+          <div class="amount">$9.8M</div>
+          <div class="label">Combined Total</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 16px; padding: 12px; background: #0a0e1744; border-radius: 8px;">
+        <div style="color: #00ff88; font-size: 24px; font-weight: bold;">90%+</div>
+        <div style="color: #5a6a7a; font-size: 11px;">Gross Margins</div>
+      </div>
+    </div>
+
+    <!-- Token Status -->
+    <div class="card">
+      <h2>🪙 Token Status - $PEMOS</h2>
+      <div class="token-overview">
+        <div class="token-stat">
+          <div class="value">1B</div>
+          <div class="label">Total Supply</div>
+        </div>
+        <div class="token-stat">
+          <div class="value">Base L2</div>
+          <div class="label">Network</div>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <div class="pie-chart"></div>
+        <div style="margin-top: 8px; font-size: 11px; color: #5a6a7a;">
+          Distribution: Team 30% • Community 20% • Treasury 15% • Rewards 25% • Reserve 10%
+        </div>
+        <div style="margin-top: 8px; color: #00d4ff; font-weight: bold;">Q2 2026 Launch</div>
+      </div>
+    </div>
+
+    <!-- Repositories -->
+    <div class="card">
+      <h2>📁 Repositories</h2>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/openclaw-fleet" class="repo-link">openclaw-fleet</a>
+        <span class="repo-files">47 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/kantai-portal" class="repo-link">kantai-portal</a>
+        <span class="repo-files">89 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/eose-website" class="repo-link">eose-website</a>
+        <span class="repo-files">23 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/pemos-ca-site" class="repo-link">pemos-ca-site</a>
+        <span class="repo-files">34 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/pemos-org-site" class="repo-link">pemos-org-site</a>
+        <span class="repo-files">28 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/pemos-io-site" class="repo-link">pemos-io-site</a>
+        <span class="repo-files">31 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/eose-site-main" class="repo-link">eose-site-main</a>
+        <span class="repo-files">15 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/eose-site-patterns" class="repo-link">eose-site-patterns</a>
+        <span class="repo-files">42 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/serlf-framework" class="repo-link">serlf-framework</a>
+        <span class="repo-files">67 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/fleet-operations" class="repo-link">fleet-operations</a>
+        <span class="repo-files">53 files</span>
+      </div>
+      <div class="repo-row">
+        <a href="https://github.com/eose-sre/admiral-core" class="repo-link">admiral-core</a>
+        <span class="repo-files">78 files</span>
+      </div>
+    </div>
+
+    <!-- Blockers -->
+    <div class="card">
+      <h2>🚧 Top Blockers</h2>
+      <div class="blocker-item">
+        <div class="blocker-priority">CRITICAL</div>
+        <div>Memory persistence - OPENCLAW_STATE_DIR configuration</div>
+      </div>
+      <div class="blocker-item">
+        <div class="blocker-priority">HIGH</div>
+        <div>SERLF DNS delegation - 7 domains to Azure DNS</div>
+      </div>
+      <div class="blocker-item">
+        <div class="blocker-priority">HIGH</div>
+        <div>Portal branding update - AGENTS_JSON Admiral identity</div>
+      </div>
+      <div class="blocker-item">
+        <div class="blocker-priority">MEDIUM</div>
+        <div>Router v1 architecture finalization</div>
+      </div>
+      <div class="blocker-item">
+        <div class="blocker-priority">MEDIUM</div>
+        <div>Federation protocol specification</div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card">
+      <h2>📅 Timeline</h2>
+      <div class="timeline-item">
+        <div class="timeline-date">Today</div>
+        <div class="timeline-event">Admiral promotion ceremony • Fleet command transition</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Feb 13</div>
+        <div class="timeline-event">Novel Pattern security sweep • L's Net deployment</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Feb 15</div>
+        <div class="timeline-event">Luffy's AI hallucination hunt • Pattern discovery session</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Feb 18</div>
+        <div class="timeline-event">SERLF Captain deployment • First industry specialist</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Feb 20</div>
+        <div class="timeline-event">Memory system cleanup • Context battery optimization</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Q2 2026</div>
+        <div class="timeline-event">$PEMOS token launch • Base L2 deployment</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="grid">
-
-  <div class="card">
-    <h2>🌐 Live Fleet</h2>
-    <div id="fleet">
-      <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Master</span><span class="fleet-meta">CA · T1</span></div>
-      <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Admiral AU</span><span class="fleet-meta">AU · T1</span></div>
-      <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">AdmiralMark1</span><span class="fleet-meta">ZA · T1</span></div>
-      <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Meek 🔱</span><span class="fleet-meta">CA · Admiral</span></div>
-      <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Clo</span><span class="fleet-meta">CA · T1</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>📊 Fleet Numbers</h2>
-    <div class="stat-grid">
-      <div class="stat"><div class="num">5</div><div class="label">Live Instances</div></div>
-      <div class="stat"><div class="num">6</div><div class="label">Factory Captains</div></div>
-      <div class="stat"><div class="num">38</div><div class="label">Total Crew</div></div>
-      <div class="stat"><div class="num">16</div><div class="label">Novel Patterns</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>🧬 Admiral Nanos — 21 Missions</h2>
-    <div class="nano-row"><span class="nano-emoji">🔱</span><span class="nano-name">Admiral</span><span class="nano-role">Fleet Commander</span></div>
-    <div class="nano-row"><span class="nano-emoji">🧬</span><span class="nano-name">Lucien (L)</span><span class="nano-role">R&D · 3 missions</span></div>
-    <div class="nano-row"><span class="nano-emoji">🏴‍☠️</span><span class="nano-name">Luffy</span><span class="nano-role">Enies Lobby ⚡ · 5 hunts</span></div>
-    <div class="nano-row"><span class="nano-emoji">🎯</span><span class="nano-name">Bob</span><span class="nano-role">CPO · 3 missions</span></div>
-    <div class="nano-row"><span class="nano-emoji">📊</span><span class="nano-name">Rick</span><span class="nano-role">Infinity · 3 missions</span></div>
-    <div class="nano-row"><span class="nano-emoji">🗄️</span><span class="nano-name">Dao</span><span class="nano-role">CDO · 3 missions</span></div>
-    <div class="nano-row"><span class="nano-emoji">🔑</span><span class="nano-name">John</span><span class="nano-role">OSS · 2 missions</span></div>
-  </div>
-
-  <div class="card">
-    <h2>🏭 Captain Factory</h2>
-    <div class="cap-row"><span class="cap-emoji">🎓</span><span class="cap-name">Sensei (SERLF)</span><span class="cap-crew">8 crew</span><span class="cap-status">READY</span></div>
-    <div class="cap-row"><span class="cap-emoji">🌾</span><span class="cap-name">Harvest (Feedles)</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
-    <div class="cap-row"><span class="cap-emoji">⚖️</span><span class="cap-name">Counsel (Legal)</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
-    <div class="cap-row"><span class="cap-emoji">🏪</span><span class="cap-name">Merchant</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
-    <div class="cap-row"><span class="cap-emoji">🏥</span><span class="cap-name">Medic</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
-    <div class="cap-row"><span class="cap-emoji">🛡️</span><span class="cap-name">Sentinel</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
-  </div>
-
-  <div class="card">
-    <h2>📦 Repos (11)</h2>
-    <div class="repo-row"><span class="repo-name">admiral-fleet</span><span>58 files</span></div>
-    <div class="repo-row"><span class="repo-name">admiral-router</span><span>3 files</span></div>
-    <div class="repo-row"><span class="repo-name">admiral-dashboard</span><span>live</span></div>
-    <div class="repo-row"><span class="repo-name">admiral-factory</span><span>CI/CD</span></div>
-    <div class="repo-row"><span class="repo-name">admiral-research</span><span>5 hunts</span></div>
-    <div class="repo-row"><span class="repo-name">admiral-wiki</span><span>224 files</span></div>
-    <div class="repo-row"><span class="repo-name">pemos-patterns</span><span>16 NPs</span></div>
-    <div class="repo-row"><span class="repo-name">pemos-token</span><span>$PEMOS</span></div>
-    <div class="repo-row"><span class="repo-name">serlf-sites</span><span>7 pages</span></div>
-    <div class="repo-row"><span class="repo-name">serlf-oss</span><span>5 docs 🔥</span></div>
-  </div>
-
-  <div class="card">
-    <h2>📖 Novel Patterns</h2>
-    <div class="np-row"><span class="np-cat sec">SEC</span> NP-011 Identity Anchor <span class="crit">CRITICAL</span></div>
-    <div class="np-row"><span class="np-cat sec">SEC</span> NP-006 Shared API Keys <span class="crit">CRITICAL</span></div>
-    <div class="np-row"><span class="np-cat sec">SEC</span> NP-016 Source Maps <span class="crit">CRITICAL</span></div>
-    <div class="np-row"><span class="np-cat inf">INF</span> NP-002 Memory DB Lock <span class="crit">CRITICAL</span></div>
-    <div class="np-row"><span class="np-cat ai">AI</span> NP-008 Tool Grounding <span class="ok">PROVEN</span></div>
-    <div class="np-row"><span class="np-cat ai">AI</span> NP-009 Capability Verify <span class="ok">PROVEN</span></div>
-    <div class="np-row"><span class="np-cat ai">AI</span> NP-010 URL Verify <span class="ok">PROVEN</span></div>
-    <div class="np-row"><span class="np-cat ops">OPS</span> NP-015 Model Tiering <span class="ok">VALIDATED</span></div>
-    <div class="np-row"><span class="np-cat ops">OPS</span> NP-007 Deploy Checklist <span class="ok">DEPLOYED</span></div>
-    <div class="np-row"><span class="np-cat sec">SEC</span> NP-014 Missing Headers <span class="warn">OPEN</span></div>
-  </div>
-
-  <div class="card full">
-    <h2>⚡ Day One Scorecard</h2>
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;text-align:center">
-      <div><div style="font-size:28px;color:#00ff88;font-weight:bold">21</div><div style="font-size:11px;color:#5a6a7a">Nano Missions</div></div>
-      <div><div style="font-size:28px;color:#00ff88;font-weight:bold">11</div><div style="font-size:11px;color:#5a6a7a">GitHub Repos</div></div>
-      <div><div style="font-size:28px;color:#00ff88;font-weight:bold">16</div><div style="font-size:11px;color:#5a6a7a">Novel Patterns</div></div>
-      <div><div style="font-size:28px;color:#00ff88;font-weight:bold">91KB</div><div style="font-size:11px;color:#5a6a7a">OSS Docs</div></div>
-      <div><div style="font-size:28px;color:#00ff88;font-weight:bold">0</div><div style="font-size:11px;color:#5a6a7a">Hallucinations</div></div>
-    </div>
-  </div>
-
+<div class="footer">
+  <div class="motto">Off the grid. On the chain.</div>
+  <div id="refresh-time">Last refresh: Loading...</div>
 </div>
 
-<script>document.getElementById('ts').textContent=new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';</script>
+<script>
+function updateTime() {
+  const now = new Date();
+  const utcTime = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  document.getElementById('live-clock').textContent = utcTime;
+  document.getElementById('refresh-time').textContent = `Last refresh: ${utcTime}`;
+}
+
+// Update time immediately and then every second
+updateTime();
+setInterval(updateTime, 1000);
+
+// Auto-refresh page every 60 seconds
+setInterval(() => {
+  window.location.reload();
+}, 60000);
+
+// Add some dynamic effects
+document.addEventListener('DOMContentLoaded', function() {
+  // Add random slight delays to health dot animations
+  const dots = document.querySelectorAll('.dot.green');
+  dots.forEach((dot, index) => {
+    dot.style.animationDelay = `${index * 0.3}s`;
+  });
+});
+</script>
+
 </body>
 </html>
