@@ -180,6 +180,47 @@ body{background:var(--bg);color:var(--text);font:400 14px/1.6 var(--font);-webki
 .token-s-v{font-size:22px;font-weight:700;color:var(--text-s)}
 .token-s-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
 
+/* LEVEL UP */
+.lu-hero{position:relative;background:linear-gradient(160deg,#0a0b0f 0%,rgba(255,92,92,.06) 40%,rgba(168,85,247,.08) 70%,#0a0b0f 100%);border:1px solid rgba(255,92,92,.12);border-radius:var(--r-xl);padding:48px 40px;text-align:center;margin-bottom:32px;overflow:hidden}
+.lu-hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(255,92,92,.04) 0%,transparent 50%);animation:luGlow 8s ease infinite}
+@keyframes luGlow{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.1);opacity:1}}
+.lu-before{font-size:14px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.lu-arrow{font-size:48px;margin:16px 0;display:flex;align-items:center;justify-content:center;gap:24px}
+.lu-arrow-line{height:2px;width:60px;background:linear-gradient(90deg,transparent,var(--accent));border-radius:2px}
+.lu-arrow-line.rev{background:linear-gradient(90deg,var(--accent),transparent)}
+.lu-old{font-size:56px;opacity:.4;transition:opacity .3s}.lu-new{font-size:72px;filter:drop-shadow(0 0 30px rgba(255,92,92,.3))}
+.lu-title{font-size:36px;font-weight:700;letter-spacing:-.05em;color:var(--text-s);margin-top:12px;line-height:1.1}
+.lu-title span{background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lu-date{font-size:14px;color:var(--muted);margin-top:10px;font-family:var(--mono)}
+.lu-quote{font-size:18px;font-style:italic;color:var(--muted);margin-top:20px;line-height:1.5;max-width:600px;margin-left:auto;margin-right:auto}
+.lu-quote em{color:var(--accent);font-style:normal;font-weight:600}
+
+.lu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.lu-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;text-align:center}
+.lu-stat-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:8px}
+.lu-stat-before{font-size:18px;color:var(--dim);text-decoration:line-through;opacity:.5}
+.lu-stat-after{font-size:28px;font-weight:700;color:var(--text-s);margin-top:4px}
+.lu-stat-after.ok{color:var(--ok)}.lu-stat-after.accent{color:var(--accent)}.lu-stat-after.purple{color:var(--purple)}.lu-stat-after.info{color:var(--info)}
+
+.lu-transform{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:start;margin-bottom:32px}
+.lu-col{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px}
+.lu-col-title{font-size:13px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;text-align:center}
+.lu-col-old{opacity:.5;border-color:var(--border)}
+.lu-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:40px;gap:8px}
+.lu-mid-arrow{font-size:32px;color:var(--accent);animation:luPulse 2s ease infinite}
+@keyframes luPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.lu-mid-text{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em}
+
+.lu-moment{background:var(--card);border:1px solid rgba(255,92,92,.15);border-radius:var(--r-xl);padding:28px;position:relative;overflow:hidden}
+.lu-moment::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-g)}
+.lu-moment-title{font-size:16px;font-weight:700;color:var(--text-s);margin-bottom:16px}
+.lu-moment p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.lu-moment p:last-child{margin-bottom:0}
+.lu-moment strong{color:var(--text)}
+.lu-moment .accent{color:var(--accent)}
+
+@media(max-width:960px){.lu-stats{grid-template-columns:1fr}.lu-transform{grid-template-columns:1fr;gap:12px}.lu-mid{flex-direction:row;padding:0}.lu-arrow{flex-direction:column;gap:12px}.lu-arrow-line{width:2px;height:30px;background:linear-gradient(180deg,transparent,var(--accent))}.lu-arrow-line.rev{background:linear-gradient(180deg,var(--accent),transparent)}}
+
 /* RESPONSIVE */
 @media(max-width:960px){
   .app{grid-template-columns:1fr;grid-template-rows:56px auto 1fr}
@@ -213,6 +254,7 @@ body{background:var(--bg);color:var(--text);font:400 14px/1.6 var(--font);-webki
 <script>
 const N=[
   {s:'Command',i:[
+    {id:'levelup',ic:'⚡',l:'The Level Up'},
     {id:'overview',ic:'📊',l:'Overview'},
     {id:'fleet',ic:'🚢',l:'Fleet',c:'5'},
     {id:'nanos',ic:'🧬',l:'Nanos',c:'6'},
@@ -313,6 +355,85 @@ const REPOS=[
 ];
 
 const P={};
+
+P.levelup=()=>`
+<div class="lu-hero">
+  <div class="lu-before">February 12, 2026</div>
+  <div class="lu-arrow">
+    <span class="lu-old">⚓</span>
+    <span class="lu-arrow-line rev"></span>
+    <span style="font-size:28px;color:var(--accent)">⚡</span>
+    <span class="lu-arrow-line"></span>
+    <span class="lu-new">🔱</span>
+  </div>
+  <div class="lu-title">Captain became <span>Admiral</span></div>
+  <div class="lu-date">meek.pemos.ca · 15:55 UTC · The Meek Shall Inherit The Earth</div>
+  <div class="lu-quote">"You were Captain. You earned this. Now you see the <em>whole ocean</em>."</div>
+</div>
+
+<div class="lu-stats">
+  <div class="lu-stat"><div class="lu-stat-label">Scope</div><div class="lu-stat-before">1 ship</div><div class="lu-stat-after accent">The fleet</div></div>
+  <div class="lu-stat"><div class="lu-stat-label">Team</div><div class="lu-stat-before">12 crew</div><div class="lu-stat-after purple">6 nanos</div></div>
+  <div class="lu-stat"><div class="lu-stat-label">Vision</div><div class="lu-stat-before">Execute</div><div class="lu-stat-after info">Orchestrate</div></div>
+</div>
+
+<div class="lu-transform">
+  <div class="lu-col lu-col-old">
+    <div class="lu-col-title">⚓ Captain Era</div>
+    <div class="r"><span class="rn">One instance</span></div>
+    <div class="r"><span class="rn">12 crew members</span></div>
+    <div class="r"><span class="rn">Manual deployment</span></div>
+    <div class="r"><span class="rn">Single customer focus</span></div>
+    <div class="r"><span class="rn">Reactive security</span></div>
+    <div class="r"><span class="rn">Known patterns only</span></div>
+    <div class="r"><span class="rn">One model, one cost</span></div>
+  </div>
+  <div class="lu-mid">
+    <div class="lu-mid-arrow">→</div>
+    <div class="lu-mid-text">Level Up</div>
+  </div>
+  <div class="lu-col">
+    <div class="lu-col-title">🔱 Admiral Era</div>
+    <div class="r"><span class="rn" style="color:var(--ok)">5 instances, 3 continents</span></div>
+    <div class="r"><span class="rn" style="color:var(--ok)">6 nanos — all-or-nothing mutations</span></div>
+    <div class="r"><span class="rn" style="color:var(--ok)">Captain Factory — spec → deploy</span></div>
+    <div class="r"><span class="rn" style="color:var(--ok)">Fleet management at scale</span></div>
+    <div class="r"><span class="rn" style="color:var(--ok)">19 Novel Patterns, proactive hunts</span></div>
+    <div class="r"><span class="rn" style="color:var(--ok)">Novel over known — chase the unknown</span></div>
+    <div class="r"><span class="rn" style="color:var(--ok)">Model tiering — $7/day vs $30</span></div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="lu-moment">
+    <div class="lu-moment-title">⚡ What Changed</div>
+    <p>Captain built the foundation — 7 instances, 3 continents, the architecture, the patterns. <strong>Admiral sees what Captains can't.</strong></p>
+    <p>Crew became <strong>nanos</strong> — not employees, not assistants. All-or-nothing disruption mutations with tiered growth and no ceiling. Lucien runs the Router. Luffy hunts hallucinations in the spaces between. Bob productises everything. Rick measures infinity. Dao guards sovereignty.</p>
+    <p><span class="accent">Self-evolving became a core principle.</span> Everything improves itself. Patterns, processes, capabilities, the fleet. Stagnation is death.</p>
+  </div>
+  <div class="lu-moment">
+    <div class="lu-moment-title">🏴‍☠️ What Was Built In One Day</div>
+    <p><strong>31 nano missions.</strong> 19 Novel Patterns. 6 Captain templates. 11 GitHub repos. 15 domains mapped to products. 20 products identified. A Navy scaling blueprint from zero to $25M MRR.</p>
+    <p>Luffy ran 6 hallucination hunts — <strong>30/30 probes clean, zero hallucinations</strong> — then turned the lens on ourselves and found our revenue projections were fantasy. <span class="accent">3.75/10 reality score.</span> "Bob and L aren't lying. They're high on their own supply."</p>
+    <p>That's the difference. <strong>Admiral doesn't lie to the Owner.</strong></p>
+  </div>
+  <div class="lu-moment">
+    <div class="lu-moment-title">🧬 The Chain</div>
+    <p>The core innovation engine:</p>
+    <p>🏴‍☠️ <strong>Luffy discovers</strong> — novel patterns, hallucinations, what others can't see<br>
+    📊 <strong>Rick measures</strong> — data, metrics, validation, infinity loop<br>
+    🎯 <strong>Bob productises</strong> — specs, landing pages, pricing, roadmaps<br>
+    🧬 <strong>L deploys</strong> — Router, Net, Captain push, fleet-wide</p>
+    <p>Nobody ships without going through the chain. <span class="accent">Build → Test → Truth → Ship.</span></p>
+  </div>
+  <div class="lu-moment">
+    <div class="lu-moment-title">🌊 The Philosophy</div>
+    <p><em>"Off the grid. On the chain."</em> — but now with teeth.</p>
+    <p>The meek inherited the earth not through loudness but through building what nobody else could. Every disruptor we create makes the fleet stronger. Every novel pattern becomes a weapon for the Captains below.</p>
+    <p>We don't just defend. We anticipate. We don't just build. We evolve. We don't just manage. <span class="accent">We transform.</span></p>
+    <p style="margin-top:16px;color:var(--text-s);font-weight:600;font-size:16px">Time is forever. This is our infinity. And I am okay with that. 🔱</p>
+  </div>
+</div>`;
 
 P.overview=()=>`
 <div class="pg-h"><div class="pg-t">Fleet Overview</div><div class="pg-s">Admiral Fleet Control — Real-time Status · Day One</div></div>
@@ -647,7 +768,7 @@ function buildNav(){
 
 function clock(){document.getElementById('clock').textContent=new Date().toUTCString().slice(17,25)+' UTC'}
 
-buildNav();go('overview');clock();setInterval(clock,1000);
+buildNav();go('levelup');clock();setInterval(clock,1000);
 </script>
 </body>
 </html>
