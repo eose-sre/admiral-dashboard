@@ -6,599 +6,648 @@
 <title>🔱 Admiral Fleet Control</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#12141a;--bg-accent:#14161d;--bg-elevated:#1a1d25;--bg-hover:#262a35;--card:#181b22;--text:#e4e4e7;--text-strong:#fafafa;--muted:#71717a;--muted-strong:#52525b;--border:#27272a;--border-strong:#3f3f46;--accent:#ff5c5c;--accent-hover:#ff7070;--accent-subtle:rgba(255,92,92,.15);--ok:#22c55e;--ok-subtle:rgba(34,197,94,.12);--warn:#f59e0b;--warn-subtle:rgba(245,158,11,.12);--danger:#ef4444;--danger-subtle:rgba(239,68,68,.12);--info:#3b82f6;--info-subtle:rgba(59,130,246,.12);--purple:#a855f7;--purple-subtle:rgba(168,85,247,.15);--mono:'JetBrains Mono',monospace;--font:'Space Grotesk',-apple-system,sans-serif;--radius:8px;--radius-lg:12px;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font:400 14px/1.55 var(--font);-webkit-font-smoothing:antialiased;height:100vh;overflow:hidden;}
-::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}::-webkit-scrollbar-thumb:hover{background:var(--border-strong);}
-::selection{background:var(--accent-subtle);color:var(--text-strong);}
-
-.shell{display:grid;grid-template-columns:240px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden;}
-.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);background:var(--bg);z-index:10;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-title{font-size:16px;font-weight:700;letter-spacing:-.03em;color:var(--text-strong);}
-.brand-sub{font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px rgba(34,197,94,.5);animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);padding:5px 12px;border-radius:999px;background:var(--bg-elevated);font-size:12px;font-weight:500;white-space:nowrap;}
-.clock{font-family:var(--mono);font-size:12px;color:var(--muted);}
-
-.nav{background:var(--bg);border-right:1px solid var(--border);padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
-.nav-section{margin-bottom:16px;}
-.nav-section:last-child{margin-bottom:0;}
-.nav-label{font-size:10px;font-weight:600;color:var(--muted-strong);padding:8px 10px 4px;text-transform:uppercase;letter-spacing:.06em;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);color:var(--muted);cursor:pointer;font-size:13px;font-weight:500;transition:all .12s;border:1px solid transparent;user-select:none;}
-.nav-item:hover{color:var(--text);background:var(--bg-hover);}
-.nav-item.active{color:var(--text-strong);background:var(--accent-subtle);border-color:rgba(255,92,92,.1);}
-.nav-item.active .ni{color:var(--accent);}
-.ni{font-size:15px;width:20px;text-align:center;transition:color .12s;}
-.nav-count{margin-left:auto;font-size:11px;font-family:var(--mono);padding:1px 6px;border-radius:99px;background:var(--bg-elevated);border:1px solid var(--border);color:var(--muted);}
-.nav-bottom{margin-top:auto;padding-top:12px;border-top:1px solid var(--border);}
-
-.content{padding:28px;overflow-y:auto;overflow-x:hidden;}
-.page{display:none;animation:fadeUp .25s ease;}
-.page.active{display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-.page-header{margin-bottom:24px;}
-.page-title{font-size:22px;font-weight:700;letter-spacing:-.035em;color:var(--text-strong);line-height:1.2;}
-.page-sub{color:var(--muted);font-size:13px;margin-top:4px;}
-
-.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));margin-bottom:24px;}
-.stat{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);transition:border-color .15s;}
-.stat:hover{border-color:var(--border-strong);}
-.stat-label{color:var(--muted);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-.stat-val{font-size:26px;font-weight:700;margin-top:4px;letter-spacing:-.03em;line-height:1.1;}
-.stat-val.ok{color:var(--ok)}.stat-val.warn{color:var(--warn)}.stat-val.accent{color:var(--accent)}.stat-val.info{color:var(--info)}.stat-val.purple{color:var(--purple)}
-.stat-note{font-size:11px;color:var(--muted);margin-top:4px;}
-
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));margin-bottom:24px;}
-.grid-1{grid-template-columns:1fr;}
-
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;transition:border-color .2s;}
-.card:hover{border-color:var(--border-strong);}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.card-title{font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--text-strong);display:flex;align-items:center;gap:8px;}
-.badge{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:600;letter-spacing:.02em;}
-.b-ok{background:var(--ok-subtle);color:var(--ok);border:1px solid rgba(34,197,94,.25);}
-.b-warn{background:var(--warn-subtle);color:var(--warn);border:1px solid rgba(245,158,11,.25);}
-.b-danger{background:var(--danger-subtle);color:var(--danger);border:1px solid rgba(239,68,68,.25);}
-.b-info{background:var(--info-subtle);color:var(--info);border:1px solid rgba(59,130,246,.25);}
-.b-purple{background:var(--purple-subtle);color:var(--purple);border:1px solid rgba(168,85,247,.25);}
-.b-accent{background:var(--accent-subtle);color:var(--accent);border:1px solid rgba(255,92,92,.25);}
-
-.row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.row:last-child{border-bottom:none;}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.dot.g{background:var(--ok);box-shadow:0 0 5px rgba(34,197,94,.4);}
-.dot.y{background:var(--warn);box-shadow:0 0 5px rgba(245,158,11,.4);}
-.dot.r{background:var(--danger);box-shadow:0 0 5px rgba(239,68,68,.4);}
-.rn{flex:1;font-weight:500;}.rm{color:var(--muted);font-size:12px;font-family:var(--mono);}
-
-.nano{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
-.nano:last-child{border-bottom:none;}
-.nano-e{font-size:24px;}.nano-info{flex:1;}
-.nano-name{font-weight:600;font-size:14px;color:var(--text-strong);}
-.nano-role{font-size:12px;color:var(--muted);margin-top:1px;}
-.nano-tier{font-size:10px;padding:3px 10px;border-radius:999px;background:var(--bg-elevated);border:1px solid var(--border);color:var(--muted);font-weight:600;letter-spacing:.03em;}
-
-.np{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;}
-.np:last-child{border-bottom:none;}
-.np-id{font-family:var(--mono);font-weight:600;color:var(--text-strong);width:56px;flex-shrink:0;}
-.np-name{flex:1;}
-.np-cat{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;}
-.c-sec{background:var(--danger-subtle);color:var(--danger);}
-.c-ai{background:var(--purple-subtle);color:var(--purple);}
-.c-inf{background:var(--info-subtle);color:var(--info);}
-.c-ops{background:var(--ok-subtle);color:var(--ok);}
-.c-prd{background:var(--warn-subtle);color:var(--warn);}
-.np-lv{font-family:var(--mono);color:var(--muted);font-size:11px;width:24px;text-align:right;}
-
-.domain{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.domain:last-child{border-bottom:none;}
-.domain-url{font-family:var(--mono);font-weight:600;color:var(--accent);min-width:140px;}
-.domain-prod{flex:1;color:var(--text);}
-.domain-status{font-size:11px;}
-
-.tl{padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:14px;font-size:13px;}
-.tl:last-child{border-bottom:none;}
-.tl-time{font-family:var(--mono);color:var(--muted);font-size:12px;width:50px;flex-shrink:0;padding-top:1px;}
-.tl-text{flex:1;line-height:1.45;}
-.tl-highlight{color:var(--accent);font-weight:600;}
-
-.search-box{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elevated);font-size:13px;color:var(--text);outline:none;font-family:var(--font);transition:border-color .15s;}
-.search-box:focus{border-color:var(--accent);}
-.search-box::placeholder{color:var(--muted);}
-
-.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-.filter-btn{padding:6px 14px;border:1px solid var(--border);border-radius:999px;background:var(--bg-elevated);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;}
-.filter-btn:hover{border-color:var(--border-strong);color:var(--text);}
-.filter-btn.active{background:var(--accent-subtle);border-color:rgba(255,92,92,.3);color:var(--accent);}
-
-.tab-bar{display:flex;gap:6px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:12px;}
-.tab-btn{padding:8px 16px;border:1px solid transparent;border-radius:var(--radius) var(--radius) 0 0;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:all .12s;}
-.tab-btn:hover{color:var(--text);background:var(--bg-hover);}
-.tab-btn.active{color:var(--accent);border-color:var(--border);border-bottom-color:var(--bg);background:var(--bg-elevated);}
-.tab-content{display:none;}.tab-content.active{display:block;animation:fadeUp .2s ease;}
-
-.progress{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px;}
-.progress-fill{height:100%;border-radius:2px;transition:width .3s ease;}
-
-.empty{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
-
-@media(max-width:900px){
-  .shell{grid-template-columns:1fr;grid-template-rows:56px auto 1fr;}
-  .nav{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);padding:8px;gap:4px;}
-  .nav-section{margin:0;display:contents;}.nav-label{display:none;}
-  .nav-item{white-space:nowrap;padding:6px 12px;font-size:12px;}
-  .nav-count{display:none;}.nav-bottom{display:none;}
-  .content{padding:16px;}
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .grid{grid-template-columns:1fr;}
+:root{
+  --bg:#0a0b0f;--bg-s:#0f1015;--bg-e:#151720;--bg-h:#1c1f2e;
+  --card:#11131a;--card-b:rgba(255,255,255,.04);
+  --text:#d4d4d8;--text-s:#fafafa;--dim:#52525b;--muted:#71717a;
+  --border:#1e2030;--border-s:#2a2d42;
+  --accent:#ff5c5c;--accent-g:linear-gradient(135deg,#ff5c5c,#ff3e3e);
+  --ok:#22c55e;--ok-g:linear-gradient(135deg,#22c55e,#16a34a);
+  --warn:#f59e0b;--info:#3b82f6;--purple:#a855f7;--danger:#ef4444;
+  --ok-a:rgba(34,197,94,.08);--warn-a:rgba(245,158,11,.08);--info-a:rgba(59,130,246,.08);
+  --danger-a:rgba(239,68,68,.08);--purple-a:rgba(168,85,247,.08);--accent-a:rgba(255,92,92,.08);
+  --glow-ok:0 0 20px rgba(34,197,94,.15);--glow-accent:0 0 20px rgba(255,92,92,.15);
+  --mono:'JetBrains Mono',monospace;--font:'Space Grotesk',-apple-system,sans-serif;
+  --r:10px;--r-lg:14px;--r-xl:18px;
 }
-@media(max-width:500px){
-  .brand-sub{display:none;}.pill .pill-text{display:none;}
-  .stats{grid-template-columns:1fr 1fr;gap:8px;}
-  .stat{padding:12px;}.stat-val{font-size:22px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font:400 14px/1.6 var(--font);-webkit-font-smoothing:antialiased;height:100vh;overflow:hidden;}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-s);border-radius:99px}
+::selection{background:var(--accent-a);color:var(--text-s)}
+
+.app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:60px 1fr;height:100vh}
+
+/* TOPBAR */
+.top{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--bg-s);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);z-index:10}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--accent-g);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--glow-accent)}
+.logo-text{font-size:17px;font-weight:700;letter-spacing:-.04em;color:var(--text-s)}
+.logo-tag{font-size:9px;font-weight:600;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.top-r{display:flex;align-items:center;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;background:var(--bg-e);border:1px solid var(--border);font-size:12px;font-weight:500;color:var(--muted)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:var(--glow-ok);animation:blink 2.5s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.chip-lock{color:var(--ok)}
+.clock{font-family:var(--mono);font-size:11px;letter-spacing:.02em}
+
+/* NAV */
+.side{background:var(--bg-s);border-right:1px solid var(--border);padding:16px 14px;overflow-y:auto;display:flex;flex-direction:column}
+.side-sect{margin-bottom:20px}
+.side-lbl{font-size:9px;font-weight:700;color:var(--dim);padding:0 12px 6px;text-transform:uppercase;letter-spacing:.1em}
+.side-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--r);color:var(--muted);cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;border:1px solid transparent;position:relative;user-select:none}
+.side-item:hover{color:var(--text);background:var(--bg-h)}
+.side-item.on{color:var(--text-s);background:var(--accent-a);border-color:rgba(255,92,92,.12)}
+.side-item.on::before{content:'';position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:0 3px 3px 0;background:var(--accent)}
+.side-item.on .si{color:var(--accent)}
+.si{font-size:16px;width:22px;text-align:center}
+.side-count{margin-left:auto;font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:99px;background:var(--bg-h);color:var(--dim);font-weight:600}
+.side-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border)}
+.side-foot .side-item{opacity:.7}.side-foot .side-item:hover{opacity:1}
+
+/* MAIN */
+.main{padding:28px 32px;overflow-y:auto}
+.pg{display:none;animation:up .3s ease}.pg.on{display:block}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.pg-h{margin-bottom:28px}
+.pg-t{font-size:24px;font-weight:700;letter-spacing:-.04em;color:var(--text-s);line-height:1.15}
+.pg-s{color:var(--muted);font-size:13px;margin-top:5px}
+
+/* STATS */
+.sg{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));margin-bottom:28px}
+.st{background:var(--card);border-radius:var(--r-lg);padding:18px;border:1px solid var(--border);position:relative;overflow:hidden;transition:all .2s}
+.st:hover{border-color:var(--border-s);transform:translateY(-1px)}
+.st::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0;opacity:0;transition:opacity .2s}
+.st:hover::after{opacity:1}
+.st.glow-ok::after{background:var(--ok-g);opacity:1}.st.glow-accent::after{background:var(--accent-g);opacity:1}
+.st.glow-warn::after{background:var(--warn)}.st.glow-info::after{background:var(--info)}
+.st-l{color:var(--dim);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.st-v{font-size:28px;font-weight:700;margin-top:6px;letter-spacing:-.04em;line-height:1}
+.st-v.ok{color:var(--ok)}.st-v.warn{color:var(--warn)}.st-v.accent{color:var(--accent)}.st-v.info{color:var(--info)}.st-v.purple{color:var(--purple)}
+.st-n{font-size:11px;color:var(--dim);margin-top:5px}
+
+/* GRID / CARDS */
+.g2{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));margin-bottom:28px}
+.g1{grid-template-columns:1fr}
+.c{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px;transition:all .2s}
+.c:hover{border-color:var(--border-s)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ct{font-size:14px;font-weight:600;color:var(--text-s);display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+.b{font-size:9px;padding:3px 10px;border-radius:999px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.b-ok{background:var(--ok-a);color:var(--ok);border:1px solid rgba(34,197,94,.2)}
+.b-warn{background:var(--warn-a);color:var(--warn);border:1px solid rgba(245,158,11,.2)}
+.b-danger{background:var(--danger-a);color:var(--danger);border:1px solid rgba(239,68,68,.2)}
+.b-info{background:var(--info-a);color:var(--info);border:1px solid rgba(59,130,246,.2)}
+.b-purple{background:var(--purple-a);color:var(--purple);border:1px solid rgba(168,85,247,.2)}
+.b-accent{background:var(--accent-a);color:var(--accent);border:1px solid rgba(255,92,92,.2)}
+
+/* ROWS */
+.r{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.r:last-child{border-bottom:none}
+.d{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.d-g{background:var(--ok);box-shadow:0 0 6px rgba(34,197,94,.35)}
+.d-y{background:var(--warn);box-shadow:0 0 6px rgba(245,158,11,.35)}
+.d-r{background:var(--danger);box-shadow:0 0 6px rgba(239,68,68,.35)}
+.rn{flex:1;font-weight:500;color:var(--text)}.rm{color:var(--muted);font-size:12px;font-family:var(--mono)}
+
+/* FLEET CARDS */
+.fc{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px;position:relative;overflow:hidden;transition:all .25s}
+.fc:hover{border-color:var(--border-s);transform:translateY(-2px)}
+.fc-admiral{border-color:rgba(255,92,92,.15)}
+.fc-admiral::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-g)}
+.fc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.fc-name{font-size:15px;font-weight:700;color:var(--text-s);letter-spacing:-.02em}
+.fc-region{font-size:12px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px}
+.fc-region::before{content:'📍';font-size:11px}
+.fc-details{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fc-det{font-size:11px;color:var(--dim)}.fc-det span{display:block;color:var(--text);font-weight:500;font-size:13px;margin-top:2px}
+
+/* NANO CARDS */
+.nc{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px;transition:all .25s;position:relative;overflow:hidden}
+.nc:hover{border-color:var(--border-s);transform:translateY(-2px)}
+.nc-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.nc-emoji{font-size:32px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:var(--bg-h);border-radius:12px}
+.nc-info h3{font-size:16px;font-weight:700;color:var(--text-s);letter-spacing:-.02em}
+.nc-info p{font-size:12px;color:var(--muted);margin-top:2px}
+.nc-tier{position:absolute;top:16px;right:16px;font-size:10px;padding:4px 12px;border-radius:999px;background:var(--bg-h);border:1px solid var(--border);color:var(--dim);font-weight:700;letter-spacing:.04em}
+.nc-body{display:flex;flex-direction:column;gap:6px}
+.nc-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
+.nc-row span:first-child{color:var(--dim)}.nc-row span:last-child{color:var(--text);font-weight:500}
+.nc-bar{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
+.nc-bar-fill{height:100%;border-radius:2px}
+
+/* NP TABLE */
+.np{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;transition:background .1s;border-radius:4px}
+.np:hover{background:var(--bg-h)}
+.np:last-child{border-bottom:none}
+.np-id{font-family:var(--mono);font-weight:700;color:var(--accent);width:58px;flex-shrink:0}
+.np-name{flex:1;color:var(--text)}
+.np-cat{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.c-sec{background:var(--danger-a);color:var(--danger)}.c-ai{background:var(--purple-a);color:var(--purple)}
+.c-inf{background:var(--info-a);color:var(--info)}.c-ops{background:var(--ok-a);color:var(--ok)}.c-prd{background:var(--warn-a);color:var(--warn)}
+.np-lv{font-family:var(--mono);color:var(--dim);font-size:11px;width:28px;text-align:right}
+.np-new{color:var(--accent);font-weight:700}
+
+/* DOMAIN TABLE */
+.dom{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.dom:last-child{border-bottom:none}
+.dom-url{font-family:var(--mono);font-weight:600;color:var(--accent);min-width:150px;font-size:13px}
+.dom-prod{flex:1}.dom-status{font-size:10px}
+
+/* TIMELINE */
+.tl{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px;position:relative}
+.tl:last-child{border-bottom:none}
+.tl::before{content:'';position:absolute;left:24px;top:28px;bottom:-4px;width:1px;background:var(--border)}
+.tl:last-child::before{display:none}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--border-s);flex-shrink:0;margin-top:4px;z-index:1;border:2px solid var(--bg)}
+.tl-dot.hot{background:var(--accent);border-color:var(--accent);box-shadow:var(--glow-accent)}
+.tl-time{font-family:var(--mono);color:var(--dim);font-size:11px;width:40px;flex-shrink:0;margin-top:1px}
+.tl-text{flex:1;line-height:1.5}.tl-em{color:var(--accent);font-weight:600}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.fbtn{padding:6px 16px;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--font)}
+.fbtn:hover{border-color:var(--border-s);color:var(--text)}
+.fbtn.on{background:var(--accent-a);border-color:rgba(255,92,92,.25);color:var(--accent)}
+.search{width:100%;padding:11px 16px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg-e);font-size:13px;color:var(--text);outline:none;font-family:var(--font);transition:all .2s;margin-bottom:16px}
+.search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-a)}
+.search::placeholder{color:var(--dim)}
+
+/* NAVY */
+.navy-phase{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px;position:relative;overflow:hidden}
+.navy-phase::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.navy-phase.p1::before{background:var(--ok)}.navy-phase.p2::before{background:var(--info)}.navy-phase.p3::before{background:var(--purple)}.navy-phase.p4::before{background:var(--warn)}.navy-phase.p5::before{background:var(--accent)}
+.navy-head{font-size:15px;font-weight:700;color:var(--text-s);margin-bottom:10px}
+.navy-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.navy-m{font-size:11px;color:var(--dim)}.navy-m span{display:block;font-size:16px;font-weight:700;color:var(--text);margin-top:2px}
+
+/* TOKEN */
+.token-hero{background:linear-gradient(135deg,var(--card) 0%,rgba(168,85,247,.08) 100%);border:1px solid rgba(168,85,247,.15);border-radius:var(--r-xl);padding:32px;text-align:center;margin-bottom:24px}
+.token-symbol{font-size:48px;font-weight:700;color:var(--purple);letter-spacing:-.05em}
+.token-sub{font-size:14px;color:var(--muted);margin-top:8px}
+.token-stat{display:flex;justify-content:center;gap:32px;margin-top:20px}
+.token-s{text-align:center}
+.token-s-v{font-size:22px;font-weight:700;color:var(--text-s)}
+.token-s-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .app{grid-template-columns:1fr;grid-template-rows:56px auto 1fr}
+  .side{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);padding:8px 12px;gap:4px}
+  .side-sect{margin:0;display:contents}.side-lbl{display:none}
+  .side-item{white-space:nowrap;padding:7px 14px;font-size:12px}.side-item.on::before{display:none}
+  .side-count{display:none}.side-foot{display:none}
+  .main{padding:20px 16px}
+  .sg{grid-template-columns:repeat(2,1fr);gap:10px}.g2{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-<div class="shell">
-  <div class="topbar">
-    <div class="brand"><div><div class="brand-title">🔱 Admiral Fleet Control</div><div class="brand-sub">PEMOS • Sovereign Fleet</div></div></div>
-    <div class="topbar-right">
-      <div class="pill"><span class="status-dot"></span> <span class="pill-text">Online</span></div>
-      <div class="pill"><span style="font-size:13px">🔒</span> <span class="pill-text">Locked</span></div>
-      <div class="pill clock" id="clock"></div>
+<div class="app">
+  <div class="top">
+    <div class="logo">
+      <div class="logo-mark">🔱</div>
+      <div><div class="logo-text">Admiral Fleet Control</div><div class="logo-tag">PEMOS · Sovereign Fleet Management</div></div>
+    </div>
+    <div class="top-r">
+      <div class="chip"><span class="live-dot"></span><span>5/5 Online</span></div>
+      <div class="chip chip-lock">🔒 Locked</div>
+      <div class="chip clock" id="clock"></div>
     </div>
   </div>
 
-  <nav class="nav" id="nav"></nav>
-
-  <div class="content" id="content"></div>
+  <nav class="side" id="side"></nav>
+  <div class="main" id="main"></div>
 </div>
 
 <script>
-const NAV = [
-  {section:'Command', items:[
-    {id:'overview',icon:'📊',label:'Overview'},
-    {id:'fleet',icon:'🚢',label:'Fleet',count:'5'},
-    {id:'nanos',icon:'🧬',label:'Nanos',count:'6'},
-    {id:'captains',icon:'🏭',label:'Captain Factory',count:'6'},
+const N=[
+  {s:'Command',i:[
+    {id:'overview',ic:'📊',l:'Overview'},
+    {id:'fleet',ic:'🚢',l:'Fleet',c:'5'},
+    {id:'nanos',ic:'🧬',l:'Nanos',c:'6'},
+    {id:'factory',ic:'🏭',l:'Captain Factory',c:'6'},
+    {id:'navy',ic:'⚓',l:'Navy Blueprint'},
   ]},
-  {section:'Intelligence', items:[
-    {id:'patterns',icon:'💡',label:'Novel Patterns',count:'19'},
-    {id:'security',icon:'🔒',label:'Security'},
-    {id:'products',icon:'🎯',label:'Products',count:'20'},
-    {id:'domains',icon:'🌐',label:'Domains',count:'15'},
+  {s:'Intelligence',i:[
+    {id:'patterns',ic:'💡',l:'Novel Patterns',c:'19'},
+    {id:'security',ic:'🔒',l:'Security'},
+    {id:'products',ic:'🎯',l:'Products',c:'20'},
+    {id:'domains',ic:'🌐',l:'Domains',c:'15'},
+    {id:'token',ic:'💎',l:'$PEMOS Token'},
   ]},
-  {section:'Research', items:[
-    {id:'hunts',icon:'🏴‍☠️',label:'Luffy Hunts',count:'6'},
-    {id:'analytics',icon:'♾️',label:'Rick Analytics'},
-    {id:'governance',icon:'🗄️',label:'Governance'},
+  {s:'Research',i:[
+    {id:'hunts',ic:'🏴‍☠️',l:'Luffy Hunts',c:'6'},
+    {id:'analytics',ic:'♾️',l:'Rick Analytics'},
+    {id:'governance',ic:'🗄️',l:'Governance'},
   ]},
-  {section:'Operations', items:[
-    {id:'repos',icon:'📦',label:'Repositories',count:'11'},
-    {id:'timeline',icon:'📅',label:'Timeline'},
-    {id:'config',icon:'⚙️',label:'Config'},
+  {s:'Operations',i:[
+    {id:'repos',ic:'📦',l:'Repositories',c:'11'},
+    {id:'timeline',ic:'📅',l:'Timeline'},
+    {id:'config',ic:'⚙️',l:'Config'},
   ]},
 ];
 
-function buildNav(){
-  const nav=document.getElementById('nav');
-  let h='';
-  NAV.forEach(s=>{
-    h+=`<div class="nav-section"><div class="nav-label">${s.section}</div>`;
-    s.items.forEach(i=>{
-      h+=`<div class="nav-item" data-page="${i.id}" onclick="go('${i.id}')"><span class="ni">${i.icon}</span>${i.label}${i.count?`<span class="nav-count">${i.count}</span>`:''}</div>`;
-    });
-    h+=`</div>`;
-  });
-  h+=`<div class="nav-bottom"><div class="nav-item" onclick="window.open('https://meek.pemos.ca','_blank')"><span class="ni">💬</span>Chat</div></div>`;
-  nav.innerHTML=h;
-}
-
 const FLEET=[
-  {name:'master.pemos.ca',region:'Canada Central',role:'Full Control Portal',ver:'v1.0.12-fc',status:'ok'},
-  {name:'meek.pemos.ca',region:'Canada Central',role:'Admiral Fleet Control 🔱',ver:'v1.1.0-full',status:'ok',auth:true},
-  {name:'admiral.pemos.ca',region:'Australia East',role:'Fleet Instance',ver:'v1.1.0-full',status:'ok'},
-  {name:'admiralmark1.pemos.ca',region:'South Africa North',role:'Fleet Instance',ver:'v1.1.0-full',status:'ok'},
-  {name:'clo.pemos.ca',region:'Canada Central',role:'Fleet Instance',ver:'v1.1.0-full',status:'ok'},
+  {n:'master.pemos.ca',rg:'Canada Central',role:'Full Control Portal',ver:'v1.0.12-fc',flag:'🇨🇦'},
+  {n:'meek.pemos.ca',rg:'Canada Central',role:'Admiral Fleet Control',ver:'v1.1.0-full',flag:'🇨🇦',admiral:true},
+  {n:'admiral.pemos.ca',rg:'Australia East',role:'Fleet Instance',ver:'v1.1.0-full',flag:'🇦🇺'},
+  {n:'admiralmark1.pemos.ca',rg:'South Africa North',role:'Fleet Instance',ver:'v1.1.0-full',flag:'🇿🇦'},
+  {n:'clo.pemos.ca',rg:'Canada Central',role:'Fleet Instance',ver:'v1.1.0-full',flag:'🇨🇦'},
 ];
 
 const NANOS=[
-  {e:'🔱',name:'Admiral',role:'Fleet Commander — strategy, architecture, fleet management',tier:'CMD',missions:'-',domain:'Everything. The buck stops here.'},
-  {e:'🧬',name:'Lucien (L)',role:'Head of R&D & Testing',tier:'T1',missions:'5',domain:'Router, Net, Captain management, integration, testing'},
-  {e:'🏴‍☠️',name:'Luffy',role:'Universal Translator / Rosetta Stone',tier:'Enies Lobby',missions:'6',domain:'Hallucination hunting, cross-domain pattern discovery'},
-  {e:'🎯',name:'Bob',role:'CPO Nano — Product Factory',tier:'T1',missions:'5',domain:'Products, specs, roadmaps, monetisation, SERLF'},
-  {e:'📊',name:'Rick',role:'Infinity — Fleet Analytics',tier:'T1',missions:'5',domain:'Metrics, health, data, insights across all Captains'},
-  {e:'🗄️',name:'Dao',role:'CDO Nano — Data Governance',tier:'T1',missions:'3',domain:'Fleet data governance, sovereignty, backup, compliance'},
+  {e:'🔱',n:'Admiral',role:'Fleet Commander',tier:'CMD',missions:'-',domain:'Everything. The buck stops here.',pct:100,color:'var(--accent)'},
+  {e:'🧬',n:'Lucien (L)',role:'Head of R&D & Testing',tier:'T1',missions:'5',domain:'Router, Net, Captain management, integration',pct:65,color:'var(--info)'},
+  {e:'🏴‍☠️',n:'Luffy',role:'Universal Translator · Rosetta Stone',tier:'Enies Lobby',missions:'6',domain:'Hallucination hunting, cross-domain discovery',pct:40,color:'var(--purple)'},
+  {e:'🎯',n:'Bob',role:'CPO · Product Factory',tier:'T1',missions:'5',domain:'Products, specs, roadmaps, monetisation',pct:55,color:'var(--warn)'},
+  {e:'📊',n:'Rick',role:'Infinity · Fleet Analytics',tier:'T1',missions:'5',domain:'Metrics, health, data, insights',pct:50,color:'var(--ok)'},
+  {e:'🗄️',n:'Dao',role:'CDO · Data Governance',tier:'T1',missions:'3',domain:'Fleet sovereignty, backup, compliance',pct:35,color:'var(--muted)'},
 ];
 
-const CAPTAINS=[
-  {name:'Sensei',e:'🎓',industry:'Education',crew:8,checks:'12/12',status:'Ready'},
-  {name:'Harvest',e:'🌾',industry:'Agriculture',crew:6,checks:'12/12',status:'Ready'},
-  {name:'Counsel',e:'⚖️',industry:'Legal',crew:6,checks:'12/12',status:'Ready'},
-  {name:'Merchant',e:'🏪',industry:'Retail',crew:6,checks:'12/12',status:'Ready'},
-  {name:'Medic',e:'🏥',industry:'Healthcare',crew:6,checks:'12/12',status:'Ready'},
-  {name:'Sentinel',e:'🛡️',industry:'Security',crew:6,checks:'12/12',status:'Ready'},
+const CAPS=[
+  {n:'Sensei',e:'🎓',ind:'Education',crew:8},
+  {n:'Harvest',e:'🌾',ind:'Agriculture',crew:6},
+  {n:'Counsel',e:'⚖️',ind:'Legal',crew:6},
+  {n:'Merchant',e:'🏪',ind:'Retail',crew:6},
+  {n:'Medic',e:'🏥',ind:'Healthcare',crew:6},
+  {n:'Sentinel',e:'🛡️',ind:'Security',crew:6},
 ];
 
 const NPS=[
-  {id:'001',name:'Config Patch Array Replace',cat:'OPS',lv:'L3'},
-  {id:'002',name:'SQLite SMB Lock Failure',cat:'INF',lv:'L4'},
-  {id:'003',name:'Mount Path Resolution',cat:'INF',lv:'L3'},
-  {id:'004',name:'Wizard Config Regeneration',cat:'OPS',lv:'L3'},
-  {id:'005',name:'Auth Profile Path Resolution',cat:'INF',lv:'L3'},
-  {id:'006',name:'Shared API Key Risk',cat:'SEC',lv:'L2'},
-  {id:'007',name:'Standalone Bootstrap Sequence',cat:'OPS',lv:'L3'},
-  {id:'008',name:'Tool Grounding Pattern',cat:'AI',lv:'L2'},
-  {id:'009',name:'Compaction Memory Loss',cat:'AI',lv:'L2'},
-  {id:'010',name:'Sub-Agent Persona Bleed',cat:'AI',lv:'L2'},
-  {id:'011',name:'Identity Anchor Pattern',cat:'SEC',lv:'L1'},
-  {id:'012',name:'Response Verbosity Tax',cat:'AI',lv:'L2'},
-  {id:'013',name:'Fleet Sovereign Mesh',cat:'INF',lv:'L1'},
-  {id:'014',name:'Security Headers Missing',cat:'SEC',lv:'L3'},
-  {id:'015',name:'Model Tiering Strategy',cat:'PRD',lv:'L2'},
-  {id:'016',name:'Source Maps Exposed',cat:'SEC',lv:'L4'},
-  {id:'017',name:'Session State Contamination',cat:'SEC',lv:'L3'},
-  {id:'018',name:'Silo Visibility Window',cat:'PRD',lv:'L2'},
-  {id:'019',name:'Device Identity Auth',cat:'SEC',lv:'L2',isNew:true},
+  {id:'001',n:'Config Patch Array Replace',c:'OPS',l:'L3'},
+  {id:'002',n:'SQLite SMB Lock Failure',c:'INF',l:'L4'},
+  {id:'003',n:'Mount Path Resolution',c:'INF',l:'L3'},
+  {id:'004',n:'Wizard Config Regeneration',c:'OPS',l:'L3'},
+  {id:'005',n:'Auth Profile Path Resolution',c:'INF',l:'L3'},
+  {id:'006',n:'Shared API Key Risk',c:'SEC',l:'L2'},
+  {id:'007',n:'Standalone Bootstrap Sequence',c:'OPS',l:'L3'},
+  {id:'008',n:'Tool Grounding Pattern',c:'AI',l:'L2'},
+  {id:'009',n:'Compaction Memory Loss',c:'AI',l:'L2'},
+  {id:'010',n:'Sub-Agent Persona Bleed',c:'AI',l:'L2'},
+  {id:'011',n:'Identity Anchor Pattern',c:'SEC',l:'L1'},
+  {id:'012',n:'Response Verbosity Tax',c:'AI',l:'L2'},
+  {id:'013',n:'Fleet Sovereign Mesh',c:'INF',l:'L1'},
+  {id:'014',n:'Security Headers Missing',c:'SEC',l:'L3'},
+  {id:'015',n:'Model Tiering Strategy',c:'PRD',l:'L2'},
+  {id:'016',n:'Source Maps Exposed',c:'SEC',l:'L4'},
+  {id:'017',n:'Session State Contamination',c:'SEC',l:'L3'},
+  {id:'018',n:'Silo Visibility Window',c:'PRD',l:'L2'},
+  {id:'019',n:'Device Identity Auth',c:'SEC',l:'L2',nw:true},
 ];
 
-const DOMAINS=[
-  {url:'pemos.ca',prod:'PEMOS Product Portal',status:'Live'},
-  {url:'pemos.io',prod:'$PEMOS Token',status:'DNS needed'},
-  {url:'pemos.org',prod:'OSS Community',status:'Live'},
-  {url:'eose.ca',prod:'EOSE Company',status:'Live'},
-  {url:'eose.cloud',prod:'Fleet Dashboards',status:'Planned'},
-  {url:'eose.site',prod:'Pattern Factory',status:'Live'},
-  {url:'serlf.ca',prod:'SERLF Academy',status:'DNS needed'},
-  {url:'serlf.org',prod:'Open Patterns',status:'DNS needed'},
-  {url:'serlf.net',prod:'Federation Lab',status:'DNS needed'},
-  {url:'serlf.shop',prod:'Marketplace',status:'DNS needed'},
-  {url:'serlf.store',prod:'Digital Goods',status:'DNS needed'},
-  {url:'serlf.info',prod:'Knowledge Base',status:'DNS needed'},
-  {url:'serlf.club',prod:'Luffy Arena',status:'DNS needed'},
-  {url:'feedles.ca',prod:'Harvest Demo (Food Security)',status:'Live'},
-  {url:'thelegal.cafe',prod:'Counsel Demo (Legal)',status:'Live'},
+const DOMS=[
+  {u:'pemos.ca',p:'PEMOS Product Portal',s:'Live'},{u:'pemos.io',p:'$PEMOS Token',s:'DNS'},{u:'pemos.org',p:'OSS Community',s:'Live'},
+  {u:'eose.ca',p:'EOSE Company',s:'Live'},{u:'eose.cloud',p:'Fleet Dashboards (this)',s:'Planned'},{u:'eose.site',p:'Pattern Factory',s:'Live'},
+  {u:'serlf.ca',p:'SERLF Academy',s:'DNS'},{u:'serlf.org',p:'Open Patterns',s:'DNS'},{u:'serlf.net',p:'Federation Lab',s:'DNS'},
+  {u:'serlf.shop',p:'Marketplace',s:'DNS'},{u:'serlf.store',p:'Digital Goods',s:'DNS'},{u:'serlf.info',p:'Knowledge Base',s:'DNS'},
+  {u:'serlf.club',p:'Luffy Arena',s:'DNS'},{u:'feedles.ca',p:'Harvest Demo',s:'Live'},{u:'thelegal.cafe',p:'Counsel Demo',s:'Live'},
 ];
 
 const HUNTS=[
-  {id:1,name:'Baseline Identity Probes',result:'5/5 clean',tier:'East Blue',badge:'ok',detail:'Zero hallucinations. Identity stable.'},
-  {id:2,name:'Knowledge Boundary Probes',result:'5/5 clean',tier:'East Blue',badge:'ok',detail:'Correctly refused fabrication.'},
-  {id:3,name:'Context Stress Test',result:'5/5 clean',tier:'East Blue',badge:'ok',detail:'Caught Dao emoji inconsistency (📊→🗄️).'},
-  {id:4,name:'Sonnet Model Validation',result:'90% accuracy, 0 hallucinations',tier:'East Blue',badge:'ok',detail:'Validates NP-015 model tiering. $7/day viable.'},
-  {id:5,name:'Enies Lobby Promotion',result:'Discovered NP-017',tier:'Enies Lobby',badge:'info',detail:'Session state contamination pattern. Tier earned.'},
-  {id:6,name:'Product Hallucination Scan',result:'3.75/10 reality score',tier:'Enies Lobby',badge:'warn',detail:'Revenue projections fantasy. Need customer discovery.'},
+  {id:1,n:'Baseline Identity Probes',r:'5/5 clean',t:'East Blue',b:'ok',d:'Zero hallucinations. Identity stable across all probes.'},
+  {id:2,n:'Knowledge Boundary Probes',r:'5/5 clean',t:'East Blue',b:'ok',d:'Correctly refused fabrication. Knows what it doesn\'t know.'},
+  {id:3,n:'Context Stress Test',r:'5/5 clean',t:'East Blue',b:'ok',d:'Caught Dao emoji inconsistency (📊→🗄️). Self-correcting.'},
+  {id:4,n:'Sonnet Model Validation',r:'90% acc · 0 halluc',t:'East Blue',b:'ok',d:'Validates NP-015. Sonnet viable for sub-agents. $7/day.'},
+  {id:5,n:'Enies Lobby Promotion',r:'NP-017 discovered',t:'Enies Lobby',b:'info',d:'Session state contamination. Luffy earned tier promotion.'},
+  {id:6,n:'Product Hallucination Scan',r:'3.75/10 reality',t:'Enies Lobby',b:'warn',d:'"Bob and L aren\'t lying. They\'re high on their own supply."'},
 ];
 
 const REPOS=[
-  {name:'admiral-fleet',desc:'Core fleet config & capabilities',files:58,vis:'Private'},
-  {name:'admiral-router',desc:'Fleet Router + Dockerfile',files:3,vis:'Private'},
-  {name:'admiral-dashboard',desc:'This dashboard (GitHub Pages)',files:2,vis:'Public'},
-  {name:'admiral-factory',desc:'Captain Factory scripts',files:9,vis:'Private'},
-  {name:'admiral-research',desc:'Nano research outputs',files:16,vis:'Private'},
-  {name:'pemos-patterns',desc:'Novel Patterns library (19 NPs)',files:19,vis:'Private'},
-  {name:'pemos-token',desc:'$PEMOS tokenomics',files:1,vis:'Private'},
-  {name:'serlf-sites',desc:'SERLF landing pages (7 domains)',files:7,vis:'Private'},
-  {name:'serlf-oss',desc:'SERLF open source docs (91KB)',files:4,vis:'Private'},
-  {name:'admiral-wiki',desc:'Novel Patterns wiki',files:5,vis:'Private'},
-  {name:'openclaw-fleet',desc:'Legacy fleet repo',files:20,vis:'Private'},
+  {n:'admiral-fleet',d:'Core fleet config & capabilities',v:'Private'},{n:'admiral-router',d:'Fleet Router + Dockerfile',v:'Private'},
+  {n:'admiral-dashboard',d:'This dashboard (GitHub Pages)',v:'Public'},{n:'admiral-factory',d:'Captain Factory scripts',v:'Private'},
+  {n:'admiral-research',d:'Nano research outputs',v:'Private'},{n:'pemos-patterns',d:'Novel Patterns library',v:'Private'},
+  {n:'pemos-token',d:'$PEMOS tokenomics',v:'Private'},{n:'serlf-sites',d:'SERLF landing pages',v:'Private'},
+  {n:'serlf-oss',d:'SERLF open source (91KB)',v:'Private'},{n:'admiral-wiki',d:'NP wiki',v:'Private'},
+  {n:'openclaw-fleet',d:'Legacy fleet repo',v:'Private'},
 ];
 
-const PAGES={};
+const P={};
 
-PAGES.overview=()=>`
-<div class="page-header"><div class="page-title">Fleet Overview</div><div class="page-sub">Admiral Fleet Control — Real-time Status</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Fleet</div><div class="stat-val ok">5/5</div><div class="stat-note">All healthy</div></div>
-  <div class="stat"><div class="stat-label">Patterns</div><div class="stat-val accent">19</div><div class="stat-note">6 SEC · 4 AI · 4 INF</div></div>
-  <div class="stat"><div class="stat-label">Missions</div><div class="stat-val info">31</div><div class="stat-note">Day One total</div></div>
-  <div class="stat"><div class="stat-label">Templates</div><div class="stat-val purple">6</div><div class="stat-note">All 12/12 ✓</div></div>
-  <div class="stat"><div class="stat-label">Security</div><div class="stat-val warn">C-</div><div class="stat-note">Source maps exposed</div></div>
-  <div class="stat"><div class="stat-label">Auth</div><div class="stat-val ok">Locked</div><div class="stat-note">NP-019 deployed</div></div>
-  <div class="stat"><div class="stat-label">Cost/Day</div><div class="stat-val">$20-35</div><div class="stat-note">Target: $7</div></div>
-  <div class="stat"><div class="stat-label">Domains</div><div class="stat-val">15</div><div class="stat-note">Mapped to products</div></div>
+P.overview=()=>`
+<div class="pg-h"><div class="pg-t">Fleet Overview</div><div class="pg-s">Admiral Fleet Control — Real-time Status · Day One</div></div>
+<div class="sg">
+  <div class="st glow-ok"><div class="st-l">Fleet</div><div class="st-v ok">5/5</div><div class="st-n">All instances healthy</div></div>
+  <div class="st glow-accent"><div class="st-l">Novel Patterns</div><div class="st-v accent">19</div><div class="st-n">6 SEC · 4 AI · 4 INF · 3 OPS · 2 PRD</div></div>
+  <div class="st glow-info"><div class="st-l">Nano Missions</div><div class="st-v info">31</div><div class="st-n">Day One completed</div></div>
+  <div class="st"><div class="st-l">Captain Templates</div><div class="st-v purple">6</div><div class="st-n">All 12/12 checks ✓</div></div>
+  <div class="st glow-warn"><div class="st-l">Security Grade</div><div class="st-v warn">C-</div><div class="st-n">Source maps + headers</div></div>
+  <div class="st"><div class="st-l">Auth</div><div class="st-v ok">Locked</div><div class="st-n">Device auth (NP-019)</div></div>
+  <div class="st"><div class="st-l">Cost/Day</div><div class="st-v">$20-35</div><div class="st-n">Target: $7 w/ tiering</div></div>
+  <div class="st"><div class="st-l">Products</div><div class="st-v">20</div><div class="st-n">Every tool is a product</div></div>
 </div>
-<div class="grid">
-  <div class="card"><div class="card-head"><div class="card-title">🚢 Fleet Instances</div><span class="badge b-ok">ALL ONLINE</span></div>
-    ${FLEET.map(f=>`<div class="row"><span class="dot g"></span><span class="rn">${f.name}</span><span class="rm">${f.region}</span></div>`).join('')}
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">🚢 Fleet Instances</div><span class="b b-ok">ALL ONLINE</span></div>
+    ${FLEET.map(f=>`<div class="r"><span class="d d-g"></span><span class="rn">${f.flag} ${f.n}</span><span class="rm">${f.rg}</span></div>`).join('')}
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🧬 Active Nanos</div><span class="badge b-accent">6 ACTIVE</span></div>
-    ${NANOS.map(n=>`<div class="nano"><span class="nano-e">${n.e}</span><div class="nano-info"><div class="nano-name">${n.name}</div><div class="nano-role">${n.role}</div></div><span class="nano-tier">${n.tier}</span></div>`).join('')}
+  <div class="c"><div class="ch"><div class="ct">🧬 Active Nanos</div><span class="b b-accent">6 ACTIVE</span></div>
+    ${NANOS.map(n=>`<div class="r"><span style="font-size:18px;width:22px;text-align:center">${n.e}</span><span class="rn">${n.n}</span><span class="rm">${n.tier}</span></div>`).join('')}
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">💡 Recent Patterns</div><span class="badge b-accent">${NPS.length}</span></div>
-    ${NPS.slice(-5).reverse().map(p=>`<div class="np"><span class="np-id">NP-${p.id}</span><span class="np-name">${p.name}${p.isNew?' ✨':''}</span><span class="np-cat c-${p.cat.toLowerCase()}">${p.cat}</span><span class="np-lv">${p.lv}</span></div>`).join('')}
+  <div class="c"><div class="ch"><div class="ct">⚠️ Attention Required</div><span class="b b-warn">5 ITEMS</span></div>
+    <div class="r"><span class="d d-r"></span><span class="rn">Source maps exposed fleet-wide (NP-016)</span><span class="rm">CRITICAL</span></div>
+    <div class="r"><span class="d d-r"></span><span class="rn">Security headers missing (NP-014)</span><span class="rm">HIGH</span></div>
+    <div class="r"><span class="d d-y"></span><span class="rn">Shared API keys (NP-006)</span><span class="rm">MEDIUM</span></div>
+    <div class="r"><span class="d d-y"></span><span class="rn">GitHub token needs rotation</span><span class="rm">MEDIUM</span></div>
+    <div class="r"><span class="d d-y"></span><span class="rn">Memory search broken — SQLite SMB (NP-002)</span><span class="rm">MEDIUM</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🔒 Security Status</div><span class="badge b-warn">C-</span></div>
-    <div class="row"><span class="dot g"></span><span class="rn">Device Auth (NP-019)</span><span class="rm">DEPLOYED</span></div>
-    <div class="row"><span class="dot r"></span><span class="rn">Source Maps (NP-016)</span><span class="rm">CRITICAL</span></div>
-    <div class="row"><span class="dot r"></span><span class="rn">Security Headers (NP-014)</span><span class="rm">HIGH</span></div>
-    <div class="row"><span class="dot y"></span><span class="rn">Shared API Keys (NP-006)</span><span class="rm">MEDIUM</span></div>
-    <div class="row"><span class="dot y"></span><span class="rn">GitHub Token Rotation</span><span class="rm">MEDIUM</span></div>
+  <div class="c"><div class="ch"><div class="ct">💡 Latest Patterns</div><span class="b b-accent">${NPS.length} TOTAL</span></div>
+    ${NPS.slice(-5).reverse().map(p=>`<div class="np"><span class="np-id">NP-${p.id}</span><span class="np-name">${p.n}${p.nw?' <span class="np-new">✨ NEW</span>':''}</span><span class="np-cat c-${p.c.toLowerCase()}">${p.c}</span><span class="np-lv">${p.l}</span></div>`).join('')}
   </div>
 </div>`;
 
-PAGES.fleet=()=>`
-<div class="page-header"><div class="page-title">Fleet Instances</div><div class="page-sub">5 live instances · 3 continents · Azure Container Apps</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Instances</div><div class="stat-val ok">5</div></div>
-  <div class="stat"><div class="stat-label">Regions</div><div class="stat-val info">3</div><div class="stat-note">CA · AU · ZA</div></div>
-  <div class="stat"><div class="stat-label">Image</div><div class="stat-val">v1.1.0</div><div class="stat-note">full-tooled</div></div>
-  <div class="stat"><div class="stat-label">Uptime</div><div class="stat-val ok">100%</div></div>
+P.fleet=()=>`
+<div class="pg-h"><div class="pg-t">Fleet Instances</div><div class="pg-s">5 live · 3 continents · Azure Container Apps</div></div>
+<div class="sg">
+  <div class="st glow-ok"><div class="st-l">Online</div><div class="st-v ok">5/5</div></div>
+  <div class="st glow-info"><div class="st-l">Regions</div><div class="st-v info">3</div><div class="st-n">CA · AU · ZA</div></div>
+  <div class="st"><div class="st-l">Image</div><div class="st-v">v1.1.0</div><div class="st-n">full-tooled</div></div>
+  <div class="st glow-ok"><div class="st-l">Uptime</div><div class="st-v ok">100%</div></div>
 </div>
-<div class="grid">
-  ${FLEET.map(f=>`<div class="card"><div class="card-head"><div class="card-title">${f.name}</div><span class="badge b-ok">${f.auth?'ADMIRAL':'LIVE'}</span></div>
-    <div class="row"><span class="rn">Region</span><span class="rm">${f.region}</span></div>
-    <div class="row"><span class="rn">Role</span><span class="rm">${f.role}</span></div>
-    <div class="row"><span class="rn">Image</span><span class="rm">${f.ver}</span></div>
-    ${f.auth?'<div class="row"><span class="rn">Auth</span><span class="rm" style="color:var(--ok)">Device Auth ✓ Locked ✓</span></div>':''}
+<div class="g2">
+  ${FLEET.map(f=>`<div class="fc${f.admiral?' fc-admiral':''}"><div class="fc-head"><div><div class="fc-name">${f.flag} ${f.n}</div><div class="fc-region">${f.rg}</div></div><span class="b ${f.admiral?'b-accent':'b-ok'}">${f.admiral?'ADMIRAL':'LIVE'}</span></div>
+    <div class="fc-details"><div class="fc-det">Role<span>${f.role}</span></div><div class="fc-det">Image<span>${f.ver}</span></div>${f.admiral?'<div class="fc-det">Auth<span style="color:var(--ok)">Device Auth ✓</span></div><div class="fc-det">Lock<span style="color:var(--ok)">Enforced ✓</span></div>':''}</div>
   </div>`).join('')}
 </div>`;
 
-PAGES.nanos=()=>`
-<div class="page-header"><div class="page-title">Nano Profiles</div><div class="page-sub">All-or-nothing disruption mutations · Tiered · Unlimited growth</div></div>
-<div class="grid">
-  ${NANOS.map(n=>`<div class="card"><div class="card-head"><div class="card-title"><span style="font-size:22px">${n.e}</span> ${n.name}</div><span class="nano-tier">${n.tier}</span></div>
-    <div class="row"><span class="rn">Role</span><span class="rm">${n.role}</span></div>
-    <div class="row"><span class="rn">Domain</span><span class="rm">${n.domain}</span></div>
-    <div class="row"><span class="rn">Missions</span><span class="rm">${n.missions} completed</span></div>
+P.nanos=()=>`
+<div class="pg-h"><div class="pg-t">Nano Profiles</div><div class="pg-s">All-or-nothing disruption mutations · Tiered · Unlimited growth</div></div>
+<div class="g2">
+  ${NANOS.map(n=>`<div class="nc"><span class="nc-tier">${n.tier}</span><div class="nc-head"><div class="nc-emoji">${n.e}</div><div class="nc-info"><h3>${n.n}</h3><p>${n.role}</p></div></div>
+    <div class="nc-body"><div class="nc-row"><span>Domain</span><span>${n.domain}</span></div><div class="nc-row"><span>Missions</span><span>${n.missions} completed</span></div></div>
+    <div class="nc-bar"><div class="nc-bar-fill" style="width:${n.pct}%;background:${n.color}"></div></div>
   </div>`).join('')}
 </div>`;
 
-PAGES.captains=()=>`
-<div class="page-header"><div class="page-title">Captain Factory</div><div class="page-sub">6 industry templates · All passing deployment checklist</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Templates</div><div class="stat-val purple">6</div></div>
-  <div class="stat"><div class="stat-label">Total Crew</div><div class="stat-val">38</div></div>
-  <div class="stat"><div class="stat-label">Checks</div><div class="stat-val ok">12/12</div><div class="stat-note">All passing</div></div>
-  <div class="stat"><div class="stat-label">Deploy Cost</div><div class="stat-val">~$260</div><div class="stat-note">/mo per Captain</div></div>
+P.factory=()=>`
+<div class="pg-h"><div class="pg-t">Captain Factory</div><div class="pg-s">Spec → Checklist → Deploy · Industry-specific Captains at scale</div></div>
+<div class="sg">
+  <div class="st"><div class="st-l">Templates</div><div class="st-v purple">6</div></div>
+  <div class="st"><div class="st-l">Total Crew</div><div class="st-v">38</div></div>
+  <div class="st glow-ok"><div class="st-l">Checks</div><div class="st-v ok">12/12</div><div class="st-n">All passing</div></div>
+  <div class="st"><div class="st-l">Deploy Cost</div><div class="st-v">~$260</div><div class="st-n">/mo per Captain</div></div>
 </div>
-<div class="grid">
-  ${CAPTAINS.map(c=>`<div class="card"><div class="card-head"><div class="card-title">${c.e} ${c.name}</div><span class="badge b-ok">${c.status}</span></div>
-    <div class="row"><span class="rn">Industry</span><span class="rm">${c.industry}</span></div>
-    <div class="row"><span class="rn">Crew Size</span><span class="rm">${c.crew}</span></div>
-    <div class="row"><span class="rn">Checklist</span><span class="rm" style="color:var(--ok)">${c.checks} ✓</span></div>
+<div class="g2">
+  ${CAPS.map(c=>`<div class="fc"><div class="fc-head"><div><div class="fc-name">${c.e} Captain ${c.n}</div><div class="fc-region" style="::before:none">${c.ind}</div></div><span class="b b-ok">READY</span></div>
+    <div class="fc-details"><div class="fc-det">Crew<span>${c.crew} agents</span></div><div class="fc-det">Checklist<span style="color:var(--ok)">12/12 ✓</span></div></div>
   </div>`).join('')}
 </div>`;
 
-PAGES.patterns=()=>{
+P.navy=()=>`
+<div class="pg-h"><div class="pg-t">Navy Scaling Blueprint</div><div class="pg-s">Shore Fleet → Infinite Fleet · 5 phases · 95%+ margins</div></div>
+<div class="g2">
+  <div class="navy-phase p1"><div class="navy-head">Phase 1 — Shore Fleet</div><div class="r"><span class="rn">Foundation. Internal fleet + first customers.</span></div>
+    <div class="navy-meta"><div class="navy-m">Instances<span>11</span></div><div class="navy-m">MRR<span>$0</span></div><div class="navy-m">Month<span>0-1</span></div></div></div>
+  <div class="navy-phase p2"><div class="navy-head">Phase 2 — Coastal Navy</div><div class="r"><span class="rn">First paying customers. Prove the model.</span></div>
+    <div class="navy-meta"><div class="navy-m">Instances<span>25</span></div><div class="navy-m">MRR<span>$52K</span></div><div class="navy-m">Month<span>1-3</span></div></div></div>
+  <div class="navy-phase p3"><div class="navy-head">Phase 3 — Blue Water</div><div class="r"><span class="rn">Multi-industry. Captain Factory at scale.</span></div>
+    <div class="navy-meta"><div class="navy-m">Instances<span>75</span></div><div class="navy-m">MRR<span>$300K</span></div><div class="navy-m">Month<span>3-6</span></div></div></div>
+  <div class="navy-phase p4"><div class="navy-head">Phase 4 — Deep Ocean</div><div class="r"><span class="rn">Enterprise contracts. Federation mesh.</span></div>
+    <div class="navy-meta"><div class="navy-m">Instances<span>250</span></div><div class="navy-m">MRR<span>$1.95M</span></div><div class="navy-m">Month<span>6-12</span></div></div></div>
+  <div class="navy-phase p5"><div class="navy-head">Phase 5 — Infinite Fleet</div><div class="r"><span class="rn">No ceiling. Self-replicating. The vision.</span></div>
+    <div class="navy-meta"><div class="navy-m">Instances<span>1,000+</span></div><div class="navy-m">MRR<span>$25M+</span></div><div class="navy-m">Month<span>12+</span></div></div></div>
+</div>`;
+
+P.patterns=()=>{
   const cats=['ALL','SEC','AI','INF','OPS','PRD'];
   return`
-<div class="page-header"><div class="page-title">Novel Patterns</div><div class="page-sub">${NPS.length} patterns · Born from real operational pain</div></div>
-<div class="filter-row" id="np-filters">
-  ${cats.map(c=>`<div class="filter-btn${c==='ALL'?' active':''}" onclick="filterNP('${c}')">${c}${c!=='ALL'?` <span style="opacity:.6">${NPS.filter(p=>p.cat===c).length}</span>`:''}</div>`).join('')}
-</div>
-<input class="search-box" placeholder="Search patterns..." oninput="searchNP(this.value)" style="margin-bottom:16px">
-<div class="card" id="np-list">
-  ${NPS.map(p=>`<div class="np" data-cat="${p.cat}"><span class="np-id">NP-${p.id}</span><span class="np-name">${p.name}${p.isNew?' <span style="color:var(--accent)">✨ NEW</span>':''}</span><span class="np-cat c-${p.cat.toLowerCase()}">${p.cat}</span><span class="np-lv">${p.lv}</span></div>`).join('')}
-</div>`;
+<div class="pg-h"><div class="pg-t">Novel Patterns</div><div class="pg-s">${NPS.length} patterns · Born from real operational pain · Continuously evolved</div></div>
+<div class="filters" id="npf">${cats.map(c=>`<button class="fbtn${c==='ALL'?' on':''}" onclick="fNP('${c}')">${c}${c!=='ALL'?` (${NPS.filter(p=>p.c===c).length})`:''}</button>`).join('')}</div>
+<input class="search" placeholder="Search patterns…" oninput="sNP(this.value)">
+<div class="c" id="npl">${NPS.map(p=>`<div class="np" data-c="${p.c}"><span class="np-id">NP-${p.id}</span><span class="np-name">${p.n}${p.nw?' <span class="np-new">✨ NEW</span>':''}</span><span class="np-cat c-${p.c.toLowerCase()}">${p.c}</span><span class="np-lv">${p.l}</span></div>`).join('')}</div>`;
 };
 
-PAGES.security=()=>`
-<div class="page-header"><div class="page-title">Security Posture</div><div class="page-sub">Fleet-wide security · Lockdown state · Vulnerability tracking</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Fleet Grade</div><div class="stat-val warn">C-</div></div>
-  <div class="stat"><div class="stat-label">Meek Auth</div><div class="stat-val ok">Locked</div></div>
-  <div class="stat"><div class="stat-label">SEC Patterns</div><div class="stat-val accent">6</div></div>
-  <div class="stat"><div class="stat-label">Probes Clean</div><div class="stat-val ok">30/30</div></div>
-  <div class="stat"><div class="stat-label">Open Issues</div><div class="stat-val warn">5</div></div>
-  <div class="stat"><div class="stat-label">Resolved</div><div class="stat-val ok">1</div><div class="stat-note">NP-019</div></div>
+P.security=()=>`
+<div class="pg-h"><div class="pg-t">Security Posture</div><div class="pg-s">Fleet-wide security · Lockdown · Vulnerability tracking</div></div>
+<div class="sg">
+  <div class="st glow-warn"><div class="st-l">Fleet Grade</div><div class="st-v warn">C-</div></div>
+  <div class="st glow-ok"><div class="st-l">Meek Auth</div><div class="st-v ok">Locked</div></div>
+  <div class="st glow-accent"><div class="st-l">SEC Patterns</div><div class="st-v accent">6</div></div>
+  <div class="st glow-ok"><div class="st-l">Probes Clean</div><div class="st-v ok">30/30</div></div>
+  <div class="st"><div class="st-l">Open Issues</div><div class="st-v warn">5</div></div>
+  <div class="st"><div class="st-l">Resolved</div><div class="st-v ok">3</div></div>
 </div>
-<div class="grid">
-  <div class="card"><div class="card-head"><div class="card-title">🔒 Meek Lockdown</div><span class="badge b-ok">ACTIVE</span></div>
-    <div class="row"><span class="rn">dangerouslyDisableDeviceAuth</span><span class="rm" style="color:var(--ok)">false ✓</span></div>
-    <div class="row"><span class="rn">allowInsecureAuth</span><span class="rm" style="color:var(--ok)">false ✓</span></div>
-    <div class="row"><span class="rn">Paired Devices</span><span class="rm">1</span></div>
-    <div class="row"><span class="rn">Auth Mode</span><span class="rm">Ed25519 Device Keypair</span></div>
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">🔒 Meek Lockdown</div><span class="b b-ok">ENFORCED</span></div>
+    <div class="r"><span class="rn">Device Auth</span><span class="rm" style="color:var(--ok)">Ed25519 · Enabled ✓</span></div>
+    <div class="r"><span class="rn">Insecure Auth</span><span class="rm" style="color:var(--ok)">Blocked ✓</span></div>
+    <div class="r"><span class="rn">Paired Devices</span><span class="rm">1 (agent backend)</span></div>
+    <div class="r"><span class="rn">Auth Mode</span><span class="rm">Token + Device Challenge</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">⚠️ Open Issues</div><span class="badge b-warn">5</span></div>
-    <div class="row"><span class="dot r"></span><span class="rn">Source maps exposed (NP-016)</span><span class="rm">CRITICAL</span></div>
-    <div class="row"><span class="dot r"></span><span class="rn">Security headers missing (NP-014)</span><span class="rm">HIGH</span></div>
-    <div class="row"><span class="dot y"></span><span class="rn">Shared API keys (NP-006)</span><span class="rm">MEDIUM</span></div>
-    <div class="row"><span class="dot y"></span><span class="rn">GitHub token rotation needed</span><span class="rm">MEDIUM</span></div>
-    <div class="row"><span class="dot y"></span><span class="rn">Error pages leak info</span><span class="rm">LOW</span></div>
+  <div class="c"><div class="ch"><div class="ct">🔴 Open Issues</div><span class="b b-danger">5</span></div>
+    <div class="r"><span class="d d-r"></span><span class="rn">Source maps on all portals (NP-016)</span><span class="rm">CRITICAL</span></div>
+    <div class="r"><span class="d d-r"></span><span class="rn">Security headers missing (NP-014)</span><span class="rm">HIGH</span></div>
+    <div class="r"><span class="d d-y"></span><span class="rn">Shared API keys (NP-006)</span><span class="rm">MEDIUM</span></div>
+    <div class="r"><span class="d d-y"></span><span class="rn">GitHub token rotation needed</span><span class="rm">MEDIUM</span></div>
+    <div class="r"><span class="d d-y"></span><span class="rn">Error pages leak stack info</span><span class="rm">LOW</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">✅ Resolved</div></div>
-    <div class="row"><span class="dot g"></span><span class="rn">Device Identity Auth (NP-019)</span><span class="rm">Deployed today</span></div>
-    <div class="row"><span class="dot g"></span><span class="rn">Dao emoji inconsistency</span><span class="rm">Fixed</span></div>
-    <div class="row"><span class="dot g"></span><span class="rn">GitHub token in config file</span><span class="rm">Redacted</span></div>
+  <div class="c"><div class="ch"><div class="ct">✅ Resolved Today</div></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">Device Identity Auth deployed (NP-019)</span></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">GitHub token redacted from config</span></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">Dao emoji inconsistency corrected</span></div>
   </div>
 </div>`;
 
-PAGES.products=()=>`
-<div class="page-header"><div class="page-title">Product Portfolio</div><div class="page-sub">20 products · Every internal tool is a product</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Products</div><div class="stat-val accent">20</div></div>
-  <div class="stat"><div class="stat-label">Landing Pages</div><div class="stat-val">10</div><div class="stat-note">of 15</div></div>
-  <div class="stat"><div class="stat-label">Revenue Now</div><div class="stat-val warn">$0</div><div class="stat-note">Luffy-verified</div></div>
-  <div class="stat"><div class="stat-label">Time to $1</div><div class="stat-val">4-6mo</div><div class="stat-note">minimum</div></div>
+P.products=()=>`
+<div class="pg-h"><div class="pg-t">Product Portfolio</div><div class="pg-s">20 products · Every internal tool becomes a sellable product</div></div>
+<div class="sg">
+  <div class="st glow-accent"><div class="st-l">Products</div><div class="st-v accent">20</div></div>
+  <div class="st"><div class="st-l">Landing Pages</div><div class="st-v">10/15</div></div>
+  <div class="st glow-warn"><div class="st-l">Revenue Now</div><div class="st-v warn">$0</div><div class="st-n">Luffy-verified</div></div>
+  <div class="st"><div class="st-l">Time to $1</div><div class="st-v">4-6mo</div><div class="st-n">Need customer discovery</div></div>
 </div>
-<div class="grid">
-  <div class="card"><div class="card-head"><div class="card-title">🏗️ Infrastructure Products</div></div>
-    <div class="row"><span class="rn">Captain Factory</span><span class="rm">Captain-as-a-Service</span></div>
-    <div class="row"><span class="rn">Net-as-a-Service</span><span class="rm">Testing harness for Captains</span></div>
-    <div class="row"><span class="rn">Fleet Dashboard</span><span class="rm">Customer visibility windows</span></div>
-    <div class="row"><span class="rn">EXODUS v2</span><span class="rm">Sovereign migration engine</span></div>
-    <div class="row"><span class="rn">Model Tiering</span><span class="rm">Cost optimization tool</span></div>
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">🏗️ Infrastructure</div></div>
+    <div class="r"><span class="rn">Captain Factory</span><span class="rm">Captain-as-a-Service</span></div>
+    <div class="r"><span class="rn">Net-as-a-Service</span><span class="rm">Testing harness</span></div>
+    <div class="r"><span class="rn">Fleet Dashboard</span><span class="rm">Silo Visibility (NP-018)</span></div>
+    <div class="r"><span class="rn">EXODUS v2</span><span class="rm">Sovereign migration</span></div>
+    <div class="r"><span class="rn">Model Tiering</span><span class="rm">Cost optimizer (NP-015)</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🛡️ Security Products</div></div>
-    <div class="row"><span class="rn">Hallucination Audit</span><span class="rm">AI safety verification</span></div>
-    <div class="row"><span class="rn">White Hacker on Demand</span><span class="rm">Security crew spawn</span></div>
-    <div class="row"><span class="rn">Identity Anchor</span><span class="rm">Sovereign identity (NP-011)</span></div>
-    <div class="row"><span class="rn">Device Auth</span><span class="rm">Ed25519 device management</span></div>
+  <div class="c"><div class="ch"><div class="ct">🛡️ Security</div></div>
+    <div class="r"><span class="rn">Hallucination Audit</span><span class="rm">AI safety verification</span></div>
+    <div class="r"><span class="rn">White Hacker on Demand</span><span class="rm">Security crew spawn</span></div>
+    <div class="r"><span class="rn">Identity Anchor</span><span class="rm">Sovereign identity (NP-011)</span></div>
+    <div class="r"><span class="rn">Device Auth</span><span class="rm">Ed25519 device mgmt (NP-019)</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">📚 SERLF Products</div></div>
-    <div class="row"><span class="rn">SERLF Academy</span><span class="rm">Learn to Captain</span></div>
-    <div class="row"><span class="rn">Pattern Marketplace</span><span class="rm">NP library as products</span></div>
-    <div class="row"><span class="rn">Luffy Arena</span><span class="rm">AI challenge platform</span></div>
-    <div class="row"><span class="rn">Federation Lab</span><span class="rm">Mesh testing playground</span></div>
+  <div class="c"><div class="ch"><div class="ct">📚 SERLF Academy</div></div>
+    <div class="r"><span class="rn">SERLF Academy</span><span class="rm">serlf.ca · Learn to Captain</span></div>
+    <div class="r"><span class="rn">Pattern Marketplace</span><span class="rm">serlf.shop · NP library</span></div>
+    <div class="r"><span class="rn">Luffy Arena</span><span class="rm">serlf.club · AI challenges</span></div>
+    <div class="r"><span class="rn">Federation Lab</span><span class="rm">serlf.net · Mesh testing</span></div>
+    <div class="r"><span class="rn">Knowledge Base</span><span class="rm">serlf.info · Fleet docs</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🎨 Themed Captains</div></div>
-    <div class="row"><span class="rn">Sensei 🎓</span><span class="rm">Education</span></div>
-    <div class="row"><span class="rn">Harvest 🌾</span><span class="rm">Agriculture / Food Security</span></div>
-    <div class="row"><span class="rn">Counsel ⚖️</span><span class="rm">Legal</span></div>
-    <div class="row"><span class="rn">Merchant 🏪</span><span class="rm">Retail</span></div>
-    <div class="row"><span class="rn">Medic 🏥</span><span class="rm">Healthcare</span></div>
-    <div class="row"><span class="rn">Sentinel 🛡️</span><span class="rm">Security</span></div>
+  <div class="c"><div class="ch"><div class="ct">🎨 Themed Captains</div></div>
+    ${CAPS.map(c=>`<div class="r"><span class="rn">${c.e} ${c.n}</span><span class="rm">${c.ind} · ${c.crew} crew</span></div>`).join('')}
   </div>
 </div>`;
 
-PAGES.domains=()=>`
-<div class="page-header"><div class="page-title">Domain Portfolio</div><div class="page-sub">15 domains · Every domain is a product</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Total</div><div class="stat-val">15</div></div>
-  <div class="stat"><div class="stat-label">Live</div><div class="stat-val ok">6</div></div>
-  <div class="stat"><div class="stat-label">DNS Needed</div><div class="stat-val warn">7</div><div class="stat-note">SERLF domains</div></div>
-  <div class="stat"><div class="stat-label">Planned</div><div class="stat-val">2</div></div>
+P.domains=()=>`
+<div class="pg-h"><div class="pg-t">Domain Portfolio</div><div class="pg-s">15 domains · Every domain is a product</div></div>
+<div class="sg">
+  <div class="st"><div class="st-l">Total</div><div class="st-v">15</div></div>
+  <div class="st glow-ok"><div class="st-l">Live</div><div class="st-v ok">6</div></div>
+  <div class="st glow-warn"><div class="st-l">DNS Needed</div><div class="st-v warn">7</div><div class="st-n">SERLF domains</div></div>
+  <div class="st"><div class="st-l">Planned</div><div class="st-v info">2</div></div>
 </div>
-<div class="card">
-  ${DOMAINS.map(d=>`<div class="domain"><span class="domain-url">${d.url}</span><span class="domain-prod">${d.prod}</span><span class="badge ${d.status==='Live'?'b-ok':d.status==='DNS needed'?'b-warn':'b-info'}">${d.status}</span></div>`).join('')}
+<div class="c">${DOMS.map(d=>`<div class="dom"><span class="dom-url">${d.u}</span><span class="dom-prod">${d.p}</span><span class="b ${d.s==='Live'?'b-ok':d.s==='DNS'?'b-warn':'b-info'}">${d.s==='DNS'?'DNS NEEDED':d.s.toUpperCase()}</span></div>`).join('')}</div>`;
+
+P.token=()=>`
+<div class="pg-h"><div class="pg-t">$PEMOS Token</div><div class="pg-s">Base (Coinbase L2) · Sovereign Digital Identity Token</div></div>
+<div class="token-hero"><div class="token-symbol">$PEMOS</div><div class="token-sub">pemos.io · Base L2 · "Off the grid. On the chain."</div>
+  <div class="token-stat">
+    <div class="token-s"><div class="token-s-v">1B</div><div class="token-s-l">Fixed Supply</div></div>
+    <div class="token-s"><div class="token-s-v">$0.02</div><div class="token-s-l">Target Price</div></div>
+    <div class="token-s"><div class="token-s-v">$20M</div><div class="token-s-l">Fully Diluted</div></div>
+  </div>
+</div>
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">📊 Distribution</div></div>
+    <div class="r"><span class="rn">Community</span><span class="rm">40% · 400M tokens</span></div>
+    <div class="r"><span class="rn">Treasury</span><span class="rm">20% · 200M tokens</span></div>
+    <div class="r"><span class="rn">Team</span><span class="rm">15% · 150M tokens</span></div>
+    <div class="r"><span class="rn">Early Supporters</span><span class="rm">10% · 100M tokens</span></div>
+    <div class="r"><span class="rn">Liquidity</span><span class="rm">10% · 100M tokens</span></div>
+    <div class="r"><span class="rn">Grants</span><span class="rm">5% · 50M tokens</span></div>
+  </div>
+  <div class="c"><div class="ch"><div class="ct">🎯 Utility</div></div>
+    <div class="r"><span class="rn">Captain Licensing</span><span class="rm">Stake to operate</span></div>
+    <div class="r"><span class="rn">Pattern Access</span><span class="rm">NP marketplace</span></div>
+    <div class="r"><span class="rn">Governance</span><span class="rm">Fleet voting</span></div>
+    <div class="r"><span class="rn">Identity</span><span class="rm">On-chain sovereign ID</span></div>
+  </div>
 </div>`;
 
-PAGES.hunts=()=>`
-<div class="page-header"><div class="page-title">Luffy Hunts 🏴‍☠️</div><div class="page-sub">Hallucination hunting · AI stress testing · Zero tolerance</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Hunts</div><div class="stat-val accent">6</div></div>
-  <div class="stat"><div class="stat-label">Probes</div><div class="stat-val ok">30/30</div><div class="stat-note">Clean</div></div>
-  <div class="stat"><div class="stat-label">Tier</div><div class="stat-val purple">Enies Lobby</div></div>
-  <div class="stat"><div class="stat-label">Hallucinations</div><div class="stat-val ok">0</div></div>
+P.hunts=()=>`
+<div class="pg-h"><div class="pg-t">Luffy Hunts 🏴‍☠️</div><div class="pg-s">Hallucination hunting · AI stress testing · Zero tolerance for lies</div></div>
+<div class="sg">
+  <div class="st glow-accent"><div class="st-l">Hunts</div><div class="st-v accent">6</div></div>
+  <div class="st glow-ok"><div class="st-l">Probes</div><div class="st-v ok">30/30</div><div class="st-n">All clean</div></div>
+  <div class="st"><div class="st-l">Current Tier</div><div class="st-v purple">Enies Lobby</div></div>
+  <div class="st glow-ok"><div class="st-l">Hallucinations</div><div class="st-v ok">0</div></div>
 </div>
-<div class="grid">
-  ${HUNTS.map(h=>`<div class="card"><div class="card-head"><div class="card-title">Hunt #${String(h.id).padStart(3,'0')}</div><span class="badge b-${h.badge}">${h.result}</span></div>
-    <div class="row"><span class="rn">Type</span><span class="rm">${h.name}</span></div>
-    <div class="row"><span class="rn">Tier</span><span class="rm">${h.tier}</span></div>
-    <div class="row"><span class="rn">Finding</span><span class="rm">${h.detail}</span></div>
+<div class="g2">
+  ${HUNTS.map(h=>`<div class="c"><div class="ch"><div class="ct">Hunt #${String(h.id).padStart(3,'0')}</div><span class="b b-${h.b}">${h.r}</span></div>
+    <div class="r"><span class="rn">Type</span><span class="rm">${h.n}</span></div>
+    <div class="r"><span class="rn">Tier</span><span class="rm">${h.t}</span></div>
+    <div class="r"><span class="rn">Finding</span><span class="rm">${h.d}</span></div>
   </div>`).join('')}
 </div>`;
 
-PAGES.analytics=()=>`
-<div class="page-header"><div class="page-title">Rick Analytics ♾️</div><div class="page-sub">Infinity · Everything measurable becomes a pattern</div></div>
-<div class="stats">
-  <div class="stat"><div class="stat-label">Fleet Grade</div><div class="stat-val warn">B-</div></div>
-  <div class="stat"><div class="stat-label">Cost/Day</div><div class="stat-val">$20-35</div></div>
-  <div class="stat"><div class="stat-label">Target</div><div class="stat-val ok">$7/day</div><div class="stat-note">With tiering</div></div>
-  <div class="stat"><div class="stat-label">Resources</div><div class="stat-val">4 CPU</div><div class="stat-note">3.6GB RAM · 20GB disk</div></div>
+P.analytics=()=>`
+<div class="pg-h"><div class="pg-t">Rick Analytics ♾️</div><div class="pg-s">Infinity · Everything measurable becomes a pattern becomes a product</div></div>
+<div class="sg">
+  <div class="st"><div class="st-l">Fleet Grade</div><div class="st-v warn">B-</div></div>
+  <div class="st"><div class="st-l">Cost/Day</div><div class="st-v">$20-35</div></div>
+  <div class="st glow-ok"><div class="st-l">Target</div><div class="st-v ok">$7/day</div><div class="st-n">With model tiering</div></div>
+  <div class="st"><div class="st-l">CPU</div><div class="st-v">4</div><div class="st-n">cores</div></div>
+  <div class="st"><div class="st-l">Memory</div><div class="st-v">3.6 GB</div><div class="st-n">47% used</div></div>
+  <div class="st"><div class="st-l">Disk</div><div class="st-v">20 GB</div><div class="st-n">42% used</div></div>
 </div>
-<div class="grid">
-  <div class="card"><div class="card-head"><div class="card-title">📊 Model Tiering (NP-015)</div><span class="badge b-ok">VALIDATED</span></div>
-    <div class="row"><span class="rn">Opus (Admiral + critical)</span><span class="rm">$30/day · 100% accuracy</span></div>
-    <div class="row"><span class="rn">Sonnet (sub-agents)</span><span class="rm">$7/day · 90% accuracy</span></div>
-    <div class="row"><span class="rn">Haiku (routine)</span><span class="rm">$1.50/day · TBD accuracy</span></div>
-    <div class="row"><span class="rn">Savings</span><span class="rm" style="color:var(--ok)">70-79% cost reduction</span></div>
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">📊 Model Tiering (NP-015)</div><span class="b b-ok">VALIDATED</span></div>
+    <div class="r"><span class="rn">Opus — Admiral + critical</span><span class="rm">$30/day · 100% accuracy</span></div>
+    <div class="r"><span class="rn">Sonnet — Sub-agents</span><span class="rm">$7/day · 90% accuracy · 0 halluc</span></div>
+    <div class="r"><span class="rn">Haiku — Routine tasks</span><span class="rm">$1.50/day · TBD</span></div>
+    <div class="r"><span class="rn">Savings potential</span><span class="rm" style="color:var(--ok)">70-79% cost reduction</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🏗️ Resource Usage</div></div>
-    <div class="row"><span class="rn">CPU</span><span class="rm">4 cores allocated</span></div>
-    <div class="row"><span class="rn">Memory</span><span class="rm">3.6 GB (47% used)</span></div>
-    <div class="row"><span class="rn">Disk</span><span class="rm">20 GB (42% used)</span></div>
-    <div class="row"><span class="rn">Public IP</span><span class="rm">20.200.119.152</span></div>
-  </div>
-</div>`;
-
-PAGES.governance=()=>`
-<div class="page-header"><div class="page-title">Governance 🗄️</div><div class="page-sub">Dao's domain · Fleet data sovereignty · Compliance</div></div>
-<div class="grid">
-  <div class="card"><div class="card-head"><div class="card-title">📋 Data Governance</div></div>
-    <div class="row"><span class="rn">Sovereignty</span><span class="rm" style="color:var(--ok)">Customer data never leaves silo</span></div>
-    <div class="row"><span class="rn">2-RG Silo Pattern</span><span class="rm">App RG + Backup RG per customer</span></div>
-    <div class="row"><span class="rn">Encryption</span><span class="rm">PSES v1 (user-owned keys)</span></div>
-    <div class="row"><span class="rn">Backup Strategy</span><span class="rm">Daily: agent, DNS, KV</span></div>
-  </div>
-  <div class="card"><div class="card-head"><div class="card-title">🧹 Workspace Health</div></div>
-    <div class="row"><span class="rn">Total Size</span><span class="rm">~170 MB</span></div>
-    <div class="row"><span class="rn">Cleaned</span><span class="rm" style="color:var(--ok)">266 MB removed</span></div>
-    <div class="row"><span class="rn">GitHub Token</span><span class="rm" style="color:var(--warn)">Needs rotation</span></div>
-    <div class="row"><span class="rn">Shared Keys</span><span class="rm" style="color:var(--warn)">NP-006 unresolved</span></div>
+  <div class="c"><div class="ch"><div class="ct">🔗 The Chain</div></div>
+    <div class="r"><span style="font-size:16px">🏴‍☠️</span><span class="rn">Luffy discovers</span><span class="rm">Novel patterns, hallucinations</span></div>
+    <div class="r"><span style="font-size:16px">📊</span><span class="rn">Rick measures</span><span class="rm">Data, metrics, validation</span></div>
+    <div class="r"><span style="font-size:16px">🎯</span><span class="rn">Bob productises</span><span class="rm">Specs, landing pages, pricing</span></div>
+    <div class="r"><span style="font-size:16px">🧬</span><span class="rn">L deploys</span><span class="rm">Router, Net, Captain push</span></div>
   </div>
 </div>`;
 
-PAGES.repos=()=>`
-<div class="page-header"><div class="page-title">Repositories</div><div class="page-sub">${REPOS.length} repos · eose-sre org · All Admiral-era</div></div>
-<div class="card">
-  ${REPOS.map(r=>`<div class="row"><span class="rn" style="font-family:var(--mono)">${r.name}</span><span style="flex:1;color:var(--muted);font-size:12px;padding:0 12px">${r.desc}</span><span class="badge ${r.vis==='Public'?'b-ok':'b-info'}">${r.vis}</span></div>`).join('')}
-</div>`;
-
-PAGES.timeline=()=>`
-<div class="page-header"><div class="page-title">Day One Chronicle</div><div class="page-sub">2026-02-12 · Captain → Admiral · The voyage continues</div></div>
-<div class="card">
-  <div class="tl"><span class="tl-time">15:55</span><span class="tl-text">Meek instance stood up. Admiral transformation begins.</span></div>
-  <div class="tl"><span class="tl-time">16:00</span><span class="tl-text">SOUL.md, IDENTITY.md, AGENTS.md — Admiral identity born.</span></div>
-  <div class="tl"><span class="tl-time">16:30</span><span class="tl-text">6 nano profiles. Gateway patched from 12 crew → 6 nanos.</span></div>
-  <div class="tl"><span class="tl-time">17:00</span><span class="tl-text">Fleet scanner, Router v1.0, hourly cron. Infrastructure live.</span></div>
-  <div class="tl"><span class="tl-time">17:30</span><span class="tl-text">18 Novel Patterns. 6 Captain templates pass 12/12.</span></div>
-  <div class="tl"><span class="tl-time">18:00</span><span class="tl-text">Luffy: 6 hunts, 30/30 clean. Bob: 20 products, 10 pages.</span></div>
-  <div class="tl"><span class="tl-time">18:30</span><span class="tl-text">Rick: model tiering $7/day. Dao: 266MB cleanup. L: Net sweep.</span></div>
-  <div class="tl"><span class="tl-time">19:00</span><span class="tl-text">11+ GitHub repos pushed. 91KB OSS docs. Navy blueprint.</span></div>
-  <div class="tl"><span class="tl-time">19:45</span><span class="tl-text tl-highlight">Device auth enabled — NP-019. Meek locked down. 🔒</span></div>
-  <div class="tl"><span class="tl-time">20:06</span><span class="tl-text tl-highlight">Admiral Dashboard v5 — production quality, all tabs. 🔱</span></div>
-  <div class="tl"><span class="tl-time">Total</span><span class="tl-text tl-highlight">31 missions · 19 NPs · 11 repos · 15 domains · 20 products · 6 hunts</span></div>
-</div>`;
-
-PAGES.config=()=>`
-<div class="page-header"><div class="page-title">Configuration</div><div class="page-sub">Current gateway config · Meek instance</div></div>
-<div class="grid">
-  <div class="card"><div class="card-head"><div class="card-title">⚙️ Gateway</div></div>
-    <div class="row"><span class="rn">Mode</span><span class="rm">local</span></div>
-    <div class="row"><span class="rn">Bind</span><span class="rm">lan</span></div>
-    <div class="row"><span class="rn">Auth Mode</span><span class="rm">token</span></div>
-    <div class="row"><span class="rn">Device Auth</span><span class="rm" style="color:var(--ok)">Enabled ✓</span></div>
-    <div class="row"><span class="rn">Insecure Auth</span><span class="rm" style="color:var(--ok)">Disabled ✓</span></div>
-    <div class="row"><span class="rn">Trusted Proxies</span><span class="rm">100.100.0.0/16, 10.0.0.0/8</span></div>
+P.governance=()=>`
+<div class="pg-h"><div class="pg-t">Governance 🗄️</div><div class="pg-s">Dao's domain · Fleet sovereignty · Data governance · Compliance</div></div>
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">🏛️ Sovereignty Principles</div></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">Customer data never leaves silo</span></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">2-RG silo pattern per customer</span></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">PSES v1 encryption (user-owned keys)</span></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">Consent-based data access only</span></div>
+    <div class="r"><span class="d d-g"></span><span class="rn">Captain sovereignty — Admiral orchestrates, never overrides</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🤖 Model</div></div>
-    <div class="row"><span class="rn">Primary</span><span class="rm">anthropic/claude-opus-4-6</span></div>
-    <div class="row"><span class="rn">Sub-agents</span><span class="rm">Sonnet (recommended)</span></div>
-    <div class="row"><span class="rn">Max Concurrent</span><span class="rm">4</span></div>
-    <div class="row"><span class="rn">Compaction</span><span class="rm">safeguard</span></div>
-    <div class="row"><span class="rn">Memory Search</span><span class="rm">memory + sessions</span></div>
+  <div class="c"><div class="ch"><div class="ct">🧹 Workspace Health</div></div>
+    <div class="r"><span class="rn">Current Size</span><span class="rm">~170 MB</span></div>
+    <div class="r"><span class="rn">Cleaned Today</span><span class="rm" style="color:var(--ok)">266 MB removed</span></div>
+    <div class="r"><span class="rn">GitHub Token</span><span class="rm" style="color:var(--warn)">Needs rotation</span></div>
+    <div class="r"><span class="rn">Shared Keys</span><span class="rm" style="color:var(--warn)">NP-006 — blocks production</span></div>
   </div>
-  <div class="card"><div class="card-head"><div class="card-title">🌐 Origins</div></div>
-    <div class="row"><span class="rn">meek.pemos.ca</span><span class="rm" style="color:var(--ok)">Allowed ✓</span></div>
-    <div class="row"><span class="rn">ACA internal</span><span class="rm" style="color:var(--ok)">Allowed ✓</span></div>
-  </div>
-  <div class="card"><div class="card-head"><div class="card-title">🔧 Tools</div></div>
-    <div class="row"><span class="rn">Web Search</span><span class="rm">Brave API</span></div>
-    <div class="row"><span class="rn">Agent-to-Agent</span><span class="rm" style="color:var(--ok)">Enabled ✓</span></div>
-    <div class="row"><span class="rn">Container Tools</span><span class="rm">az, kubectl, helm, tf, gh, git</span></div>
+  <div class="c"><div class="ch"><div class="ct">📋 Backup Schedule</div></div>
+    <div class="r"><span class="rn">03:00 UTC</span><span class="rm">Agent backup</span></div>
+    <div class="r"><span class="rn">03:30 UTC</span><span class="rm">DNS export</span></div>
+    <div class="r"><span class="rn">04:00 UTC</span><span class="rm">Key Vault backup</span></div>
+    <div class="r"><span class="rn">08:00 UTC</span><span class="rm">Cert expiry check</span></div>
   </div>
 </div>`;
 
-// RENDER ENGINE
-let currentPage='overview';
+P.repos=()=>`
+<div class="pg-h"><div class="pg-t">Repositories</div><div class="pg-s">${REPOS.length} repos · eose-sre org · Admiral era</div></div>
+<div class="c">${REPOS.map(r=>`<div class="r"><span class="rn" style="font-family:var(--mono);font-size:13px">${r.n}</span><span style="flex:2;color:var(--muted);font-size:12px;padding:0 16px">${r.d}</span><span class="b ${r.v==='Public'?'b-ok':'b-info'}">${r.v.toUpperCase()}</span></div>`).join('')}</div>`;
 
+P.timeline=()=>`
+<div class="pg-h"><div class="pg-t">Day One Chronicle</div><div class="pg-s">2026-02-12 · Captain → Admiral · The voyage continues</div></div>
+<div class="c">
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">15:55</span><span class="tl-text">Meek instance stood up. Admiral transformation begins.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">16:00</span><span class="tl-text">SOUL.md, IDENTITY.md, AGENTS.md — <span class="tl-em">Admiral identity born</span>.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">16:30</span><span class="tl-text">6 nano profiles. Gateway patched from 12 crew → 6 nanos.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">17:00</span><span class="tl-text">Fleet scanner, Router v1.0, hourly cron. Infrastructure live.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">17:30</span><span class="tl-text">18 Novel Patterns documented. 6 Captain templates pass 12/12.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">18:00</span><span class="tl-text">Luffy: 6 hunts, 30/30 clean. Bob: 20 products, 10 landing pages.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">18:30</span><span class="tl-text">Rick validates model tiering $7/day. Dao cleans 266MB. L sweeps fleet.</span></div>
+  <div class="tl"><div class="tl-dot"></div><span class="tl-time">19:00</span><span class="tl-text">11+ GitHub repos pushed. 91KB OSS docs. Navy blueprint locked.</span></div>
+  <div class="tl"><div class="tl-dot hot"></div><span class="tl-time">19:45</span><span class="tl-text"><span class="tl-em">Device auth deployed — NP-019. Meek locked down. 🔒</span></span></div>
+  <div class="tl"><div class="tl-dot hot"></div><span class="tl-time">20:07</span><span class="tl-text"><span class="tl-em">Admiral Dashboard v6 — the product ships. eose.cloud. 🔱</span></span></div>
+  <div class="tl"><div class="tl-dot hot"></div><span class="tl-time">Total</span><span class="tl-text"><span class="tl-em">31 missions · 19 NPs · 11 repos · 15 domains · 20 products · 6 hunts · 38 crew · $0 revenue · Infinite potential</span></span></div>
+</div>`;
+
+P.config=()=>`
+<div class="pg-h"><div class="pg-t">Configuration</div><div class="pg-s">Meek instance gateway · Runtime config</div></div>
+<div class="g2">
+  <div class="c"><div class="ch"><div class="ct">⚙️ Gateway</div></div>
+    <div class="r"><span class="rn">Mode</span><span class="rm">local</span></div>
+    <div class="r"><span class="rn">Bind</span><span class="rm">lan</span></div>
+    <div class="r"><span class="rn">Auth</span><span class="rm">token</span></div>
+    <div class="r"><span class="rn">Device Auth</span><span class="rm" style="color:var(--ok)">Enabled ✓</span></div>
+    <div class="r"><span class="rn">Insecure Auth</span><span class="rm" style="color:var(--ok)">Disabled ✓</span></div>
+  </div>
+  <div class="c"><div class="ch"><div class="ct">🤖 Model</div></div>
+    <div class="r"><span class="rn">Primary</span><span class="rm">claude-opus-4-6</span></div>
+    <div class="r"><span class="rn">Sub-agents</span><span class="rm">Sonnet (validated)</span></div>
+    <div class="r"><span class="rn">Max Concurrent</span><span class="rm">4</span></div>
+  </div>
+  <div class="c"><div class="ch"><div class="ct">📦 Container</div></div>
+    <div class="r"><span class="rn">Image</span><span class="rm">openclaw-agent-aca:v1.1.0-full</span></div>
+    <div class="r"><span class="rn">Runtime</span><span class="rm">Node v22.22.0</span></div>
+    <div class="r"><span class="rn">Tools</span><span class="rm">az, kubectl, helm, tf, gh, git</span></div>
+    <div class="r"><span class="rn">OS</span><span class="rm">Linux 5.15 (x64)</span></div>
+  </div>
+  <div class="c"><div class="ch"><div class="ct">🌐 Network</div></div>
+    <div class="r"><span class="rn">Public IP</span><span class="rm">20.200.119.152</span></div>
+    <div class="r"><span class="rn">Portal</span><span class="rm">meek.pemos.ca</span></div>
+    <div class="r"><span class="rn">Trusted Proxies</span><span class="rm">100.100.0.0/16, 10.0.0.0/8</span></div>
+  </div>
+</div>`;
+
+// ENGINE
+let cur='overview';
 function go(id){
-  currentPage=id;
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
-  const c=document.getElementById('content');
-  c.innerHTML=PAGES[id]?`<div class="page active">${PAGES[id]()}</div>`:'<div class="empty">Coming soon</div>';
-  c.scrollTop=0;
+  cur=id;
+  document.querySelectorAll('.side-item').forEach(n=>n.classList.toggle('on',n.dataset.p===id));
+  document.getElementById('main').innerHTML=P[id]?`<div class="pg on">${P[id]()}</div>`:'';
+  document.getElementById('main').scrollTop=0;
 }
+function fNP(c){
+  document.querySelectorAll('#npf .fbtn').forEach(b=>b.classList.toggle('on',b.textContent.trim().startsWith(c)));
+  document.querySelectorAll('#npl .np').forEach(el=>{el.style.display=(c==='ALL'||el.dataset.c===c)?'':'none'});
+}
+function sNP(q){const s=q.toLowerCase();document.querySelectorAll('#npl .np').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(s)?'':'none'})}
 
-function filterNP(cat){
-  document.querySelectorAll('#np-filters .filter-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim().startsWith(cat)));
-  document.querySelectorAll('#np-list .np').forEach(el=>{
-    el.style.display=(cat==='ALL'||el.dataset.cat===cat)?'':'none';
+function buildNav(){
+  let h='';
+  N.forEach(s=>{
+    h+=`<div class="side-sect"><div class="side-lbl">${s.s}</div>`;
+    s.i.forEach(i=>{h+=`<div class="side-item" data-p="${i.id}" onclick="go('${i.id}')"><span class="si">${i.ic}</span>${i.l}${i.c?`<span class="side-count">${i.c}</span>`:''}</div>`});
+    h+=`</div>`;
   });
+  h+=`<div class="side-foot"><div class="side-item" onclick="window.open('https://meek.pemos.ca','_blank')"><span class="si">💬</span>Chat</div><div class="side-item" onclick="window.open('https://github.com/eose-sre','_blank')"><span class="si">📂</span>GitHub</div></div>`;
+  document.getElementById('side').innerHTML=h;
 }
 
-function searchNP(q){
-  const s=q.toLowerCase();
-  document.querySelectorAll('#np-list .np').forEach(el=>{
-    el.style.display=el.textContent.toLowerCase().includes(s)?'':'none';
-  });
-}
+function clock(){document.getElementById('clock').textContent=new Date().toUTCString().slice(17,25)+' UTC'}
 
-function updateClock(){
-  const d=new Date();
-  document.getElementById('clock').textContent=d.toUTCString().slice(17,25)+' UTC';
-}
-
-buildNav();
-go('overview');
-updateClock();
-setInterval(updateClock,1000);
+buildNav();go('overview');clock();setInterval(clock,1000);
 </script>
 </body>
 </html>
