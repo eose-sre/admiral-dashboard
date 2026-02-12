@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admiral Fleet Control 🔱</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e17; color: #e0e6ed; font-family: 'SF Mono', 'Fira Code', monospace; padding: 20px; }
+  .header { text-align: center; margin-bottom: 24px; }
+  .header h1 { font-size: 28px; color: #00d4ff; letter-spacing: 2px; }
+  .header .sub { color: #5a6a7a; font-size: 12px; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .card { background: #111825; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px; }
+  .card h2 { font-size: 13px; color: #5a6a7a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .card.full { grid-column: 1 / -1; }
+  .fleet-row { display: flex; align-items: center; padding: 6px 0; border-bottom: 1px solid #1a2535; }
+  .fleet-row:last-child { border-bottom: none; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
+  .dot.green { background: #00ff88; box-shadow: 0 0 6px #00ff8844; }
+  .dot.yellow { background: #ffaa00; box-shadow: 0 0 6px #ffaa0044; }
+  .dot.red { background: #ff4444; box-shadow: 0 0 6px #ff444444; }
+  .fleet-name { flex: 1; font-size: 13px; }
+  .fleet-meta { color: #5a6a7a; font-size: 11px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat { text-align: center; }
+  .stat .num { font-size: 32px; font-weight: bold; color: #00d4ff; }
+  .stat .label { font-size: 11px; color: #5a6a7a; margin-top: 2px; }
+  .np-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; }
+  .np-cat { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; }
+  .np-cat.inf { background: #1a3a5c; color: #4a9eff; }
+  .np-cat.ai { background: #2a1a4c; color: #aa66ff; }
+  .np-cat.sec { background: #3c1a1a; color: #ff6666; }
+  .np-cat.ops { background: #1a3c2a; color: #44dd88; }
+  .np-cat.prd { background: #3c3a1a; color: #ddcc44; }
+  .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; background: #1e2d3d; color: #88aacc; }
+  .nano-row { display: flex; align-items: center; padding: 5px 0; }
+  .nano-emoji { font-size: 18px; margin-right: 8px; }
+  .nano-name { flex: 1; font-size: 13px; }
+  .nano-role { color: #5a6a7a; font-size: 11px; }
+  .cap-row { display: flex; align-items: center; padding: 5px 0; border-bottom: 1px solid #1a2535; }
+  .cap-row:last-child { border-bottom: none; }
+  .cap-emoji { font-size: 16px; margin-right: 8px; }
+  .cap-name { flex: 1; font-size: 13px; }
+  .cap-crew { color: #5a6a7a; font-size: 11px; }
+  .cap-status { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #1a3c2a; color: #44dd88; }
+  .progress-bar { height: 4px; background: #1e2d3d; border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; }
+  .crit { color: #ff6666; font-weight: bold; font-size: 11px; }
+  .warn { color: #ffaa00; font-size: 11px; }
+  .ok { color: #00ff88; font-size: 11px; }
+  .blocked-item { padding: 6px 0; border-bottom: 1px solid #1a2535; font-size: 12px; }
+  .blocked-item:last-child { border-bottom: none; }
+  .blocked-label { color: #ff6666; font-size: 10px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔱 ADMIRAL FLEET CONTROL</h1>
+  <div class="sub" id="timestamp"></div>
+</div>
+
+<div class="grid">
+
+  <!-- Live Fleet -->
+  <div class="card">
+    <h2>🌐 Live Fleet</h2>
+    <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Master</span><span class="fleet-meta">CA · T1</span></div>
+    <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Admiral AU</span><span class="fleet-meta">AU · T1</span></div>
+    <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">AdmiralMark1</span><span class="fleet-meta">ZA · T1</span></div>
+    <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Meek 🔱</span><span class="fleet-meta">CA · Admiral</span></div>
+    <div class="fleet-row"><span class="dot green"></span><span class="fleet-name">Clo</span><span class="fleet-meta">CA · T1</span></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="card">
+    <h2>📊 Fleet Numbers</h2>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">5</div><div class="label">Live Instances</div></div>
+      <div class="stat"><div class="num">6</div><div class="label">Factory Captains</div></div>
+      <div class="stat"><div class="num">38</div><div class="label">Total Crew</div></div>
+      <div class="stat"><div class="num">14</div><div class="label">Novel Patterns</div></div>
+    </div>
+  </div>
+
+  <!-- Nanos -->
+  <div class="card">
+    <h2>🧬 Admiral Nanos</h2>
+    <div class="nano-row"><span class="nano-emoji">🔱</span><span class="nano-name">Admiral</span><span class="nano-role">Fleet Commander</span></div>
+    <div class="nano-row"><span class="nano-emoji">🧬</span><span class="nano-name">Lucien (L)</span><span class="nano-role">R&D · Router · Net</span></div>
+    <div class="nano-row"><span class="nano-emoji">🏴‍☠️</span><span class="nano-name">Luffy</span><span class="nano-role">AI Explorer · 2 Hunts</span></div>
+    <div class="nano-row"><span class="nano-emoji">🎯</span><span class="nano-name">Bob</span><span class="nano-role">CPO · SERLF Specs Done</span></div>
+    <div class="nano-row"><span class="nano-emoji">📊</span><span class="nano-name">Rick</span><span class="nano-role">Analytics · Inventory</span></div>
+    <div class="nano-row"><span class="nano-emoji">🗄️</span><span class="nano-name">Dao</span><span class="nano-role">Data Governance</span></div>
+  </div>
+
+  <!-- Captain Factory -->
+  <div class="card">
+    <h2>🏭 Captain Factory</h2>
+    <div class="cap-row"><span class="cap-emoji">🎓</span><span class="cap-name">Sensei (SERLF)</span><span class="cap-crew">8 crew</span><span class="cap-status">READY</span></div>
+    <div class="cap-row"><span class="cap-emoji">🌾</span><span class="cap-name">Harvest (Feedles)</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
+    <div class="cap-row"><span class="cap-emoji">⚖️</span><span class="cap-name">Counsel (Legal)</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
+    <div class="cap-row"><span class="cap-emoji">🏪</span><span class="cap-name">Merchant</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
+    <div class="cap-row"><span class="cap-emoji">🏥</span><span class="cap-name">Medic</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
+    <div class="cap-row"><span class="cap-emoji">🛡️</span><span class="cap-name">Sentinel</span><span class="cap-crew">6 crew</span><span class="cap-status">READY</span></div>
+  </div>
+
+  <!-- Novel Patterns -->
+  <div class="card">
+    <h2>📖 Novel Patterns</h2>
+    <div class="np-row"><span class="np-cat sec">SEC</span> NP-011 Identity Anchor <span class="crit">CRITICAL</span></div>
+    <div class="np-row"><span class="np-cat sec">SEC</span> NP-006 Shared API Keys <span class="crit">CRITICAL</span></div>
+    <div class="np-row"><span class="np-cat sec">SEC</span> NP-014 Missing Headers <span class="warn">OPEN</span></div>
+    <div class="np-row"><span class="np-cat inf">INF</span> NP-002 Memory DB Lock <span class="crit">CRITICAL</span></div>
+    <div class="np-row"><span class="np-cat ai">AI</span> NP-008 Tool Grounding <span class="ok">PROVEN</span></div>
+    <div class="np-row"><span class="np-cat ai">AI</span> NP-009 Capability Verify <span class="ok">PROVEN</span></div>
+    <div class="np-row"><span class="np-cat ai">AI</span> NP-010 URL Verify <span class="ok">PROVEN</span></div>
+    <div class="np-row"><span class="np-cat ops">OPS</span> NP-007 Deploy Checklist <span class="ok">DEPLOYED</span></div>
+    <div class="np-row"><span class="np-cat ops">OPS</span> NP-012 Compression <span class="warn">OPEN</span></div>
+    <div class="np-row"><span class="np-cat ops">OPS</span> NP-013 Context Battery <span class="warn">OPEN</span></div>
+  </div>
+
+  <!-- Capabilities -->
+  <div class="card">
+    <h2>⚡ Capabilities</h2>
+    <div style="font-size:12px;">
+      <div style="padding:4px 0;">Fleet Scan <span class="ok">v0.2 LIVE</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#00ff88;"></div></div>
+      <div style="padding:4px 0;margin-top:8px;">Net Test <span class="ok">v0.1 LIVE</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#00ff88;"></div></div>
+      <div style="padding:4px 0;margin-top:8px;">Captain Factory <span class="ok">v0.1 LIVE</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#00ff88;"></div></div>
+      <div style="padding:4px 0;margin-top:8px;">Router <span class="warn">v1 DESIGN</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:40%;background:#ffaa00;"></div></div>
+      <div style="padding:4px 0;margin-top:8px;">Arena <span class="warn">v1 DESIGN</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:30%;background:#ffaa00;"></div></div>
+      <div style="padding:4px 0;margin-top:8px;">Federation <span style="color:#5a6a7a;">BLOCKED</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:10%;background:#ff4444;"></div></div>
+    </div>
+  </div>
+
+  <!-- Blockers -->
+  <div class="card full">
+    <h2>🚧 Awaiting Kay</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:12px;">
+      <div><span class="blocked-label">Memory</span><br/>OPENCLAW_STATE_DIR=/tmp/openclaw<br/><span style="color:#5a6a7a;">Unlocks: memory search, context persistence</span></div>
+      <div><span class="blocked-label">Branding</span><br/>Portal AGENTS_JSON update<br/><span style="color:#5a6a7a;">Unlocks: Admiral identity in portal</span></div>
+      <div><span class="blocked-label">SERLF DNS</span><br/>7 domains → Azure DNS NS<br/><span style="color:#5a6a7a;">Unlocks: SERLF sites, first industry Captain</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('timestamp').textContent = 'Last updated: ' + new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+</script>
+</body>
+</html>
