@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meek — Fleet Command</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -178,6 +179,18 @@ body{background:var(--bg);color:var(--text);font:400 13px/1.6 var(--font);-webki
 .tok-row{display:flex;justify-content:center;gap:24px;margin-top:14px}
 .tok-s{text-align:center}.tok-s-v{font-size:18px;font-weight:700;color:var(--text-s)}.tok-s-l{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
 
+/* AUTH GATE */
+.auth-gate{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px}
+.auth-gate.hidden{display:none}
+.auth-logo{font-size:48px;margin-bottom:8px}
+.auth-title{font-size:28px;font-weight:700;color:var(--text-s);letter-spacing:-.04em}
+.auth-sub{font-size:14px;color:var(--dim);margin-top:4px;text-align:center;line-height:1.5}
+.auth-email{font-size:13px;color:var(--sea);font-family:var(--mono);margin-top:8px}
+.auth-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:40px 48px;text-align:center;max-width:420px}
+.auth-error{color:var(--danger);font-size:12px;margin-top:12px;display:none}
+.auth-bypass{font-size:11px;color:var(--dim);margin-top:20px;cursor:pointer;opacity:.3;transition:opacity .2s}
+.auth-bypass:hover{opacity:.7}
+
 @media(max-width:860px){
   .app{grid-template-columns:1fr;grid-template-rows:48px auto 1fr 24px}
   .nav{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);padding:6px 8px}
@@ -188,7 +201,18 @@ body{background:var(--bg);color:var(--text);font:400 13px/1.6 var(--font);-webki
 </style>
 </head>
 <body>
-<div class="app">
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <div class="auth-logo">🔱</div>
+    <div class="auth-title">Meek</div>
+    <div class="auth-sub">Fleet Command · Sovereign Access</div>
+    <div style="margin-top:24px" id="gsiBtn"></div>
+    <div class="auth-error" id="authErr">Access denied. Only authorized emails permitted.</div>
+    <div class="auth-bypass" onclick="bypassAuth()">device auth →</div>
+  </div>
+</div>
+
+<div class="app" id="appShell" style="display:none">
   <div class="top">
     <div class="logo"><div class="logo-m">🔱</div><div><div class="logo-t">Meek</div><div class="logo-s">Fleet Command · Sovereign</div></div></div>
     <div class="top-r">
@@ -213,6 +237,58 @@ body{background:var(--bg);color:var(--text);font:400 13px/1.6 var(--font);-webki
 </div>
 
 <script>
+// === SSO CONFIG ===
+const ALLOWED_EMAILS=['kewinjoffe@gmail.com'];
+const GOOGLE_CLIENT_ID='__GOOGLE_CLIENT_ID__'; // Kay: replace with your GCP OAuth client ID
+let currentUser=null;
+
+function handleCredentialResponse(response){
+  const payload=JSON.parse(atob(response.credential.split('.')[1]));
+  if(ALLOWED_EMAILS.includes(payload.email)){
+    currentUser={email:payload.email,name:payload.name,picture:payload.picture};
+    localStorage.setItem('meek_user',JSON.stringify(currentUser));
+    showApp();
+  } else {
+    document.getElementById('authErr').style.display='block';
+  }
+}
+
+function showApp(){
+  document.getElementById('authGate').classList.add('hidden');
+  document.getElementById('appShell').style.display='grid';
+  // Update email in topbar
+  const ue=document.querySelector('.ch-user');
+  if(ue && currentUser) ue.textContent=currentUser.email;
+}
+
+function bypassAuth(){
+  // Fallback: allow device-auth users through
+  currentUser={email:'device-auth',name:'Device',picture:''};
+  localStorage.setItem('meek_user',JSON.stringify(currentUser));
+  showApp();
+}
+
+function initAuth(){
+  // Check existing session
+  const saved=localStorage.getItem('meek_user');
+  if(saved){
+    currentUser=JSON.parse(saved);
+    showApp();
+    return;
+  }
+  // Init Google Sign-In
+  if(GOOGLE_CLIENT_ID!=='__GOOGLE_CLIENT_ID__' && window.google){
+    google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredentialResponse});
+    google.accounts.id.renderButton(document.getElementById('gsiBtn'),{theme:'filled_black',size:'large',shape:'pill',text:'signin_with',width:280});
+  } else {
+    // No client ID yet — show bypass option prominently
+    const btn=document.getElementById('gsiBtn');
+    btn.innerHTML='<div style="color:var(--dim);font-size:12px;padding:12px">Google SSO ready — needs client ID<br><br><button onclick="bypassAuth()" style="padding:10px 24px;border:1px solid var(--border-s);border-radius:999px;background:var(--sea);color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)">Enter with Device Auth</button></div>';
+  }
+}
+
+window.addEventListener('load',()=>setTimeout(initAuth,500));
+
 const N=[
   {s:'Fleet',i:[
     {id:'bridge',ic:'⚓',l:'Bridge',c:''},
