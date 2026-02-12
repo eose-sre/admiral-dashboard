@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERLF - Your AI Fleet. Your Data. Your Rules.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a1628;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+        
+        .hero {
+            padding: 8rem 0 6rem;
+            background: linear-gradient(135deg, #0a1628 0%, #1e293b 100%);
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+        
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #f1f5f9;
+        }
+        
+        .problem {
+            background: #111827;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .problem-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .problem-item h3 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .solution {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        
+        .solution-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .solution-content p {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+        }
+        
+        .how-it-works {
+            background: #0f172a;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .step h3 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .products {
+            background: #111827;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .product-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+        
+        .product-card h3 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .pricing {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            text-align: center;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+        
+        .pricing-card h3 {
+            color: #60a5fa;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: #94a3b8;
+        }
+        
+        .trust {
+            background: #0a1628;
+            text-align: center;
+        }
+        
+        .trust-quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #60a5fa;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .customers {
+            background: #111827;
+        }
+        
+        .customers-content {
+            text-align: center;
+        }
+        
+        .customer-logos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            opacity: 0.6;
+        }
+        
+        .customer-logo {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            text-align: center;
+            color: #94a3b8;
+        }
+        
+        .final-cta {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            text-align: center;
+            padding: 6rem 0;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+        
+        .final-cta p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+        }
+        
+        footer {
+            background: #0a1628;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h4 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: #60a5fa;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            color: #64748b;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 6rem 0 4rem;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">SERLF</div>
+            <ul class="nav-links">
+                <li><a href="#products">Products</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#trust">Trust</a></li>
+                <li><a href="mailto:hello@serlf.ca">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Your AI Fleet. Your Data. Your Rules.</h1>
+                <p>Deploy sovereign AI infrastructure that stays under your control. No vendor lock-in, no data exfiltration, no compromises.</p>
+                <a href="https://github.com/eose-ai/serlf" class="cta-button">Start Free</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section problem">
+        <div class="container">
+            <h2 class="section-title">The Problem</h2>
+            <div class="problem-grid">
+                <div class="problem-item">
+                    <h3>Lost Control</h3>
+                    <p>Companies surrender their most valuable asset—data—to third-party AI providers with no guarantees of privacy or sovereignty.</p>
+                </div>
+                <div class="problem-item">
+                    <h3>Data Everywhere</h3>
+                    <p>Your sensitive information flows through external APIs, gets cached in foreign servers, and lives in systems you can't audit.</p>
+                </div>
+                <div class="problem-item">
+                    <h3>No Sovereignty</h3>
+                    <p>Vendor dependencies create strategic risks. What happens when pricing changes, terms shift, or access gets cut off?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution">
+        <div class="container">
+            <h2 class="section-title">The Solution</h2>
+            <div class="solution-content">
+                <p>SERLF lets you deploy sovereign AI fleets in your own infrastructure. Keep your data, maintain control, and scale without compromise.</p>
+                <p>Run models locally, process data privately, and maintain complete ownership of your AI stack—from inference to fine-tuning.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">1</div>
+                    <h3>Deploy</h3>
+                    <p>Launch SERLF on your infrastructure—cloud, on-premise, or hybrid. One command deploys your entire AI fleet.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">2</div>
+                    <h3>Configure</h3>
+                    <p>Set up models, data sources, and policies through our intuitive dashboard. Your rules, your data, your control.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">3</div>
+                    <h3>Scale</h3>
+                    <p>Auto-scale workloads, manage multiple deployments, and monitor performance—all while maintaining sovereignty.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section products" id="products">
+        <div class="container">
+            <h2 class="section-title">Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <h3>Captain Factory</h3>
+                    <p>Deploy and manage AI agents at scale. Create, configure, and orchestrate intelligent systems that work autonomously within your infrastructure.</p>
+                </div>
+                <div class="product-card">
+                    <h3>Fleet Trials</h3>
+                    <p>Test drive sovereign AI with pre-configured environments. Experiment with models, evaluate performance, and validate use cases before commitment.</p>
+                </div>
+                <div class="product-card">
+                    <h3>Fleet Dashboard</h3>
+                    <p>Monitor, manage, and optimize your AI infrastructure from a single pane of glass. Real-time insights, performance metrics, and operational control.</p>
+                </div>
+                <div class="product-card">
+                    <h3>Novel Patterns</h3>
+                    <p>Discover and implement cutting-edge AI architectures. Access our research lab's latest findings and breakthrough methodologies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Free</h3>
+                    <div class="price">$0<span>/month</span></div>
+                    <p>Single instance, community support, basic monitoring, up to 10GB inference volume</p>
+                </div>
+                <div class="pricing-card featured">
+                    <h3>Pro</h3>
+                    <div class="price">$49<span>/month</span></div>
+                    <p>Multi-instance, priority support, advanced analytics, up to 100GB inference volume</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>Business</h3>
+                    <div class="price">$299<span>/month</span></div>
+                    <p>Enterprise features, SLA, custom integrations, up to 1TB inference volume</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>Sovereign</h3>
+                    <div class="price">$999<span>+/month</span></div>
+                    <p>Unlimited scale, dedicated support, custom deployment, on-premise option</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="section trust" id="trust">
+        <div class="container">
+            <h2 class="section-title">Trust</h2>
+            <p class="trust-quote">"We score ourselves 3.75/10 and publish it. That's the kind of honest you need."</p>
+        </div>
+    </section>
+
+    <!-- Customers Section -->
+    <section class="section customers">
+        <div class="container">
+            <h2 class="section-title">Customers</h2>
+            <div class="customers-content">
+                <p style="font-size: 1.25rem; color: #94a3b8; margin-bottom: 2rem;">Built for enterprises who've had enough</p>
+                <div class="customer-logos">
+                    <div class="customer-logo">[Enterprise Logo]</div>
+                    <div class="customer-logo">[Enterprise Logo]</div>
+                    <div class="customer-logo">[Enterprise Logo]</div>
+                    <div class="customer-logo">[Enterprise Logo]</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Deploy Your First Captain in 5 Minutes</h2>
+            <p>Join the sovereign AI movement. Take control of your data and AI infrastructure today.</p>
+            <a href="https://github.com/eose-ai/serlf" class="cta-button">Get Started on GitHub</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SERLF</h4>
+                    <a href="mailto:hello@serlf.ca">hello@serlf.ca</a>
+                    <a href="https://github.com/eose-ai/serlf">GitHub</a>
+                    <a href="https://serlf.org">Open Source</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Products</h4>
+                    <a href="#products">Captain Factory</a>
+                    <a href="#products">Fleet Trials</a>
+                    <a href="#products">Fleet Dashboard</a>
+                    <a href="#products">Novel Patterns</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="#trust">Trust Score</a>
+                    <a href="mailto:hello@serlf.ca">Contact</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="https://github.com/eose-ai/serlf/wiki">Documentation</a>
+                    <a href="https://serlf.org/blog">Blog</a>
+                    <a href="mailto:hello@serlf.ca">Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EOSE Inc. All rights reserved. serlf.ca</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
