@@ -278,11 +278,11 @@
         class FleetMonitor {
             constructor() {
                 this.instances = [
-                    { name: 'master.pemos.ca', region: 'Canada Central', url: 'https://master.pemos.ca' },
-                    { name: 'admiral.pemos.ca', region: 'Australia East', url: 'https://admiral.pemos.ca' },
-                    { name: 'admiralmark1.pemos.ca', region: 'South Africa North', url: 'https://admiralmark1.pemos.ca' },
-                    { name: 'meek.pemos.ca', region: 'Canada Central', url: 'https://meek.pemos.ca' },
-                    { name: 'clo.pemos.ca', region: 'Canada Central', url: 'https://clo.pemos.ca' },
+                    { name: 'demo-ca-1.serlf.ca', region: 'Canada Central', url: 'https://demo-ca-1.serlf.ca' },
+                    { name: 'demo-au-1.serlf.ca', region: 'Australia East', url: 'https://demo-au-1.serlf.ca' },
+                    { name: 'demo-za-1.serlf.ca', region: 'South Africa North', url: 'https://demo-za-1.serlf.ca' },
+                    { name: 'demo-ca-2.serlf.ca', region: 'Canada Central', url: 'https://demo-ca-2.serlf.ca' },
+                    { name: 'demo-us-1.serlf.ca', region: 'US East', url: 'https://demo-us-1.serlf.ca' },
                     { name: 'meek.serlf.ca', region: 'Canada Central', url: 'https://meek.serlf.ca' }
                 ];
                 
@@ -315,12 +315,12 @@
                     const incidents = [
                         {
                             time: new Date(Date.now() - 3600000).toISOString(),
-                            message: 'admiral.pemos.ca recovered from downtime',
+                            message: 'demo-au-1.serlf.ca recovered from downtime',
                             type: 'recovery'
                         },
                         {
                             time: new Date(Date.now() - 7200000).toISOString(),
-                            message: 'admiral.pemos.ca experiencing high response times',
+                            message: 'demo-au-1.serlf.ca experiencing high response times',
                             type: 'degraded'
                         }
                     ];
