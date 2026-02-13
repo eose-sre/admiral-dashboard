@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERLF — Self-Evolving Research & Learning Framework</title>
+    <meta name="description" content="Updates, lessons, and novel patterns from the SERLF project — building the future of self-evolving systems.">
+    <meta name="keywords" content="SERLF, self-evolving, AI, research, patterns, sovereignty, meek philosophy">
+    <meta property="og:title" content="SERLF Blog — Self-Evolving Research & Learning Framework">
+    <meta property="og:description" content="Updates, lessons, and novel patterns from the SERLF project.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blog.serlf.ca">
+    <link rel="canonical" href="https://blog.serlf.ca">
+    <style>
+        :root {
+            --navy-dark: #0a0f1c;
+            --navy-mid: #1a2332;
+            --navy-light: #2a3441;
+            --accent-blue: #4a90e2;
+            --text-primary: #e1e8f0;
+            --text-secondary: #a8b5c4;
+            --text-muted: #6b7785;
+            --border: #2d3748;
+            --launch: #10b981;
+            --pattern: #3b82f6;
+            --lesson: #f59e0b;
+            --update: #8b5cf6;
+            --boss-fight: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--navy-dark);
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        
+        .tagline {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+        
+        .contact {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .contact a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        
+        .posts {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+        
+        .post {
+            background: var(--navy-mid);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .post-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .post-category {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .category-launch { background: var(--launch); }
+        .category-pattern { background: var(--pattern); }
+        .category-lesson { background: var(--lesson); }
+        .category-update { background: var(--update); }
+        .category-boss-fight { background: var(--boss-fight); }
+        
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        
+        .post-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .post-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .post-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .post-content strong {
+            color: var(--text-primary);
+        }
+        
+        .post-content em {
+            color: var(--accent-blue);
+        }
+        
+        .share-buttons {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .share-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            background: var(--navy-light);
+        }
+        
+        .share-btn:hover {
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+        
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem 0.75rem;
+            }
+            
+            .post {
+                padding: 1.5rem;
+            }
+            
+            .post-title {
+                font-size: 1.3rem;
+            }
+            
+            .post-meta {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .share-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="/" class="logo">SERLF</a></h1>
+            <p class="tagline">Self-Evolving Research & Learning Framework</p>
+            <p class="subtitle">Updates, lessons, and novel patterns</p>
+            <p class="contact">Contact: <a href="mailto:hello@serlf.ca">hello@serlf.ca</a></p>
+        </header>
+
+        <main class="posts">
+            <article class="post">
+                <header class="post-header">
+                    <div class="post-meta">
+                        <time class="post-date" datetime="2026-02-13">February 13, 2026</time>
+                        <span class="post-category category-launch">Launch</span>
+                    </div>
+                    <h2 class="post-title">Day One: We Built a Company for $7</h2>
+                </header>
+                <div class="post-content">
+                    <p>Today we launched SERLF. Total cost: <strong>$7</strong>.</p>
+                    <p>What we built: A self-evolving research framework that discovers novel patterns, tests them, and improves itself. Five AI agents working in harmony. A product pipeline that runs itself. Infrastructure that scales quietly.</p>
+                    <p>The $7 went to domain registration. Everything else? <em>Free</em>. ImprovMX for email routing. GitHub for code. Azure credits for compute. The meek philosophy in action — we don't announce, we just build.</p>
+                    <p>This isn't about being cheap. It's about proving that <strong>constraints breed creativity</strong>. When you can't buy your way out of problems, you have to think differently. You have to build better.</p>
+                    <p>We scored ourselves 3.75/10 and published it. We shipped with $0 revenue and zero shame. Because the goal isn't perfection — it's <em>evolution</em>.</p>
+                    <p>This is day one. Tomorrow we iterate.</p>
+                </div>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=Day%20One%3A%20We%20Built%20a%20Company%20for%20%247&url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on LinkedIn</a>
+                </div>
+            </article>
+
+            <article class="post">
+                <header class="post-header">
+                    <div class="post-meta">
+                        <time class="post-date" datetime="2026-02-12">February 12, 2026</time>
+                        <span class="post-category category-boss-fight">Boss Fight</span>
+                    </div>
+                    <h2 class="post-title">Sovereignty Is a Pattern, Not a Server</h2>
+                </header>
+                <div class="post-content">
+                    <p>Everyone thinks sovereignty means owning servers. <strong>Wrong</strong>.</p>
+                    <p>Sovereignty is owning the <em>pattern</em>. It's about control over your data, your decisions, your evolution. You can be sovereign in the cloud if you own the architecture, the data flows, the decision trees.</p>
+                    <p>This is L-003 — our core lesson on digital sovereignty. The server is just metal and electricity. The pattern is how you think, how you process, how you evolve.</p>
+                    <p>Consider: A company that owns a data center but lets vendors control their data flows vs. a company that runs in the cloud but owns every bit of their processing logic. <strong>Who is more sovereign?</strong></p>
+                    <p>SERLF embodies this. We run on cloud infrastructure, but every algorithm, every decision tree, every evolution pattern is ours. We can migrate. We can adapt. We can evolve.</p>
+                    <p>The cloud providers can change their terms. But they can't change our patterns. That's where true sovereignty lives — in the <em>how</em>, not the <em>where</em>.</p>
+                </div>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=Sovereignty%20Is%20a%20Pattern%2C%20Not%20a%20Server&url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on LinkedIn</a>
+                </div>
+            </article>
+
+            <article class="post">
+                <header class="post-header">
+                    <div class="post-meta">
+                        <time class="post-date" datetime="2026-02-11">February 11, 2026</time>
+                        <span class="post-category category-pattern">Pattern</span>
+                    </div>
+                    <h2 class="post-title">The $0 Email Stack</h2>
+                </header>
+                <div class="post-content">
+                    <p>Enterprise email for <strong>$0</strong>. Here's how we did it.</p>
+                    <p><strong>Stack:</strong> ImprovMX for routing + Resend for sending. Total monthly cost: $0 (within free tiers).</p>
+                    <p><strong>Pattern:</strong> Don't buy what you can route. ImprovMX catches all email to our domain and forwards to existing accounts. Resend sends transactional email with perfect deliverability.</p>
+                    <p>Setup takes 10 minutes. Add MX records, verify domain, done. Professional email addresses without the professional price tag.</p>
+                    <p>This isn't about being cheap — it's about being <em>efficient</em>. Why pay $6/month/user for features you don't need? Route what you can, send what you must, own the addresses that matter.</p>
+                    <p>Scales beautifully too. Need hello@, support@, noreply@? All routes to the same place. Need dedicated sending? Resend scales to millions of emails.</p>
+                    <p>The constraint (no budget) forced the innovation (better architecture).</p>
+                </div>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=The%20%240%20Email%20Stack&url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on LinkedIn</a>
+                </div>
+            </article>
+
+            <article class="post">
+                <header class="post-header">
+                    <div class="post-meta">
+                        <time class="post-date" datetime="2026-02-10">February 10, 2026</time>
+                        <span class="post-category category-lesson">Lesson</span>
+                    </div>
+                    <h2 class="post-title">We Scored Ourselves 3.75/10 and Published It</h2>
+                </header>
+                <div class="post-content">
+                    <p>Radical honesty as competitive advantage.</p>
+                    <p>Most companies hide their weaknesses. Spin their failures. Polish their metrics until they shine. We took the opposite approach: <strong>we published our real score</strong>.</p>
+                    <p>3.75 out of 10. Not great. But real.</p>
+                    <p>Why? Because honesty builds trust faster than perfection. When you admit what's broken, people believe what's working. When you show the real numbers, the good ones matter more.</p>
+                    <p>Our users know exactly what they're getting. No oversold promises. No hidden limitations. Just the truth, measured and shared.</p>
+                    <p>The result? Higher conversion rates. Better feedback. Stronger relationships. People prefer brutal honesty to beautiful lies.</p>
+                    <p>Everyone's obsessed with looking perfect. We're obsessed with <em>being</em> better. That's the competitive advantage.</p>
+                </div>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=We%20Scored%20Ourselves%203.75%2F10%20and%20Published%20It&url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on LinkedIn</a>
+                </div>
+            </article>
+
+            <article class="post">
+                <header class="post-header">
+                    <div class="post-meta">
+                        <time class="post-date" datetime="2026-02-09">February 9, 2026</time>
+                        <span class="post-category category-boss-fight">Boss Fight</span>
+                    </div>
+                    <h2 class="post-title">The Tree Metaphor</h2>
+                </header>
+                <div class="post-content">
+                    <p>SERLF grows like a tree. This is how we think about everything.</p>
+                    <p><strong>Roots:</strong> Core principles, data sovereignty, the meek philosophy. Deep, hidden, but everything depends on them. You can't see roots from the surface, but without them, nothing stands.</p>
+                    <p><strong>Trunk:</strong> Infrastructure, systems, the foundation that carries everything else. Strong, reliable, growing slowly but surely. The trunk doesn't need to be pretty — it needs to work.</p>
+                    <p><strong>Branches:</strong> Products, features, capabilities. They extend in different directions, exploring new possibilities. Some branches thrive, others get pruned. That's natural selection.</p>
+                    <p><strong>Leaves:</strong> User interactions, content, the visible surface. Beautiful, numerous, constantly changing. Leaves come and go, but the tree endures.</p>
+                    <p>When something breaks, we ask: <em>Is this a leaf problem or a root problem?</em> Leaf problems are quick fixes. Root problems require deep work.</p>
+                    <p>Most companies optimize for leaves — making things look good. We optimize for roots — making things <strong>grow right</strong>.</p>
+                </div>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text=The%20Tree%20Metaphor&url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on Twitter</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//blog.serlf.ca" class="share-btn" target="_blank" rel="noopener">Share on LinkedIn</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <p>© 2026 SERLF — Self-evolving, always learning</p>
+        </footer>
+    </div>
+</body>
+</html>
