@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERLF Pricing - Built for Sovereignty</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,sans-serif;background:#0A1628;color:#E2E8F0;line-height:1.6}
+        .container{max-width:1200px;margin:0 auto;padding:0 20px}
+        .header{padding:60px 0;text-align:center;background:linear-gradient(135deg,#1E3A8A,#0F172A)}
+        .hero-title{font-size:3.5rem;font-weight:900;margin-bottom:16px;background:linear-gradient(135deg,#60A5FA,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hero-subtitle{font-size:1.5rem;color:#94A3B8;margin-bottom:12px}
+        .hero-tagline{font-size:1.1rem;color:#64748B;font-style:italic}
+        .annual-banner{background:linear-gradient(90deg,#059669,#10B981);color:white;padding:12px;text-align:center;font-weight:600}
+        .pricing{padding:80px 0}
+        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:48px}
+        .tier{background:#1E293B;border:2px solid #334155;border-radius:16px;padding:32px 24px;position:relative;transition:all .3s}
+        .tier:hover{border-color:#60A5FA;transform:translateY(-4px);box-shadow:0 25px 50px rgba(96,165,250,.15)}
+        .tier.featured{border-color:#10B981;background:linear-gradient(135deg,#1E293B,#0F766E)}
+        .tier.featured::before{content:"MOST POPULAR";position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#10B981;color:white;padding:6px 16px;border-radius:20px;font-size:.75rem;font-weight:700}
+        .tier-name{font-size:1.5rem;font-weight:700;margin-bottom:8px}
+        .tier-price{font-size:3rem;font-weight:900;margin-bottom:4px}
+        .tier-price .currency{font-size:1.5rem;vertical-align:top}
+        .tier-price .period{font-size:1rem;color:#64748B;font-weight:400}
+        .tier-desc{color:#94A3B8;margin-bottom:24px;min-height:48px}
+        .features{list-style:none;margin-bottom:32px}
+        .features li{padding:8px 0;display:flex;align-items:center}
+        .features li::before{content:"✓";color:#10B981;font-weight:bold;margin-right:12px}
+        .cta-btn{width:100%;padding:16px;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .3s}
+        .cta-primary{background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:white}
+        .cta-primary:hover{background:linear-gradient(135deg,#2563EB,#1E40AF);transform:translateY(-2px)}
+        .cta-secondary{background:transparent;color:#60A5FA;border:2px solid #60A5FA}
+        .cta-secondary:hover{background:#60A5FA;color:#0F172A}
+        .cta-enterprise{background:linear-gradient(135deg,#7C3AED,#5B21B6);color:white}
+        .cta-enterprise:hover{background:linear-gradient(135deg,#6D28D9,#4C1D95);transform:translateY(-2px)}
+        .comparison{padding:80px 0;background:#0F172A}
+        .section-title{text-align:center;font-size:2.5rem;font-weight:800;margin-bottom:48px}
+        .table-container{overflow-x:auto}
+        table{width:100%;border-collapse:collapse;background:#1E293B;border-radius:12px;overflow:hidden}
+        th,td{padding:16px;text-align:left;border-bottom:1px solid #334155}
+        th{background:#0F172A;font-weight:600;color:#E2E8F0}
+        .feature-name{font-weight:500}
+        .check{color:#10B981;font-weight:bold}
+        .cross{color:#EF4444}
+        .limited{color:#F59E0B}
+        .faq{padding:80px 0}
+        .faq-item{background:#1E293B;border-radius:12px;margin-bottom:16px;overflow:hidden}
+        .faq-question{padding:24px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+        .faq-question:hover{background:#334155}
+        .faq-answer{padding:0 24px 24px;color:#94A3B8;display:none}
+        .faq-item.open .faq-answer{display:block}
+        .faq-toggle{color:#60A5FA;font-size:1.2rem;transition:transform .3s}
+        .faq-item.open .faq-toggle{transform:rotate(45deg)}
+        .footer{background:#0F172A;padding:40px 0;text-align:center;color:#64748B}
+        @media(max-width:768px){
+            .hero-title{font-size:2.5rem}
+            .pricing-grid{grid-template-columns:1fr}
+            .tier{margin-bottom:20px}
+            th,td{padding:12px 8px;font-size:.9rem}
+        }
+    </style>
+</head>
+<body>
+    <div class="annual-banner">🎯 Save 2 months with annual billing</div>
+    <header class="header">
+        <div class="container">
+            <h1 class="hero-title">SERLF Pricing</h1>
+            <p class="hero-subtitle">Choose your sovereignty tier</p>
+            <p class="hero-tagline">Built for enterprises who've had enough of surveillance capitalism</p>
+        </div>
+    </header>
+
+    <section class="pricing">
+        <div class="container">
+            <div class="pricing-grid">
+                <!-- Free Tier -->
+                <div class="tier">
+                    <h3 class="tier-name">Free</h3>
+                    <div class="tier-price">
+                        <span class="currency">$</span>0
+                    </div>
+                    <p class="tier-desc">Perfect for testing</p>
+                    <ul class="features">
+                        <li>1 Captain, 1 agent</li>
+                        <li>Community support</li>
+                        <li>100 messages/day</li>
+                        <li>Basic dashboard</li>
+                    </ul>
+                    <button class="cta-btn cta-secondary">Start Free</button>
+                </div>
+
+                <!-- Pro Tier -->
+                <div class="tier featured">
+                    <h3 class="tier-name">Pro</h3>
+                    <div class="tier-price">
+                        <span class="currency">$</span>49<span class="period">/mo</span>
+                    </div>
+                    <p class="tier-desc">For growing teams ready to scale</p>
+                    <ul class="features">
+                        <li>3 Captains, 5 agents</li>
+                        <li>Email support</li>
+                        <li>Unlimited messages</li>
+                        <li>Fleet Trials</li>
+                        <li>Novel Patterns access</li>
+                        <li>Custom domain</li>
+                        <li>Basic analytics</li>
+                    </ul>
+                    <button class="cta-btn cta-primary">Get Pro</button>
+                </div>
+
+                <!-- Business Tier -->
+                <div class="tier">
+                    <h3 class="tier-name">Business</h3>
+                    <div class="tier-price">
+                        <span class="currency">$</span>299<span class="period">/mo</span>
+                    </div>
+                    <p class="tier-desc">Enterprise-grade fleet management</p>
+                    <ul class="features">
+                        <li>10 Captains, 25 agents</li>
+                        <li>Priority support</li>
+                        <li>Fleet Dashboard</li>
+                        <li>Captain Factory</li>
+                        <li>DKIM/DMARC</li>
+                        <li>SSO integration</li>
+                        <li>Team management</li>
+                        <li>SLA 99.5%</li>
+                    </ul>
+                    <button class="cta-btn cta-primary">Get Business</button>
+                </div>
+
+                <!-- Sovereign Tier -->
+                <div class="tier">
+                    <h3 class="tier-name">Sovereign</h3>
+                    <div class="tier-price">
+                        <span class="currency">$</span>999<span class="period">+/mo</span>
+                    </div>
+                    <p class="tier-desc">Complete data sovereignty</p>
+                    <ul class="features">
+                        <li>Unlimited everything</li>
+                        <li>Dedicated support</li>
+                        <li>Own infrastructure</li>
+                        <li>Own keys, own data</li>
+                        <li>Custom nanos</li>
+                        <li>Compliance pack</li>
+                        <li>Audit trail</li>
+                        <li>White-glove onboarding</li>
+                    </ul>
+                    <button class="cta-btn cta-enterprise">Contact Us</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">Feature Comparison</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Free</th>
+                            <th>Pro</th>
+                            <th>Business</th>
+                            <th>Sovereign</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="feature-name">Captains</td><td>1</td><td>3</td><td>10</td><td class="check">Unlimited</td></tr>
+                        <tr><td class="feature-name">Agents</td><td>1</td><td>5</td><td>25</td><td class="check">Unlimited</td></tr>
+                        <tr>
+                            <td class="feature-name">Messages/day</td>
+                            <td class="limited">100</td>
+                            <td class="check">Unlimited</td>
+                            <td class="check">Unlimited</td>
+                            <td class="check">Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">Support</td>
+                            <td>Community</td>
+                            <td>Email</td>
+                            <td>Priority</td>
+                            <td>Dedicated</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">Fleet Dashboard</td>
+                            <td class="cross">✕</td>
+                            <td class="cross">✕</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">Custom Domain</td>
+                            <td class="cross">✕</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">SSO</td>
+                            <td class="cross">✕</td>
+                            <td class="cross">✕</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td class="feature-name">Data Sovereignty</td>
+                            <td class="cross">✕</td>
+                            <td class="cross">✕</td>
+                            <td class="cross">✕</td>
+                            <td class="check">✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What's the difference between agents and Captains?
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Captains are specialized AI commanders that lead domains. Agents execute tasks under Captain guidance. Think department heads vs teams.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Can I upgrade or downgrade anytime?
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. Changes take effect immediately with prorated billing.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What does "data sovereignty" actually mean?
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Your infrastructure, your keys, your data. We never see it — you own it entirely.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Do you offer annual discounts?
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! 2 months free annually (~17% savings). Plus priority support and early access.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What's included in the compliance pack?
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    SOC 2, GDPR tools, HIPAA readiness, audit logging, data lineage. Custom frameworks available.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    How does Fleet Trials work?
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Test agent configs and Captain personas in sandbox before production. A/B testing for AI fleets.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 SERLF. Built for those who choose sovereignty over surveillance.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isOpen = faqItem.classList.contains('open');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('open');
+                item.querySelector('.faq-toggle').textContent = '+';
+            });
+            
+            // Open the clicked one if it wasn't already open
+            if (!isOpen) {
+                faqItem.classList.add('open');
+                element.querySelector('.faq-toggle').textContent = '×';
+            }
+        }
+    </script>
+</body>
+</html>
