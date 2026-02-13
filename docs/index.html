@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SERLF Documentation</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy-dark:#0a1929;--navy-med:#1a2332;--navy-light:#2a3441;--blue:#3498db;--text:#e8eaed;--text2:#9aa0a6;--border:#3c4043}
+body{font:14px -apple-system,sans-serif;line-height:1.6;color:var(--text);background:var(--navy-dark)}
+.container{display:flex;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;width:260px;height:100vh;background:var(--navy-med);border-right:1px solid var(--border);overflow-y:auto;z-index:1000;transition:transform .3s}
+.sidebar-header{padding:1rem;border-bottom:1px solid var(--border)}
+.logo{font-size:1.5rem;font-weight:bold;color:var(--blue);margin-bottom:.5rem}
+.tagline{font-size:.8rem;color:var(--text2)}
+.search{padding:1rem;border-bottom:1px solid var(--border)}
+.search input{width:100%;padding:.5rem;border:1px solid var(--border);border-radius:4px;background:var(--navy-dark);color:var(--text);font-size:.9rem}
+.nav{padding:1rem 0}
+.nav a{display:block;padding:.5rem 1rem;color:var(--text2);text-decoration:none;border-left:3px solid transparent;transition:all .2s}
+.nav a:hover,.nav a.active{background:var(--navy-light);color:var(--text);border-left-color:var(--blue)}
+.hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:1001;background:var(--navy-med);border:1px solid var(--border);border-radius:4px;padding:.5rem;color:var(--text);cursor:pointer}
+.content{margin-left:260px;padding:2rem;max-width:800px}
+.section{margin-bottom:3rem;display:none}
+.section.active{display:block}
+h1{font-size:2rem;margin-bottom:1rem;color:var(--blue)}
+h2{font-size:1.5rem;margin:1.5rem 0 1rem 0;color:var(--text);border-bottom:2px solid var(--blue);padding-bottom:.3rem}
+h3{font-size:1.2rem;margin:1rem 0 .5rem 0;color:var(--blue)}
+p{margin-bottom:.8rem;color:var(--text2)}
+.tree{background:var(--navy-light);border:1px solid var(--border);border-radius:4px;padding:1rem;margin:1rem 0;font-family:monospace;font-size:.8rem;line-height:1.6}
+.code{background:var(--navy-light);border:1px solid var(--border);border-radius:4px;padding:.8rem;margin:.8rem 0;overflow-x:auto;font-family:monospace;font-size:.8rem}
+code{background:var(--navy-light);padding:.2rem .3rem;border-radius:3px;font-size:.8rem}
+.steps{counter-reset:step}
+.step{counter-increment:step;margin:1rem 0;padding:.8rem;background:var(--navy-light);border-radius:4px;position:relative}
+.step::before{content:counter(step);position:absolute;left:-15px;top:.8rem;background:var(--blue);color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:.7rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
+.card{background:var(--navy-light);border:1px solid var(--border);border-radius:4px;padding:.8rem}
+.card-title{color:var(--blue);font-weight:bold;margin-bottom:.3rem}
+.chain{display:flex;align-items:center;justify-content:center;margin:1rem 0;gap:.8rem;flex-wrap:wrap}
+.chain-box{background:var(--navy-light);border:2px solid var(--blue);border-radius:6px;padding:.8rem;text-align:center;min-width:100px}
+.arrow{color:var(--blue);font-size:1.2rem}
+.level{margin:.8rem 0;padding:.8rem;background:var(--navy-light);border-left:4px solid var(--blue)}
+.faq{margin:1rem 0;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.faq-q{background:var(--navy-light);padding:.8rem;cursor:pointer;font-weight:bold}
+.faq-a{padding:.8rem;display:none}
+.faq-a.open{display:block}
+.hidden{display:none!important}
+@media (max-width:768px){
+.hamburger{display:block}
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.content{margin-left:0;padding:3rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+<div class="hamburger" onclick="toggleSidebar()">☰</div>
+<div class="container">
+<nav class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<div class="logo">SERLF</div>
+<div class="tagline">Self-Evolving Resilient Language Framework</div>
+</div>
+<div class="search">
+<input type="text" placeholder="Search docs..." id="searchInput" oninput="searchContent()">
+</div>
+<div class="nav">
+<a href="#overview" class="active" onclick="showSection('overview')">Overview</a>
+<a href="#quickstart" onclick="showSection('quickstart')">Quick Start</a>
+<a href="#architecture" onclick="showSection('architecture')">Architecture</a>
+<a href="#captains" onclick="showSection('captains')">Captains</a>
+<a href="#nanos" onclick="showSection('nanos')">Nanos</a>
+<a href="#patterns" onclick="showSection('patterns')">Novel Patterns</a>
+<a href="#lessons" onclick="showSection('lessons')">Lessons</a>
+<a href="#trials" onclick="showSection('trials')">Fleet Trials</a>
+<a href="#email" onclick="showSection('email')">Email</a>
+<a href="#deployment" onclick="showSection('deployment')">Deployment</a>
+<a href="#api" onclick="showSection('api')">API Reference</a>
+<a href="#faq" onclick="showSection('faq')">FAQ</a>
+</div>
+</nav>
+<main class="content">
+
+<section id="overview" class="section active">
+<h1>Overview</h1>
+<p>SERLF (Self-Evolving Resilient Language Framework) builds AI agent systems that grow, adapt, and improve themselves over time. Unlike static AI implementations, SERLF creates living digital ecosystems.</p>
+<h2>The Tree Metaphor</h2>
+<div class="tree">🌳 SERLF Ecosystem
+├── 🍃 Leaves (UIs) — Web, mobile, CLI, APIs
+├── 🌿 Branches (Products) — Platforms, pipelines, services
+├── 🌲 Trunk (Fleet) — Container orchestration, scaling
+└── 🌱 Roots (Lessons) — Pattern recognition, adaptation</div>
+<h3>Core Principles</h3>
+<p><strong>Self-Evolution:</strong> Systems improve without external intervention</p>
+<p><strong>Resilience:</strong> Fault-tolerant architectures that heal and adapt</p>
+<p><strong>Sovereignty:</strong> Each component maintains its own identity</p>
+<p><strong>Symbiosis:</strong> Components work together while staying independent</p>
+</section>
+
+<section id="quickstart" class="section">
+<h1>Quick Start</h1>
+<div class="steps">
+<div class="step">
+<h3>Install OpenClaw</h3>
+<div class="code">curl -fsSL https://get.openclaw.ai | sh
+openclaw setup</div>
+</div>
+<div class="step">
+<h3>Create Agent</h3>
+<div class="code">openclaw create agent myapp --template=sensei
+cd myapp && openclaw configure</div>
+</div>
+<div class="step">
+<h3>Deploy</h3>
+<div class="code">openclaw deploy
+openclaw monitor</div>
+</div>
+</div>
+</section>
+
+<section id="architecture" class="section">
+<h1>Architecture</h1>
+<h2>Sovereign Silo Pattern</h2>
+<p>Each agent operates within its own boundary, maintaining complete control over data, decisions, and evolution.</p>
+<h2>2-RG Model</h2>
+<p><strong>Development RG:</strong> Rapid prototyping, testing, iteration</p>
+<p><strong>Production RG:</strong> High availability, security, auto-scaling</p>
+<h2>Config-Driven Identity</h2>
+<div class="code">{
+  "identity": {
+    "name": "customer-service-agent",
+    "captain": "counsel"
+  },
+  "capabilities": {
+    "languages": ["english", "spanish"],
+    "integrations": ["crm", "knowledgebase"]
+  }
+}</div>
+</section>
+
+<section id="captains" class="section">
+<h1>Captains</h1>
+<p>Specialized agent templates for industry-specific patterns and behaviors.</p>
+<div class="grid">
+<div class="card">
+<div class="card-title">🎯 Sensei</div>
+<p>Education & Training - Adaptive learning, knowledge transfer</p>
+</div>
+<div class="card">
+<div class="card-title">🌾 Harvest</div>
+<p>Agriculture & Resources - Optimization, yield prediction</p>
+</div>
+<div class="card">
+<div class="card-title">⚖️ Counsel</div>
+<p>Legal & Compliance - Document analysis, risk assessment</p>
+</div>
+<div class="card">
+<div class="card-title">💰 Merchant</div>
+<p>Commerce & Finance - Transaction processing, market analysis</p>
+</div>
+<div class="card">
+<div class="card-title">🏥 Medic</div>
+<p>Healthcare & Wellness - Diagnostic assistance, patient care</p>
+</div>
+<div class="card">
+<div class="card-title">🛡️ Sentinel</div>
+<p>Security & Monitoring - Threat detection, incident response</p>
+</div>
+</div>
+</section>
+
+<section id="nanos" class="section">
+<h1>Nanos</h1>
+<p>Seven specialized micro-agents that handle specific ecosystem aspects.</p>
+<h2>The Chain</h2>
+<div class="chain">
+<div class="chain-box"><strong>🏴‍☠️ Luffy</strong><br>Discovery</div>
+<div class="arrow">→</div>
+<div class="chain-box"><strong>📊 Rick</strong><br>Measurement</div>
+<div class="arrow">→</div>
+<div class="chain-box"><strong>🎯 Bob</strong><br>Product</div>
+<div class="arrow">→</div>
+<div class="chain-box"><strong>🧬 L</strong><br>Deployment</div>
+</div>
+<h2>Individual Roles</h2>
+<p><strong>🔱 Meek:</strong> Orchestration and coordination</p>
+<p><strong>🏴‍☠️ Luffy:</strong> Novel discovery and pattern recognition</p>
+<p><strong>📊 Rick:</strong> Metrics, monitoring, system health</p>
+<p><strong>🎯 Bob:</strong> Product development and monetization</p>
+<p><strong>🧬 L:</strong> Research, development, deployment</p>
+<p><strong>🗄️ Dao:</strong> Data governance and compliance</p>
+</section>
+
+<section id="patterns" class="section">
+<h1>Novel Patterns</h1>
+<p>SERLF identifies and codifies breakthrough approaches validated across L1-L5 complexity levels.</p>
+<h2>Complexity Levels</h2>
+<div class="level"><strong>L1:</strong> Single Agent Patterns</div>
+<div class="level"><strong>L2:</strong> Agent-User Interaction</div>
+<div class="level"><strong>L3:</strong> Multi-Agent Coordination</div>
+<div class="level"><strong>L4:</strong> System-Environment Integration</div>
+<div class="level"><strong>L5:</strong> Ecosystem Evolution</div>
+<h2>Top Patterns</h2>
+<p><strong>Adaptive Context Windows:</strong> Dynamic sizing based on complexity</p>
+<p><strong>Emotional Resonance Matching:</strong> Mirroring user emotional states</p>
+<p><strong>Predictive Resource Allocation:</strong> Anticipating compute needs</p>
+<p><strong>Graceful Degradation Cascades:</strong> Systematic fallback strategies</p>
+<p><strong>Collaborative Knowledge Synthesis:</strong> Sharing insights without data</p>
+</section>
+
+<section id="lessons" class="section">
+<h1>Lessons</h1>
+<p>SERLF's learning backbone — how agents capture, process, and apply knowledge.</p>
+<h2>Learning Hierarchy</h2>
+<h3>Boss Tier — Strategic Lessons</h3>
+<p>High-level strategic insights, permanently stored</p>
+<h3>Pattern Tier — Behavioral Lessons</h3>
+<p>Mid-level behavior patterns, 6-12 month retention</p>
+<h3>Lesson Tier — Tactical Insights</h3>
+<p>Specific actionable insights, 30-90 day retention</p>
+<h2>Process: Capture → Analyze → Validate → Apply → Share</h2>
+</section>
+
+<section id="trials" class="section">
+<h1>Fleet Trials</h1>
+<p>Systematic testing across the agent ecosystem before deployment.</p>
+<h2>Three-Tier Testing</h2>
+<h3>Tier 1 — Sandbox (24-48h)</h3>
+<p>Isolated environment with synthetic data</p>
+<h3>Tier 2 — Limited Production (1-2 weeks)</h3>
+<p>5-10% traffic routing with real data</p>
+<h3>Tier 3 — Full Fleet (4-6 weeks)</h3>
+<p>Complete rollout with continuous monitoring</p>
+<div class="code">openclaw trial start --pattern=adaptive-context --tier=1
+openclaw trial promote adaptive-context --tier=2</div>
+</section>
+
+<section id="email" class="section">
+<h1>Email</h1>
+<p>API-first email with $0 architecture that scales automatically.</p>
+<h2>$0 Architecture</h2>
+<p>Serverless functions + event-driven processing + intelligent routing = zero base costs</p>
+<h2>API Integration</h2>
+<div class="code">POST /api/v1/email/send
+{
+  "to": "user@example.com",
+  "template": "onboarding",
+  "data": {"userName": "John"}
+}</div>
+<h2>Features</h2>
+<p>• Template system with variables</p>
+<p>• Delivery tracking and analytics</p>
+<p>• A/B testing support</p>
+<p>• GDPR and CAN-SPAM compliance</p>
+</section>
+
+<section id="deployment" class="section">
+<h1>Deployment</h1>
+<h2>Azure Container Apps</h2>
+<p>Serverless scaling with enterprise-grade security</p>
+<div class="code">openclaw deploy --target=aca --environment=production
+openclaw scale configure --min=0 --max=50</div>
+<h2>Custom Domain & SSL</h2>
+<div class="code">openclaw domain add myagent.company.com
+openclaw ssl enable --domain=myagent.company.com</div>
+<h2>Environments</h2>
+<p><strong>Development:</strong> Local containers with hot reload</p>
+<p><strong>Staging:</strong> Production-like testing environment</p>
+<p><strong>Production:</strong> Fully scaled and monitored</p>
+</section>
+
+<section id="api" class="section">
+<h1>API Reference</h1>
+<h2>Gateway WebSocket</h2>
+<div class="code">const ws = new WebSocket('wss://gateway.yourdomain.com/v1/agent/connect');
+ws.send(JSON.stringify({
+  type: 'user_message',
+  content: 'Hello, I need help',
+  sessionId: 'session_123'
+}));</div>
+<h2>Config Schema</h2>
+<div class="code">{
+  "agent": {
+    "name": "customer-service-agent",
+    "captain": "counsel"
+  },
+  "capabilities": {
+    "languages": ["en", "es"],
+    "tools": ["email_sender", "calendar"]
+  },
+  "deployment": {
+    "scaling": {
+      "minInstances": 1,
+      "maxInstances": 10
+    }
+  }
+}</div>
+</section>
+
+<section id="faq" class="section">
+<h1>FAQ</h1>
+<div class="faq">
+<div class="faq-q" onclick="toggleFaq(this)">What makes SERLF different?</div>
+<div class="faq-a">SERLF focuses on self-evolution and resilience. Agents learn continuously through novel patterns while maintaining sovereign silos.</div>
+</div>
+<div class="faq">
+<div class="faq-q" onclick="toggleFaq(this)">How does $0 email work?</div>
+<div class="faq-a">Serverless functions + event-driven architecture + intelligent routing = pay only for compute time used.</div>
+</div>
+<div class="faq">
+<div class="faq-q" onclick="toggleFaq(this)">Which captain for my use case?</div>
+<div class="faq-a">Sensei (education), Harvest (optimization), Counsel (support/legal), Merchant (commerce), Medic (healthcare), Sentinel (security).</div>
+</div>
+<div class="faq">
+<div class="faq-q" onclick="toggleFaq(this)">How do nanos work together?</div>
+<div class="faq-a">Luffy discovers → Rick measures → Bob productizes → L deploys. Build→Test→Truth→Ship cycle.</div>
+</div>
+<div class="faq">
+<div class="faq-q" onclick="toggleFaq(this)">Minimum requirements?</div>
+<div class="faq-a">1 vCPU, 1GB RAM, Docker. Recommended: Azure subscription, custom domain.</div>
+</div>
+<div class="faq">
+<div class="faq-q" onclick="toggleFaq(this)">Data sovereignty in practice?</div>
+<div class="faq-a">Each agent has isolated environment with dedicated storage, processing, config. Data never crosses boundaries without consent.</div>
+</div>
+</div>
+</section>
+
+</main>
+</div>
+<script>
+function showSection(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+event.target.classList.add('active');
+document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar(){
+document.getElementById('sidebar').classList.toggle('open');
+}
+function searchContent(){
+const q=document.getElementById('searchInput').value.toLowerCase();
+const items=document.querySelectorAll('.nav a');
+if(!q){items.forEach(i=>i.classList.remove('hidden'));return;}
+items.forEach((item,idx)=>{
+const section=document.querySelectorAll('.section')[idx];
+if(section.textContent.toLowerCase().includes(q)){
+item.classList.remove('hidden');
+}else{item.classList.add('hidden');}
+});
+}
+function toggleFaq(q){
+q.nextElementSibling.classList.toggle('open');
+}
+window.addEventListener('load',()=>{
+const hash=location.hash.substring(1);
+if(hash&&document.getElementById(hash))showSection(hash);
+});
+document.addEventListener('click',e=>{
+const sidebar=document.getElementById('sidebar');
+const hamburger=document.querySelector('.hamburger');
+if(!sidebar.contains(e.target)&&!hamburger.contains(e.target)){
+sidebar.classList.remove('open');
+}
+});
+</script>
+</body>
+</html>
